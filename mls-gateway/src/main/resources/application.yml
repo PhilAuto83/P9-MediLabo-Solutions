@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: mls-gateway
+server:
+  port: 8081
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8089/eureka
+
+
