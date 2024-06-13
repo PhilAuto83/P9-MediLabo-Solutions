@@ -29,7 +29,9 @@ Ffront-mls/src/main/java/com/phildev/front/mls/service/UserService.java,0\9\098
 Mfront-mls/src/main/java/com/phildev/front/mls/controller/LoginController.java,c\6\c6de8c19bcfc10f22f12ddc572d2e7e4111433fe
 {
 Kfront-mls/src/test/java/com/phildev/front/mls/FrontMlsApplicationTests.java,c\f\cf44578760f2348d42dcf1e7595600bbc5c19cd6
-å
-\front-mls/src/main/java/com/phildev/front/mls/config/CustomAuthenticationFailureHandler.java,4\6\460d33c886fb7632cbbacfe55fdafecdb842e770
 Ö
 Ufront-mls/src/main/java/com/phildev/front/mls/config/CustomAuthenticationFailure.java,d\b\dbb032464e3cd0d749f7b6d343124f5ebdd6003c
+r
+Bfront-mls/src/main/java/com/phildev/front/mls/model/Structure.java,2\9\29641ef9660f4016e842d5f92b733f58884fd5b1
+Å
+Qfront-mls/src/main/java/com/phildev/front/mls/repository/StructureRepository.java,d\0\d08c7edf4a53c4e99a91cc4ced0ae3c331112aab
