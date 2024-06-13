@@ -1,6 +1,13 @@
 spring:
   application:
     name: mls-donnees-patient
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: mls
+      password: mls
+      username: mls
 server:
   port: 9000
 eureka:
