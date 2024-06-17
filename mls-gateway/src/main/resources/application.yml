@@ -1,11 +1,26 @@
 spring:
   application:
     name: mls-gateway
+  cloud:
+      gateway:
+        mvc:
+          routes:
+          - id: coordonnees-patient
+            uri: http://localhost:9000
+            predicates:
+              - Path=gateway/coordonneesPatient/all
+            filters:
+              - SetPath=/coordonneesPatient/all
+              - AddResponseHeader=Coordonnees, tous
+  security:
+    user:
+      name: phildev
+      password: mls2024@
 server:
   port: 8081
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8089/eureka
+      defaultZone: http://localhost:8082/eureka
 
 
