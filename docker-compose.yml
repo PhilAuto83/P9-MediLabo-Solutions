@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+
+  front-mls:
+    container_name: front-mls
+    image: front-mls:latest
+    build:
+      context: .
+    depends_on:
+      - mls-mysql
+    ports:
+      - "8080:8080"
+    networks:
+      - mls-network
+  mls-mysql:
+    container_name: mls-mysql
+    image: mysql:latest
+    environment:
+      - MYSQL_DATABASE=mls
+      - MYSQL_USER=mls
+      - MYSQL_PASSWORD=mls
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "3306"
+    networks:
+      - mls-network
+    volumes:
+      - ./mysql-data:/var/lib/mysql/
+networks:
+  mls-network:
+    driver: bridge
+volumes:
+  mysql-data:
+  mongo-data:
+
+

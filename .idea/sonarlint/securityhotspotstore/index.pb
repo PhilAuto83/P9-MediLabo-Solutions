@@ -75,3 +75,5 @@ D
 front-mls/Dockerfile,3\d\3d91d9706db2bc12e966b68903bf7358d245c251
 †
 Vmls-gateway/src/main/java/com/phildev/mls/gateway/config/MlsGatewaySecurityConfig.java,5\9\59559b05369093f0cbaddb6b12dcf8d6450cf4b4
+B
+docker-compose.yml,3\5\35b8c13cf2eb2a194eada000eb310d65aed53b2a
