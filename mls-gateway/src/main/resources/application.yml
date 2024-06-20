@@ -6,12 +6,11 @@ spring:
         mvc:
           routes:
           - id: coordonnees-patient
-            uri: http://localhost:9000
+            uri: lb://mls-donnees-patient
             predicates:
               - Path=gateway/coordonneesPatient/all
             filters:
               - SetPath=/coordonneesPatient/all
-              - AddResponseHeader=Coordonnees, tous
   security:
     user:
       name: phildev
