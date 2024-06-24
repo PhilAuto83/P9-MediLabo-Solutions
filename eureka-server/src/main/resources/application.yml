@@ -6,4 +6,4 @@ eureka:
     register-with-eureka: false
     fetch-registry: false
 server:
-  port: 8082
+  port: 8089

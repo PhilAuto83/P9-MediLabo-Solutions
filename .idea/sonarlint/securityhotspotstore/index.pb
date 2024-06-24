@@ -77,3 +77,17 @@ D
 Vmls-gateway/src/main/java/com/phildev/mls/gateway/config/MlsGatewaySecurityConfig.java,5\9\59559b05369093f0cbaddb6b12dcf8d6450cf4b4
 B
 docker-compose.yml,3\5\35b8c13cf2eb2a194eada000eb310d65aed53b2a
+š
+jmls-donnees-patient/src/main/java/com/phildev/mls/donnees/patient/exception/PatientNonTrouveException.java,e\0\e05165292584b62d1524569f941d4be45d2a4d4d
+—
+gmls-donnees-patient/src/main/java/com/phildev/mls/donnees/patient/exception/CustomExceptionHandler.java,3\f\3fb407b1cdd0f9ac574b8c495f0e92dd82cd7876
+‘
+amls-donnees-patient/src/main/java/com/phildev/mls/donnees/patient/exception/PatientException.java,c\6\c633f96ce05aaeb7b27eccf9eb94b8338c1daa0f
+›
+kmls-donnees-patient/src/main/java/com/phildev/mls/donnees/patient/exception/StructureNotFoundException.java,b\c\bcf2a8451764f1de7a303d349f7fb556f9e983e2
+˜
+hmls-donnees-patient/src/test/java/com/phildev/mls/donnees/patient/MlsDonneesPatientApplicationTests.java,8\6\860133bb0f50274d040e90fee43eb38ae65b4931
+œ
+lmls-donnees-patient/src/test/java/com/phildev/mls/donnees/patient/controller/CoordonneesControllerTests.java,f\8\f8d217ed6507deaa7dde87ff91bfa25dafbf3b97
+£
+smls-donnees-patient/src/test/java/com/phildev/mls/donnees/patient/controller/CoordonneesPatientControllerTests.java,b\1\b1d4c4e99550ae8d3b9f94281555e251274e981f

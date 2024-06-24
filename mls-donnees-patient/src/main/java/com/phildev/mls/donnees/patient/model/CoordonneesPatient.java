@@ -2,6 +2,8 @@ package com.phildev.mls.donnees.patient.model;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,17 +22,23 @@ public class CoordonneesPatient {
     @Id
     private String id;
 
+    @NotNull(message = "ne doit pas être nul")
+    @Field("structure_id")
+    private Integer structureId;
+
+    @NotBlank(message = "ne doit pas être nul ou vide")
     private String nom;
 
-    @Field("prénom")
+    @NotBlank(message = "ne doit pas être nul ou vide")
     private String prenom;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @NotNull(message = "ne doit pas être nulle ou vide")
     private LocalDate dateDeNaissance;
+
 
     private String adresse;
 
-    @Field("téléphone")
     private String telephone;
 
 
