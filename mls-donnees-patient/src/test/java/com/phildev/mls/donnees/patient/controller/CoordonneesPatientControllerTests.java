@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.*;
@@ -57,7 +58,7 @@ public class CoordonneesPatientControllerTests {
     @Test
     @DisplayName(value="Test recherche coordonnees patient avec numéro de structure inconnue qui renvoie une exception")
     public void testAvecStructureInconnue() throws Exception {
-        when(coordonneesPatientService.getAllCoordonneesPatientByStructureId(2)).thenReturn(null);
+        when(coordonneesPatientService.getAllCoordonneesPatientByStructureId(2)).thenReturn(Collections.emptyList());
         mockMvc.perform(get("/coordonneesPatient/structure/2"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
@@ -67,7 +68,7 @@ public class CoordonneesPatientControllerTests {
     @Test
     @DisplayName(value="Test recherche coordonnees patient avec id patient inexistant qui renvoie une exception")
     public void testCoordonneesPatientAvecPatientInconnu() throws Exception {
-        when(coordonneesPatientService.getAllCoordonneesPatientById("3")).thenReturn(null);
+        when(coordonneesPatientService.getAllCoordonneesPatientById("3")).thenReturn(Optional.empty());
         mockMvc.perform(get("/coordonneesPatient/3"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
@@ -98,12 +99,12 @@ public class CoordonneesPatientControllerTests {
     @Test
     @DisplayName(value="Test recherche coordonnees patient avec nom/prenom patient valide dans la requête")
     public void testCoordonneesPatientAvecNomPrenomPatientValide() throws Exception {
-        when(coordonneesPatientService.getAllCoordonneesPatientByNomEtPrenom("Test", "Tester")).thenReturn(
-                new CoordonneesPatient("10", 2, "Test", "Tester", LocalDate.of(1974, 6, 7), null, null));
+        when(coordonneesPatientService.getAllCoordonneesPatientByNomEtPrenom("TEST", "TESTER")).thenReturn(
+                new CoordonneesPatient("10", 2, "TEST", "TESTER", LocalDate.of(1974, 6, 7), null, null));
         mockMvc.perform(get("/coordonneesPatient?nom=Test&prenom=Tester"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.prenom", is("Tester")))
+                .andExpect(jsonPath("$.prenom", is("TESTER")))
                 .andExpect(jsonPath("$.dateDeNaissance", is("1974-06-07")));
     }
 
@@ -113,14 +114,14 @@ public class CoordonneesPatientControllerTests {
           mockMvc.perform(get("/coordonneesPatient?nom=&prenom="))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message", containsString("getCoordonneesPatient.nom: ne doit pas être nul ou vide")))
-                .andExpect(jsonPath("$.message", containsString("getCoordonneesPatient.prenom: ne doit pas être nul ou vide")));
+                .andExpect(jsonPath("$.message", containsString("le nom ne doit pas être nul ou vide")))
+                .andExpect(jsonPath("$.message", containsString("le prénom ne doit pas être nul ou vide")));
     }
 
     @Test
     @DisplayName(value="Test recherche coordonnees patient par nom/prenom avec retour null qui renvoie une exception")
     public void testCoordonneesPatientAvecNomPrenomQuiRetourneException() throws Exception {
-        when(coordonneesPatientService.getAllCoordonneesPatientByNomEtPrenom("Test", "Tester")).thenReturn(null);
+        when(coordonneesPatientService.getAllCoordonneesPatientByNomEtPrenom("Test", "Tester")).thenThrow(new RuntimeException(""));
 
         mockMvc.perform(get("/coordonneesPatient?nom=Test&prenom=Tester"))
                 .andDo(print())
@@ -146,7 +147,7 @@ public class CoordonneesPatientControllerTests {
     @DisplayName(value = "Test retour exception lors de la création d'un patient")
     public void testExceptionCreationPatientValide() throws Exception {
         CoordonneesPatient patientValide = new CoordonneesPatient("11",2,"VALIDE","PATIENT", LocalDate.of(1988,4,1),"","");
-        when(coordonneesPatientService.save(patientValide)).thenReturn(null);
+        when(coordonneesPatientService.save(patientValide)).thenThrow(new RuntimeException(""));
         mockMvc.perform(post("/coordonneesPatient")
                         .content(mapper.writeValueAsString(patientValide))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -166,7 +167,7 @@ public class CoordonneesPatientControllerTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(jsonPath("$.message", containsString("dateDeNaissance: ne doit pas être nulle ou vide")))
+                .andExpect(jsonPath("$.message", containsString("dateDeNaissance: ne doit pas être vide ou nulle et doit respecter le format yyyy-MM-dd")))
                  .andExpect(jsonPath("$.message", containsString("structureId: ne doit pas être nul")))
                 .andExpect(jsonPath("$.message", containsString("nom: ne doit pas être nul ou vide")))
                 .andExpect(jsonPath("$.message", containsString("prenom: ne doit pas être nul ou vide")))
@@ -176,10 +177,10 @@ public class CoordonneesPatientControllerTests {
     @Test
     @DisplayName("Test de suppression d un patient par son id invalide")
     public void testSuppressionAvecIdPatientInValide() throws Exception {
-        when(coordonneesPatientService.findById("2")).thenReturn(null);
+        when(coordonneesPatientService.findById("2")).thenReturn(Optional.empty());
         mockMvc.perform(delete("/coordonneesPatient/delete/2"))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message", is("Pas de patient trouvé avec cet id :2")));
+                .andExpect(jsonPath("$.message", is("Pas de patient trouvé avec cet id : 2")));
 
     }
 

@@ -19,7 +19,7 @@ public class CoordonneesPatientService {
 
 
     public CoordonneesPatient getAllCoordonneesPatientByNomEtPrenom(String nom, String prenom){
-        return Optional.of(coordonneesPatientRepository.findByNomAndPrenom(nom, prenom)).orElse(null);
+        return coordonneesPatientRepository.findByNomAndPrenom(nom, prenom);
     }
 
     public void deleteCoordonneesPatient(String id) {

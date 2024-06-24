@@ -91,3 +91,5 @@ hmls-donnees-patient/src/test/java/com/phildev/mls/donnees/patient/MlsDonneesPat
 lmls-donnees-patient/src/test/java/com/phildev/mls/donnees/patient/controller/CoordonneesControllerTests.java,f\8\f8d217ed6507deaa7dde87ff91bfa25dafbf3b97
 £
 smls-donnees-patient/src/test/java/com/phildev/mls/donnees/patient/controller/CoordonneesPatientControllerTests.java,b\1\b1d4c4e99550ae8d3b9f94281555e251274e981f
+ù
+mmls-donnees-patient/src/main/java/com/phildev/mls/donnees/patient/exception/StructureNonTrouveeException.java,1\4\14a55e9a518254eb585964a2ba38783e6516d4a1
