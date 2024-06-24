@@ -8,9 +8,9 @@ spring:
           - id: coordonnees-patient
             uri: lb://mls-donnees-patient
             predicates:
-              - Path=gateway/coordonneesPatient/all
+              - Path=gateway/**
             filters:
-              - SetPath=/coordonneesPatient/all
+              - StripPrefix=1
   security:
     user:
       name: phildev
@@ -20,6 +20,6 @@ server:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://eureka-server:8089/eureka
+      defaultZone: http://localhost:8089/eureka
 
 
