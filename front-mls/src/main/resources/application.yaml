@@ -3,13 +3,15 @@ spring:
     name: front-mls
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/mls?serverTimezone=UTC
+    url: ${DATABASE_URL} # jdbc:mysql://localhost:3306/mls?serverTimezone=UTC
     username: mls
     password: mls
   sql:
     init:
-      mode: always
+      mode: never
   jpa:
     show-sql: true
+    hibernate:
+      ddl-auto: update
 server:
   port: 8080
