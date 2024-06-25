@@ -6,7 +6,7 @@ spring:
         mvc:
           routes:
           - id: coordonnees-patient
-            uri: lb://mls-donnees-patient
+            uri: lb://mls-coordonnees-patient
             predicates:
               - Path=gateway/**
             filters:

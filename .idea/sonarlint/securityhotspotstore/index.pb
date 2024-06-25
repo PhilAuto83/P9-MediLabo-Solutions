@@ -81,3 +81,5 @@ Ifront-mls/src/main/java/com/phildev/front/mls/service/PatientService.java,b\f\
 ^front-mls/src/main/java/com/phildev/front/mls/service/MicroserviceCoordonneesPatientProxy.java,c\3\c343df81018fa759d6498513a746dd4a67a7aefb
 {
 Kfront-mls/src/main/java/com/phildev/front/mls/model/CoordonneesPatient.java,9\8\989c11c413e00cd5f3a8a463abcf5b82186724b9
+}
+Mfront-mls/src/main/java/com/phildev/front/mls/config/FeignSecurityConfig.java,4\5\451c7c9ce1fa56e1bdec68305f65926aa73e70a6

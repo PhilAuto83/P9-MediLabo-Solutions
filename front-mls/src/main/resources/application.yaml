@@ -13,5 +13,15 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+  cloud:
+    openfeign:
+      client:
+        config:
+          mls-gateway:
+            url: ${GATEWAY_URL}
 server:
   port: 8080
+gateway-user: ${GATEWAY_USER}
+gateway-pwd:  ${GATEWAY_PWD}
+
+
