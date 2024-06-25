@@ -1,0 +1,23 @@
+<div class="container-fluid" style="height: 100vh;">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between">
+        <a class="navbar-brand" th:href="@{/home}" style="font-style: italic">MédiLabo Solutions</a>
+        <div>
+            <div class="navbar-nav d-flex justify-content-around align-items-baseline">
+                <a class="nav-item nav-link active" th:href="@{/home}">Home</a>
+                <a class="nav-item nav-link" th:href="@{/patients/liste}">Liste des utilisateurs</a>
+                <div class="row">
+                    <form th:action="@{/logout}" method="POST">
+                        <input type="submit" value="Logout" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="fs-2">Voici la liste des utilisateurs</div>
+
+
+
+
+</div>
+</body>
+</html>
