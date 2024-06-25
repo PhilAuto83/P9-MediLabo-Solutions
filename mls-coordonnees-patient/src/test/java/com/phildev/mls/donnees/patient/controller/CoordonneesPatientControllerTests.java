@@ -42,8 +42,8 @@ public class CoordonneesPatientControllerTests {
     @DisplayName(value = "Test recherche coordonnees patient avec le numéro de structure valide 1 et une liste de 2 patients en retour")
     public void testAvecStructureValide() throws Exception {
         when(coordonneesPatientService.getAllCoordonneesPatientByStructureId(1)).thenReturn(Arrays.asList(
-                new CoordonneesPatient(2L,1,"Test", "Phil", LocalDate.of(1980, Month.APRIL,12),"",""),
-                new CoordonneesPatient(1L,1,"Jones", "Tom", LocalDate.of(1980, Month.APRIL,12),"1 rue des tests","000-444-5555")
+                new CoordonneesPatient(2L,1,"Test", "Phil", LocalDate.of(1980, Month.APRIL,12),"M","",""),
+                new CoordonneesPatient(1L,1,"Jones", "Tom", LocalDate.of(1980, Month.APRIL,12),"M","1 rue des tests","000-444-5555")
         ));
         mockMvc.perform(get("/coordonneesPatient/structure/1"))
                 .andDo(print())
@@ -88,7 +88,7 @@ public class CoordonneesPatientControllerTests {
     @DisplayName(value="Test recherche coordonnees patient avec id patient valide dans la requête")
     public void testCoordonneesPatientAvecPatientValide() throws Exception {
         when(coordonneesPatientService.getAllCoordonneesPatientById(10L)).thenReturn(
-                Optional.of(new CoordonneesPatient(10L, 2, "James", "Lebron", LocalDate.of(1990, 5, 24), null, null)));
+                Optional.of(new CoordonneesPatient(10L, 2, "James", "Lebron", LocalDate.of(1990, 5, 24),"M", null, null)));
         mockMvc.perform(get("/coordonneesPatient/10"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -100,7 +100,7 @@ public class CoordonneesPatientControllerTests {
     @DisplayName(value="Test recherche coordonnees patient avec nom/prenom patient valide dans la requête")
     public void testCoordonneesPatientAvecNomPrenomPatientValide() throws Exception {
         when(coordonneesPatientService.getAllCoordonneesPatientByNomEtPrenom("TEST", "TESTER")).thenReturn(
-                new CoordonneesPatient(10L, 2, "TEST", "TESTER", LocalDate.of(1974, 6, 7), null, null));
+                new CoordonneesPatient(10L, 2, "TEST", "TESTER", LocalDate.of(1974, 6, 7),"M", null, null));
         mockMvc.perform(get("/coordonneesPatient?nom=Test&prenom=Tester"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -133,7 +133,7 @@ public class CoordonneesPatientControllerTests {
     @Test
     @DisplayName(value = "Test de création d un patient avec un objet valide")
     public void testCreationPatientValide() throws Exception {
-        CoordonneesPatient patientValide = new CoordonneesPatient(11L,2,"VALIDE","PATIENT", LocalDate.of(1988,4,1),"","");
+        CoordonneesPatient patientValide = new CoordonneesPatient(11L,2,"VALIDE","PATIENT", LocalDate.of(1988,4,1),"M","","");
         when(coordonneesPatientService.save(patientValide)).thenReturn(patientValide);
         mockMvc.perform(post("/coordonneesPatient")
                 .content(mapper.writeValueAsString(patientValide))
@@ -146,7 +146,7 @@ public class CoordonneesPatientControllerTests {
     @Test
     @DisplayName(value = "Test retour exception lors de la création d'un patient")
     public void testExceptionCreationPatientValide() throws Exception {
-        CoordonneesPatient patientValide = new CoordonneesPatient(11L,2,"VALIDE","PATIENT", LocalDate.of(1988,4,1),"","");
+        CoordonneesPatient patientValide = new CoordonneesPatient(11L,2,"VALIDE","PATIENT", LocalDate.of(1988,4,1),"F","","");
         when(coordonneesPatientService.save(patientValide)).thenThrow(new RuntimeException(""));
         mockMvc.perform(post("/coordonneesPatient")
                         .content(mapper.writeValueAsString(patientValide))
@@ -160,7 +160,7 @@ public class CoordonneesPatientControllerTests {
     @Test
     @DisplayName(value = "Test création d'un patient avec objet invalide")
     public void testCreationPatientAvecObjetInvalide() throws Exception {
-        CoordonneesPatient patientInValide = new CoordonneesPatient(11L,null,"","", null,"","");
+        CoordonneesPatient patientInValide = new CoordonneesPatient(11L,null,"","", null,"","","");
 
         mockMvc.perform(post("/coordonneesPatient")
                         .content(mapper.writeValueAsString(patientInValide))
@@ -171,6 +171,7 @@ public class CoordonneesPatientControllerTests {
                  .andExpect(jsonPath("$.message", containsString("structureId: ne doit pas être nul")))
                 .andExpect(jsonPath("$.message", containsString("nom: ne doit pas être nul ou vide")))
                 .andExpect(jsonPath("$.message", containsString("prenom: ne doit pas être nul ou vide")))
+                .andExpect(jsonPath("$.message", containsString("genre: Le genre doit être M ou F pour masculin ou féminin")))
                 .andExpect(status().isBadRequest());
     }
 
@@ -189,7 +190,7 @@ public class CoordonneesPatientControllerTests {
     public void testSuppressionAvecIdPatientValide() throws Exception {
 
         when(coordonneesPatientService.findById(2L)).thenReturn(
-                Optional.of(new CoordonneesPatient(11L, 2, "VALIDE", "PATIENT", LocalDate.of(1981, 11, 1), "", "")));
+                Optional.of(new CoordonneesPatient(11L, 2, "VALIDE", "PATIENT", LocalDate.of(1981, 11, 1),"F", "", "")));
 
         mockMvc.perform(delete("/coordonneesPatient/delete/2"))
                 .andExpect(jsonPath("$", is("Le patient avec l id 2 a bien été supprimé")));

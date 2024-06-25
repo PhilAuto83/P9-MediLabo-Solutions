@@ -1,6 +1,6 @@
 spring:
   application:
-    name: mls-donnees-patient
+    name: mls-coordonnees-patient
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${DATABASE_URL} #jdbc:mysql://localhost:3306/mls?serverTimezone=UTC
