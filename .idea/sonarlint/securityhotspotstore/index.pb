@@ -109,3 +109,5 @@ lmls-coordonnees-patient/src/test/java/com/phildev/mls/donnees/patient/MlsDonnee
 	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 G
 front-mls/data/data.sql,0\b\0bb285c51097388507b920c7f690bc8047c9a2ec
+{
+Kfront-mls/src/main/java/com/phildev/front/mls/service/StructureService.java,9\a\9a0441b5378660964fa6a5aa794606fd56b3d17a

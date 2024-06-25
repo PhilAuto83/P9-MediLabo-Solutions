@@ -39,7 +39,7 @@ VALUES
 INSERT INTO user (firstname, lastname, role, email, structure_id, password)
 VALUES
     ('Phil', 'Dev','ADMIN','phil.dev@mls.fr',1,'$2a$10$zFvC9UAxeYJp3dnyv8cHHO0JupOZ6GtlGtAuWbCFzXn4znAShiGym'),
-    ('Joe', 'Louis','USER','phil.louis@test.fr',2,'$2a$10$XeE2pyiMLbkJbXz46tzRf.SFSqlyBQAKis0dzL1jRlHMYHvhxME32'),
+    ('Joe', 'Louis','USER','joe.louis@test.fr',2,'$2a$10$XeE2pyiMLbkJbXz46tzRf.SFSqlyBQAKis0dzL1jRlHMYHvhxME32'),
     ('Samantha', 'Doc','USER','sam.doc@test.fr',3,'$2a$10$XeE2pyiMLbkJbXz46tzRf.SFSqlyBQAKis0dzL1jRlHMYHvhxME32'),
     ('Denis', 'La Malice','USER','denis.lm@test.fr',2,'$2a$10$XeE2pyiMLbkJbXz46tzRf.SFSqlyBQAKis0dzL1jRlHMYHvhxME32');
 

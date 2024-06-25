@@ -1,6 +1,7 @@
 package com.phildev.front.mls.controller;
 
 import com.phildev.front.mls.model.User;
+import com.phildev.front.mls.service.StructureService;
 import com.phildev.front.mls.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,6 +16,9 @@ public class LoginController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private StructureService structureService;
 
     /**
      * This method is the login endpoint which displays the login view
@@ -37,6 +41,7 @@ public class LoginController {
         User user = userService.findByEmail(principal.getName());
         ModelAndView mav = new ModelAndView();
         mav.addObject("username", user.getFirstName()+" "+user.getLastName());
+        mav.addObject("structure", structureService.getStructureNameById(user.getStructureId()));
         mav.setViewName("user/admin");
         return mav;
     }
@@ -46,6 +51,7 @@ public class LoginController {
         User user = userService.findByEmail(principal.getName());
         ModelAndView mav = new ModelAndView();
         mav.addObject("username", user.getFirstName()+" "+user.getLastName());
+        mav.addObject("structure", structureService.getStructureNameById(user.getStructureId()));
         mav.setViewName("user/home");
         return mav;
     }

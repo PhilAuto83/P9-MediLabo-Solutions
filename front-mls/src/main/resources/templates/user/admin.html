@@ -8,13 +8,31 @@
 </head>
 <body>
 <div class="container-fluid" style="height: 100vh;">
-    <div class="row text-center" th:if="${username != null}">
-        <div th:text="${username+ '😋'}"></div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" th:href="@{/home}" style="font-style: italic">MédiLabo Solutions</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse d-flex justify-content-end" id="menu">
+            <div class="navbar-nav d-flex justify-content-around align-items-baseline">
+                <a class="nav-item nav-link active" th:href="@{/home}">Home</a>
+                <a class="nav-item nav-link" th:href="@{/patients/liste}">Liste des utilisateurs</a>
+                <div class="row">
+                    <form th:action="@{/logout}" method="POST">
+                        <input type="submit" value="Logout" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="row mt-4">
+        <img th:src="@{/images/mls-banner.webp}" alt="mls logo" class="img-thumbnail col-8 col-sm-6 col-md-4 mx-auto"/>
     </div>
-    <div class="row">
-        <form th:action="@{/logout}" method="POST" class="d-flex justify-content-end p-0">
-            <input type="submit" value="Logout" />
-        </form>
+    <div class="row text-center" th:if="${username != null}">
+        <div th:text="${'Bienvenue sur la page administrateur MLS : '+username}"></div>
+    </div>
+    <div class="row text-center" th:if="${structure != null}">
+        <div th:text="${'Vous faites partie de la structure : '+structure}"></div>
     </div>
 
 

@@ -13,21 +13,21 @@
             <div class="row mt-4">
                 <img th:src="@{/images/mls-banner.webp}" alt="mls logo" class="img-thumbnail col-10 col-md-8 mx-auto"/>
             </div>
-            <div th:if="${param.error}" class="d-flex justify-content-between alert alert-danger alert-dismissible fade show px-2 col-10 col-md-6 mx-auto mt-2" role="alert">
+            <div th:if="${param.error}" class="d-flex justify-content-between alert alert-danger alert-dismissible fade show p-2 col-10 col-md-6 mx-auto mt-2" role="alert">
                 Invalid username and password.
-                <button type="button" class="close" onclick="redirectToLoginPage()">
+                <button type="button" class="close p-0 border-0" onclick="redirectToLoginPage()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div th:if="${param.sessionError}" class="d-flex justify-content-between alert alert-danger alert-dismissible fade show px-2 col-10 col-md-6 mx-auto mt-2" role="alert">
+            <div th:if="${param.sessionError}" class="d-flex justify-content-between alert alert-danger alert-dismissible fade show p-2 col-10 col-md-6 mx-auto mt-2" role="alert">
                 Session already in use.
-                <button type="button" class="close" onclick="redirectToLoginPage()">
+                <button type="button" class="close p-0 border-0" onclick="redirectToLoginPage()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div th:if="${param.logout}" class="d-flex justify-content-between alert alert-success alert-dismissible fade show px-2 col-10 col-md-6 mx-auto mt-2" role="alert">
+            <div th:if="${param.logout}" class="d-flex justify-content-between alert alert-success alert-dismissible fade show p-2 col-10 col-md-6 mx-auto mt-2" role="alert">
                 You have been logged out.
-                <button type="button" class="close" onclick="redirectToLoginPage()">
+                <button type="button" class="close p-0 border-0" onclick="redirectToLoginPage()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
