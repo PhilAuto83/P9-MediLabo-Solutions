@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: mls-donnees-patient
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/mls?serverTimezone=UTC
+    username: mls
+    password: mls
+  sql:
+    init:
+      mode: never
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+server:
+  port: 9000
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8089/eureka

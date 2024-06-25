@@ -12,6 +12,7 @@
         <option value="$USER_HOME$/Downloads/mls-donnees-patient/pom.xml" />
         <option value="$PROJECT_DIR$/mls-donnees-patient/pom.xml" />
         <option value="$PROJECT_DIR$/front-mls/pom.xml" />
+        <option value="$PROJECT_DIR$/mls-coordonnees-patient/pom.xml" />
       </list>
     </option>
     <option name="workspaceImportForciblyTurnedOn" value="true" />
