@@ -111,3 +111,11 @@ G
 front-mls/data/data.sql,0\b\0bb285c51097388507b920c7f690bc8047c9a2ec
 {
 Kfront-mls/src/main/java/com/phildev/front/mls/service/StructureService.java,9\a\9a0441b5378660964fa6a5aa794606fd56b3d17a
+ƒ
+Sfront-mls/src/main/java/com/phildev/front/mls/controller/UtilisateurController.java,f\a\fa9c980add8255998b672a7d8bc1ea8308b38f06
+n
+>front-mls/src/main/java/com/phildev/front/mls/dto/UserDTO.java,b\4\b44373880b290eaeb840c5fa7b75ea531a7a9afe
+}
+Mfront-mls/src/main/java/com/phildev/front/mls/service/UtilisateurService.java,9\9\99b2e58983e9788db895604751ac757fcbef24b8
+t
+Dfront-mls/src/main/java/com/phildev/front/mls/mapper/UserMapper.java,4\5\456cf0ef88cb2495b9cf38f623f2d7101b3e96f1
