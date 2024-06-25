@@ -20,12 +20,14 @@ CREATE TABLE user (
 
 CREATE TABLE coordonnees_patient (
         id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        structure_id INT NOT NULL,
         nom VARCHAR(30) NOT NULL,
         prenom VARCHAR(30) NOT NULL,
         date_de_naissance DATE NOT NULL,
         genre VARCHAR(1) NOT NULL,
         adresse VARCHAR(50),
-        telephone VARCHAR(12)
+        telephone VARCHAR(12),
+        FOREIGN KEY(structure_id) REFERENCES structure(id)
 );
 
 INSERT INTO structure (name)
@@ -41,12 +43,12 @@ VALUES
     ('Samantha', 'Doc','USER','sam.doc@test.fr',3,'$2a$10$XeE2pyiMLbkJbXz46tzRf.SFSqlyBQAKis0dzL1jRlHMYHvhxME32'),
     ('Denis', 'La Malice','USER','denis.lm@test.fr',2,'$2a$10$XeE2pyiMLbkJbXz46tzRf.SFSqlyBQAKis0dzL1jRlHMYHvhxME32');
 
-INSERT INTO coordonnees_patient(nom, prenom, date_de_naissance, genre, adresse, telephone)
+INSERT INTO coordonnees_patient(structure_id, nom, prenom, date_de_naissance, genre, adresse, telephone)
 VALUES
-    ('TESTNONE','TEST','1966-12-31','F','1 Brookside St','100-222-3333'),
-    ('TESTBORDERLINE','TEST','1945-06-24','M','2 High St','200-333-4444'),
-    ('TESTINDANGER','TEST','2004-06-18','M','3 Club Road','300-444-5555'),
-    ('TESTEARLYONSET','TEST','2002-06-28','F','4 Valley Dr','400-555-6666');
+    (2,'TESTNONE','TEST','1966-12-31','F','1 Brookside St','100-222-3333'),
+    (3,'TESTBORDERLINE','TEST','1945-06-24','M','2 High St','200-333-4444'),
+    (2,'TESTINDANGER','TEST','2004-06-18','M','3 Club Road','300-444-5555'),
+    (3,'TESTEARLYONSET','TEST','2002-06-28','F','4 Valley Dr','400-555-6666');
 
 
 

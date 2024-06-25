@@ -2,12 +2,17 @@
 
 Le projet MédiLabo Solutions fournit des informations sur les patients par rapport à leur risque de diabète.
 Le projet est organisé avec plusieurs microservices qui communiquent entre eux :
-- **front-mls** : qui représente le front avec ne base de données mysql qui stocke les users
-- **mls-coordonnees-patient** : qui représente un service back-end qui renvoie les coordonnées des patients. 
-Les données sont stockées dans une base de données mysql partagée avec le service front pour respecter certains principes du green code.
-- **mls-notes-patient** : qui représente un service back-end qui renvoie les notes du praticien sur le patient
-- **mls-gateway** : qui est la gateway proté&geant les appels aux services back-end. Le front n'appellera pas directement les services back.
-- **eureka-server** : qui est un edge microservice représentant un server de registre détectant les microservices et leur état une fois déclaré en tant que client.
+>- **front-mls** : qui représente le front avec ne base de données mysql qui stocke les users
+>- **mls-coordonnees-patient** : qui représente un service back-end qui renvoie les coordonnées des patients. 
+>Les données sont stockées dans une base de données mysql partagée avec le service front pour respecter certains principes du green code.
+>- **mls-notes-patient** : qui représente un service back-end qui renvoie les notes du praticien sur le patient
+>- **mls-gateway** : qui est la gateway protégeant les appels aux services back-end. Le front n'appellera pas directement les services back.
+>- **eureka-server** : qui est un edge microservice représentant un server de registre détectant les microservices et leur état une fois déclaré en tant que client.
+
+## <span style="color: red;">Pré-requis</span>
+
+Les données injectées dans la base de données mysql sont présentes [ici](./front-mls/data/data.sql).
+Pour la partie container, les bases de données mysql et plus tard mongo auront des volumes pour persister les données.
 
 ## <span style="color: grey;">Architecture du projet</span>
 

@@ -3,7 +3,7 @@ spring:
     name: mls-donnees-patient
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/mls?serverTimezone=UTC
+    url: ${DATABASE_URL} #jdbc:mysql://localhost:3306/mls?serverTimezone=UTC
     username: mls
     password: mls
   sql:
