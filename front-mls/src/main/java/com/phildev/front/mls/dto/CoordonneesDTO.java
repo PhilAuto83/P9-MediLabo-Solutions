@@ -15,8 +15,6 @@ import java.time.LocalDate;
 public class CoordonneesDTO {
 
 
-    private Integer structureId;
-
     private String nom;
 
     private String prenom;

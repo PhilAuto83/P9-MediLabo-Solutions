@@ -23,6 +23,30 @@
             </div>
         </div>
     </nav>
+    <div class="fs-2">Voici la liste des patients</div>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Prenom</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Date de naissance</th>
+            <th scope="col">Genre</th>
+            <th scope="col">Adresse</th>
+            <th scope="col">Téléphone</th>
+        </tr>
+        </thead>
+        <tbody th:unless="${#lists.isEmpty(coordonnees_patient)}">
+        <tr th:each="patient :${coordonnees_patient}">
+            <td th:text="${patient.prenom}"></td>
+            <td th:text="${patient.nom}"></td>
+            <td th:text="${patient.dateDeNaissance}"></td>
+            <td th:text="${patient.genre}"></td>
+            <td th:text="${patient.adresse}"></td>
+            <td th:text="${patient.telephone}"></td>
+        </tr>
+        </tbody>
+    </table>
+
 
 </div>
 </body>

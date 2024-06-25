@@ -2,7 +2,6 @@ package com.phildev.front.mls.config;
 
 import com.phildev.front.mls.model.User;
 import com.phildev.front.mls.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

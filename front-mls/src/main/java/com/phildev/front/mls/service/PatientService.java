@@ -23,7 +23,7 @@ public class PatientService {
 
     /**
      * Cette méthode permet de récupérer tous les coordonnées des patients associés à la structure de l'utilisateur connecté
-     * @param principal qui est l'objet permettant de récupérer le user connecté
+     * @param principal qui est l'objet permettant de récupérer le user connecté et son structure id
      * @return une liste de {@link CoordonneesDTO} qui représente les coordonnées d'un patient (téléphone, adresse, nom, prénom)
      */
     public List<CoordonneesDTO> recupereToutesLesCoordonneesPatient(Principal principal) {

@@ -21,6 +21,7 @@ public class PatientController {
     public ModelAndView recupereToutesLesCoordonneesPatient(Principal principal){
         ModelAndView mav = new ModelAndView("patients");
         List<CoordonneesDTO> coordonneesDTOList = patientService.recupereToutesLesCoordonneesPatient(principal);
+        mav.addObject("coordonnees_patient", coordonneesDTOList);
         return mav;
     }
 }
