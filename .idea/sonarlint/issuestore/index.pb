@@ -67,10 +67,6 @@ n
 >front-mls/src/main/java/com/phildev/front/mls/dto/UserDTO.java,b\4\b44373880b290eaeb840c5fa7b75ea531a7a9afe
 }
 Mfront-mls/src/main/java/com/phildev/front/mls/service/UtilisateurService.java,9\9\99b2e58983e9788db895604751ac757fcbef24b8
-Š
-Zfront-mls/src/main/java/com/phildev/front/mls/controller/CoordonneesPatientController.java,9\d\9d21e1dffffcd83db061f2d79cc0d9a7e3d114c3
-„
-Tfront-mls/src/main/java/com/phildev/front/mls/service/CoordonneesPatientService.java,e\3\e3aa168fa5b8a37fff4529754fbb24ddcf490174
 u
 Efront-mls/src/main/java/com/phildev/front/mls/dto/CoordonneesDTO.java,3\2\32f86d954a3e405007e205efef4c13de6f933c1e
 

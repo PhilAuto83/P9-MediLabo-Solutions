@@ -1,13 +1,26 @@
-#services:
-#  eureka-server:
-#    container_name: eureka-server
-#    build:
-#      context: ./eureka-server
-#      dockerfile: Dockerfile
-#    ports:
-#      - "8089:8089"
+services:
+  eureka-server:
+    container_name: eureka-server
+    build:
+      context: ./eureka-server
+      dockerfile: Dockerfile
+    ports:
+      - "8089:8089"
+  mls-mysql:
+    container_name: mls-mysql
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: mls
+      MYSQL_PASS: mls
+    volumes:
+      - mysql-data:/var/lib/mysql
+volumes:
+  mysql-data:
 #  mls-gateway:
 #    container_name: mls-gateway
+#    environment:
+#      EUREKA_SERVER: eureka-server:8089/eureka
 #    build:
 #      context: ./mls-gateway
 #      dockerfile: Dockerfile
@@ -15,6 +28,7 @@
 #    - eureka-server
 #    ports:
 #      - "8081:8081"
+
 
 #  front-mls:
 #    container_name: front-mls
