@@ -32,8 +32,8 @@ CREATE TABLE coordonnees_patient (
 
 INSERT INTO structure (name)
 VALUES
-    ('mls'),
-    ('labo analyse 1'),
+    ('MLS'),
+    ('Laboratoire Test 1'),
     ('Cabinet Dr Sam');
 
 INSERT INTO user (firstname, lastname, role, email, structure_id, password)

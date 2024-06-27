@@ -79,3 +79,7 @@ Ifront-mls/src/main/java/com/phildev/front/mls/service/PatientService.java,b\f\
 Kfront-mls/src/main/java/com/phildev/front/mls/model/CoordonneesPatient.java,9\8\989c11c413e00cd5f3a8a463abcf5b82186724b9
 }
 Mfront-mls/src/main/java/com/phildev/front/mls/config/FeignSecurityConfig.java,4\5\451c7c9ce1fa56e1bdec68305f65926aa73e70a6
+R
+"mls-coordonnees-patient/Dockerfile,d\5\d550d6507111cb6c89bd857ff3cd9d1352935bf8
+›
+kmls-coordonnees-patient/src/main/java/com/phildev/mls/donnees/patient/MlsCoordonneesPatientApplication.java,2\7\279d7106bff5c49cd26d7b2eeaa72670d4637a2b

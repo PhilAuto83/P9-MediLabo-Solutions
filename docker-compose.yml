@@ -15,19 +15,22 @@ services:
       MYSQL_PASS: mls
     volumes:
       - mysql-data:/var/lib/mysql
+    expose:
+      - "3306"
+  mls-gateway:
+    container_name: mls-gateway
+    environment:
+      EUREKA_SERVER: http://eureka-server:8089/eureka
+    build:
+      context: ./mls-gateway
+      dockerfile: Dockerfile
+    depends_on:
+      - eureka-server
+    ports:
+      - "8081:8081"
 volumes:
   mysql-data:
-#  mls-gateway:
-#    container_name: mls-gateway
-#    environment:
-#      EUREKA_SERVER: eureka-server:8089/eureka
-#    build:
-#      context: ./mls-gateway
-#      dockerfile: Dockerfile
-#    depends_on:
-#    - eureka-server
-#    ports:
-#      - "8081:8081"
+
 
 
 #  front-mls:
@@ -40,19 +43,6 @@ volumes:
 #    ports:
 #      - "8080:8080"
 #
-#  mls-mysql:
-#    container_name: mls-mysql
-#    image: mysql:latest
-#    environment:
-#      - MYSQL_DATABASE=mls
-#      - MYSQL_USER=mls
-#      - MYSQL_PASSWORD=mls
-#    ports:
-#      - "3307:3306"
-#    volumes:
-#      - ./mysql-data:/var/lib/mysql/
-#volumes:
-#  mysql-data:
-#  mongo-data:
+
 
 

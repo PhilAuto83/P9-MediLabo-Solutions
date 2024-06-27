@@ -7,7 +7,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
@@ -29,7 +28,7 @@ public class MlsSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(auth ->{
-                    auth.requestMatchers( "/login").permitAll();
+                    auth.requestMatchers( "/login","/js/**","/css/**","/images/**").permitAll();
                     auth.requestMatchers("/admin").hasRole("ADMIN");
                     auth.requestMatchers("/home").hasRole("USER");
                     auth.anyRequest().authenticated();
@@ -63,15 +62,6 @@ public class MlsSecurityConfig {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(bCryptPasswordEncoder);
         return authenticationManagerBuilder.build();
-    }
-
-    /***
-     * This bean is used to grant public access to css files, images and js scripts
-     * @return WebSecurityCustomizer object
-     */
-    @Bean
-    WebSecurityCustomizer enableStaticResources(){
-        return (web -> web.ignoring().requestMatchers("/css/**","/images/**", "/js/**"));
     }
 
 
