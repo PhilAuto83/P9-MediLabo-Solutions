@@ -25,6 +25,9 @@
         </div>
     </nav>
     <div class="fs-2">Voici la liste des patients</div>
+    <div th:if="${erreurSuppression != null}">
+        <span th:text="${erreurSuppression}"></span>
+    </div>
     <table class="table table-striped">
         <thead class="thead-dark">
         <tr>
@@ -46,13 +49,16 @@
             <td th:text="${patient.adresse}"></td>
             <td th:text="${patient.telephone}"></td>
             <td class="d-flex justify-content-around" >
-                <a th:href="@{/patient/${patient.id}}">Voir fiche</a>
-                <a th:href="@{/patient/maj/${patient.id}}">Mettre à jour</a>
-                <a th:href="@{/patient/suppression/${patient.id}}">Supprimer</a>
+                <a th:href="@{/patient/{id}(id=${patient.id})}">Voir fiche</a>
+                <a th:href="@{/patient/update/{id}(id=${patient.id})}">Mettre à jour</a>
+                <a th:href="@{/patient/suppression/{id}(id=${patient.id})}">Supprimer</a>
             </td>
         </tr>
         </tbody>
     </table>
+    <div th:if="${listeVide != null}" class="text-center">
+        <span th:text="${listeVide}" class="fs-4 text-danger"></span>
+    </div>
 
 
 </div>

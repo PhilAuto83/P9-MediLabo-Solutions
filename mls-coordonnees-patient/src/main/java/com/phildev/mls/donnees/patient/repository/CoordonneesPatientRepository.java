@@ -12,5 +12,6 @@ public interface CoordonneesPatientRepository extends JpaRepository<CoordonneesP
 
     CoordonneesPatient findByNomAndPrenom(@NotNull String nom, @NotNull String prenom);
 
+
     List<CoordonneesPatient> findAllByStructureId(Integer id);
 }

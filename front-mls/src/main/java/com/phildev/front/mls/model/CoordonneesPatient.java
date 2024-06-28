@@ -13,9 +13,7 @@ public class CoordonneesPatient {
 
     private Long id;
 
-
     private Integer structureId;
-
 
     private String nom;
 

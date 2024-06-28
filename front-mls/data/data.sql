@@ -26,8 +26,7 @@ CREATE TABLE coordonnees_patient (
         date_de_naissance DATE NOT NULL,
         genre VARCHAR(1) NOT NULL,
         adresse VARCHAR(50),
-        telephone VARCHAR(12),
-        FOREIGN KEY(structure_id) REFERENCES structure(id)
+        telephone VARCHAR(12)
 );
 
 INSERT INTO structure (name)
