@@ -21,6 +21,10 @@ public interface MicroserviceCoordonneesPatientProxy {
     @DeleteMapping("/gateway/coordonneesPatient/delete/{id}")
     ResponseEntity<String> supprimerPatient(@PathVariable("id") Long id);
 
-    @PostMapping("gateway/coordonneesPatient")
-    CoordonneesPatient ajoutPatient(@RequestBody CoordonneesPatient coordonneesPatient);
+    @PostMapping("/gateway/coordonneesPatient")
+    CoordonneesPatient sauvegarderUnPatient(@RequestBody CoordonneesPatient coordonneesPatient);
+
+    @GetMapping("/gateway/coordonneesPatient/{id}")
+    CoordonneesPatient recuperePatient(@PathVariable("id") Long id);
+
 }

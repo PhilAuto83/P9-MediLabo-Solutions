@@ -1,6 +1,7 @@
 package com.phildev.front.mls.controller;
 
 
+import com.phildev.front.mls.error.ResponseNotFoundException;
 import com.phildev.front.mls.model.CoordonneesPatient;
 import com.phildev.front.mls.model.User;
 import com.phildev.front.mls.service.PatientService;
@@ -13,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
@@ -101,7 +99,7 @@ public class PatientController {
             }
             return "ajout_patient";
         } try{
-            CoordonneesPatient patient = patientService.ajouterUnPatient(coordonneesPatient);
+            CoordonneesPatient patient = patientService.sauvegarderUnPatient(coordonneesPatient);
             logger.info("Le patient {}]{} a été ajouté à la structure n° {} ", patient.getPrenom(), patient.getNom(), patient.getStructureId());
             return "redirect:/patients/liste";
 
@@ -109,6 +107,55 @@ public class PatientController {
             logger.error(exception.getMessage());
             model.addAttribute("backendError", exception.getMessage());
             return "ajout_patient";
+        }
+    }
+
+    /**
+     * Cette méthode permet de renvoyer l'utilisateur sur la page de modification des coordonnées du patient sélectionné
+     * @param id qui est l'id du patient sélectionné
+     * @param model qui permet de renvoyer un objet {@link CoordonneesPatient} dans la vue update_patient.html
+     * @return la vue update_patient.html
+     */
+    @GetMapping("/patient/update/{id}")
+    public String afficherLaVueAjoutPatientAvecLesInfosPatient(@PathVariable("id") Long id, Model model){
+
+        try{
+            CoordonneesPatient patient  = patientService.recuperePatient(id);
+            model.addAttribute("patient", patient);
+            logger.info("Patient {} {} prêt à être mis à jour", patient.getPrenom(), patient.getNom());
+            return "update_patient";
+        }catch(ResponseNotFoundException exception){
+            model.addAttribute("patientError", exception.getMessage());
+            logger.error("Le patient avec l'id {} n' a pas été trouvé ", id);
+            return "redirect:/patients/liste";
+        }
+    }
+
+    /**
+     * Cette méthode permet de mettre à jour un patient via son id
+     * @param id qui est l'identifiant du patient en base de données
+     * @param coordonneesPatient qui représente les nouvelles coordonnées du patient
+     * @param result qui permet de vérifier la validité des données
+     * @param model qui renvoie des objets dans la vue patients.html ou dans la vue update_patient.html
+     * @return la vue de la liste patients si tout est OK sinon reste sur la vue en cours avec des erreurs
+     */
+    @PostMapping(value = "/patient/update/{id}", consumes = "application/x-www-form-urlencoded")
+    public String updateDuPatient(@PathVariable("id") Long id, @Valid @ModelAttribute("patient") CoordonneesPatient coordonneesPatient, BindingResult result, Model model){
+        if(result.hasErrors()) {
+            if(result.hasFieldErrors("dateDeNaissance")){
+                model.addAttribute("dateError", "Le format de la date n'est pas valide, il doit respecter le format yyyy-MM-dd");
+            }
+            return "update_patient";
+        } try{
+            coordonneesPatient.setId(id);
+            CoordonneesPatient patient = patientService.sauvegarderUnPatient(coordonneesPatient);
+            logger.info("Le patient {}]{} a été mis à jour à la structure n° {} ", patient.getPrenom(), patient.getNom(), patient.getStructureId());
+            return "redirect:/patients/liste";
+
+        }catch(FeignException exception){
+            logger.error(exception.getMessage());
+            model.addAttribute("backendError", exception.getMessage());
+            return "update_patient";
         }
     }
 }

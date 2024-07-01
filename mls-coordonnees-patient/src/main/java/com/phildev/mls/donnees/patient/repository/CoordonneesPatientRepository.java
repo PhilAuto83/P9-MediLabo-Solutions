@@ -3,6 +3,8 @@ package com.phildev.mls.donnees.patient.repository;
 import com.phildev.mls.donnees.patient.model.CoordonneesPatient;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,4 +16,6 @@ public interface CoordonneesPatientRepository extends JpaRepository<CoordonneesP
 
 
     List<CoordonneesPatient> findAllByStructureId(Integer id);
+
+
 }

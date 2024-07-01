@@ -45,7 +45,7 @@ public class CoordonneesPatientController {
 
 
     /**
-     * Cette méthode retourne les coordonnées d'un patient retoruvé via son id sur la base mongo
+     * Cette méthode retourne les coordonnées d'un patient retoruvé via son id sur la base mysql
      * @param id qui est l'id du patient sous forme de chaîne de caractères
      * @return les coordonnées d'un patient -> {@link CoordonneesPatient}.
      * Si le patient n'est pas trouvé une exception est retourné de type {@link PatientNonTrouveException}
@@ -103,6 +103,7 @@ public class CoordonneesPatientController {
             throw new PatientException("Une erreur est survenue, le patient n'a pas été créé");
         }
     }
+
 
     /**
      * Cette méthode supprime les coordonnnées d'un patient par son id

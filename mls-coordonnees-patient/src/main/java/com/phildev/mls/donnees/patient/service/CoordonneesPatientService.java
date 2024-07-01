@@ -48,4 +48,6 @@ public class CoordonneesPatientService {
     public List<CoordonneesPatient> getAllCoordonneesPatientByStructureId(Integer id) {
         return coordonneesPatientRepository.findAllByStructureId(id);
     }
+
+
 }
