@@ -1,5 +1,6 @@
 package com.phildev.front.mls.service;
 
+
 import com.phildev.front.mls.model.CoordonneesPatient;
 import com.phildev.front.mls.model.User;
 import com.phildev.front.mls.repository.UserRepository;
@@ -48,5 +49,9 @@ public class PatientService {
             logger.error("Le patient {} n'a pas été supprimé", id);
             throw new RuntimeException(String .format("Le patient %d n'a pas été supprimé", id));
         }
+    }
+
+    public CoordonneesPatient ajouterUnPatient(CoordonneesPatient coordonneesPatient){
+        return microserviceCoordonneesPatientProxy.ajoutPatient(coordonneesPatient);
     }
 }
