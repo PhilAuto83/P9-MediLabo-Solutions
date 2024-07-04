@@ -26,8 +26,7 @@ public class CoordonneesPatient {
     @NotBlank(message = "Le prénom ne peut pas être vide ou nul")
     private String prenom;
 
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "La date ne peut pas être vide et doit respecter le format yyyy-MM-dd")
     private LocalDate dateDeNaissance;
 

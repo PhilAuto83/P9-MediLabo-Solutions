@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -33,7 +34,8 @@ public class CoordonneesPatient {
     @NotBlank(message = "ne doit pas être nul ou vide")
     private String prenom;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "ne doit pas être vide ou nulle et doit respecter le format yyyy-MM-dd")
     @Column(name = "date_de_naissance")
     private LocalDate dateDeNaissance;

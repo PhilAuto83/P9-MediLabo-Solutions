@@ -23,5 +23,8 @@ server:
   port: 8080
 gateway-user: ${GATEWAY_USER}
 gateway-pwd:  ${GATEWAY_PWD}
-
+logging:
+  level:
+    com.phildev.front.mls: debug
+    root: error
 

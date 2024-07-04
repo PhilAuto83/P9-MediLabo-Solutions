@@ -26,7 +26,7 @@ public class CustomExceptionHandler {
         int statusCode = HttpStatus.BAD_REQUEST.value();
         String method = request.getMethod();
         response.put("date", localDateTime);
-        response.put("methode", method);
+        response.put("method", method);
         response.put("statusCode", statusCode);
 
         if(request.getMethod().equals("GET")){

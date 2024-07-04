@@ -1,23 +1,30 @@
 package com.phildev.front.mls.error;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
 import feign.codec.ErrorDecoder;
 
-import static feign.FeignException.errorStatus;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class CustomErrorDecoder implements ErrorDecoder {
+    private final ErrorDecoder errorDecoder = new Default();
+
     @Override
     public Exception decode(String methodKey, Response response) {
-        if (response.status() == 400 ) {
-            return new BadRequestException(response.reason());
-
-        }else if(response.status() == 404) {
-            return new ResponseNotFoundException(response.reason());
-        }else if(response.status()>=500 && response.status()<=599){
-            return new ServerResponseException("Le serveur ne répond pas. Veuillez réessayer ultérieurement.");
+        OriginalException originalException = null;
+        try (InputStream body = response.body().asInputStream()) {
+            ObjectMapper mapper = new ObjectMapper();
+            originalException = mapper.readValue(body, OriginalException.class);
+        } catch (IOException e) {
+            return new Exception(e.getMessage());
         }
-        return errorStatus(methodKey, response);
+        return switch (response.status()) {
+            case 400 ->
+                    new BadRequestException(originalException.getMessage() != null ? originalException.getMessage() : "Bad Request");
+            case 404 ->
+                    new ResponseNotFoundException(originalException.getMessage() != null ? originalException.getMessage() : "Not found");
+            default -> errorDecoder.decode(methodKey, response);
+        };
     }
-
-
 }

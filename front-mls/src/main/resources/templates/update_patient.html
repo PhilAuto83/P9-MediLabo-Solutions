@@ -64,13 +64,14 @@
         <div class="form-group mt-2">
             <label for="telephone">Téléphone</label>
             <input type="text" class="form-control" id="telephone" th:field="*{telephone}">
-            <p class="text-danger" th:if="${#fields.hasErrors('telephone')}" th:errors="*{telephone}"></p>
+            <p class="text-danger" th:if="${telephoneError != null}" th:text="${telephoneError}"></p>
         </div>
         <button type="submit" class="btn btn-primary mt-2">Mise à jour</button>
+        <div th:if="${backendError != null}">
+            <div th:text="${backendError}"></div>
+        </div>
+
     </form>
-    <div th:if="${backendError != null}">
-        <div th:text="${backendError}"></div>
-    </div>
 
 
 </div>
