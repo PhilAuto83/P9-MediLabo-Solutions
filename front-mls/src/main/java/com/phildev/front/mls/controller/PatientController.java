@@ -67,6 +67,7 @@ public class PatientController {
     public String supprimerPatient(@PathVariable("id") Long id, Model model, Principal principal){
         try{
             patientService.supprimerPatient(id);
+            logger.info("Le patient {} a bien été supprimé", id);
         }catch (RuntimeException exception){
             model.addAttribute("erreurSuppression", exception.getMessage());
             return "patients";
