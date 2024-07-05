@@ -111,3 +111,5 @@ v
 Ffront-mls/src/test/java/com/phildev/front/mls/utils/PrincipalTest.java,5\e\5e607e8f51c7dc7a8a646df9e654b25a415baa80
 á
 Wfront-mls/src/test/java/com/phildev/front/mls/controller/UtilisateurControllerTest.java,0\4\048c07d8cec9293855e9505e1b056b535562b625
+Å
+Qfront-mls/src/test/java/com/phildev/front/mls/controller/LoginControllerTest.java,5\b\5b004f810631061e995dbf6b95f198007419d8ad
