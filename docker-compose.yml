@@ -20,7 +20,7 @@ services:
   mls-gateway:
     container_name: mls-gateway
     environment:
-      EUREKA_SERVER: http://eureka-server:8089/eureka
+      EUREKA_SERVER: "http://eureka-server:8089/eureka"
     build:
       context: ./mls-gateway
       dockerfile: Dockerfile
@@ -28,21 +28,19 @@ services:
       - eureka-server
     ports:
       - "8081:8081"
+  mls-mongo:
+    container_name: mls-mongo
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: mls
+    expose:
+      - "27017"
+    volumes:
+      - mongo-data:/data/db
 volumes:
   mysql-data:
-
-
-
-#  front-mls:
-#    container_name: front-mls
-#    build:
-#      context: ./front-mls
-#      dockerfile: Dockerfile
-#    depends_on:
-#      - mls-mysql
-#    ports:
-#      - "8080:8080"
-#
+  mongo-data:
 
 
 
