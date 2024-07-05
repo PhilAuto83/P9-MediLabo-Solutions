@@ -29,7 +29,7 @@ public class MlsSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(auth ->{
                     auth.requestMatchers( "/login","/js/**","/css/**","/images/**").permitAll();
-                    auth.requestMatchers("/admin").hasRole("ADMIN");
+                    auth.requestMatchers("/admin", "/utilisateurs/liste").hasRole("ADMIN");
                     auth.requestMatchers("/home").hasRole("USER");
                     auth.anyRequest().authenticated();
                 }).formLogin(form -> form

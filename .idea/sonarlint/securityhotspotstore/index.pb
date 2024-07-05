@@ -103,3 +103,11 @@ nmls-coordonnees-patient/src/main/java/com/phildev/mls/donnees/patient/exception
 qmls-coordonnees-patient/src/main/java/com/phildev/mls/donnees/patient/exception/StructureNonTrouveeException.java,d\1\d13443c2444ae34ef6374671611a71bbf2dbb9ef
 Å
 Qfront-mls/src/main/java/com/phildev/front/mls/error/TelephoneFormatException.java,a\e\aed5e950f2f5630bc2baecf4760584d28ddca066
+É
+Sfront-mls/src/test/java/com/phildev/front/mls/controller/PatientControllerTest.java,b\f\bfe1126020e0c1424fb83f036db064b9bac24cd2
+Ü
+Vfront-mls/src/test/java/com/phildev/front/mls/integration/PatientIntegrationTests.java,5\6\5669a7c5ed76e73b78a5b432584db80eb0d19331
+v
+Ffront-mls/src/test/java/com/phildev/front/mls/utils/PrincipalTest.java,5\e\5e607e8f51c7dc7a8a646df9e654b25a415baa80
+á
+Wfront-mls/src/test/java/com/phildev/front/mls/controller/UtilisateurControllerTest.java,0\4\048c07d8cec9293855e9505e1b056b535562b625
