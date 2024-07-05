@@ -7,10 +7,10 @@ import com.phildev.front.mls.model.User;
 import com.phildev.front.mls.service.PatientService;
 import com.phildev.front.mls.service.UserService;
 import com.phildev.front.mls.utils.PrincipalTest;
+import feign.FeignException;
+import feign.Request;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,10 +20,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -233,4 +233,48 @@ public class PatientControllerTest {
                 .andExpect(content().string(containsString(" <div>Pas de patient créé</div>")))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    @WithMockUser(username = "tester@mls.fr")
+    @DisplayName("Test affichage du formulaire pour mettre à jour le patient 6")
+    public void testMiseAJourPatientValide() throws Exception {
+        CoordonneesPatient patient = new CoordonneesPatient(6L,2, "Test","Sofia", LocalDate.of(1983, 5,  18), "F","12 rue des tests","000-111-8888");
+               when(patientService.recuperePatient(6L)).thenReturn(patient);
+               mockMvc.perform(get("/patient/update/6"))
+                .andDo(print())
+                .andExpect(view().name("update_patient"))
+                .andExpect(model().attributeExists("patient"))
+                .andExpect(content().string(containsString(" <title>MLS - Mise à jour du patient</title>")))
+                .andExpect(content().string(containsString("<input type=\"text\" class=\"form-control\" id=\"structureId\" name=\"structureId\" value=\"2\">")))
+                .andExpect(content().string(containsString("<input type=\"text\" class=\"form-control\" id=\"prenom\" name=\"prenom\" value=\"Sofia\">")))
+                .andExpect(content().string(containsString("<input type=\"text\" class=\"form-control\" id=\"nom\" aria-describedby=\"nom\" name=\"nom\" value=\"Test\">")))
+                .andExpect(content().string(containsString("<option value=\"F\" selected=\"selected\">Féminin</option>")))
+                .andExpect(content().string(containsString("<input type=\"text\" class=\"form-control\" id=\"dateDeNaissance\" name=\"dateDeNaissance\" value=\"1983-05-18\">")))
+                .andExpect(content().string(containsString("<input type=\"text\" class=\"form-control\" id=\"adresse\" name=\"adresse\" value=\"12 rue des tests\">")))
+                .andExpect(content().string(containsString("<input type=\"text\" class=\"form-control\" id=\"telephone\" name=\"telephone\" value=\"000-111-8888\">")))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "tester@mls.fr")
+    @DisplayName("Mise à jour patient valide")
+    public void updatePatientValide() throws Exception {
+        CoordonneesPatient patient = new CoordonneesPatient(8L,2, "Developer","Phil", LocalDate.of(1983, 7,  18), "M","","000-111-2222");
+        when(patientService.sauvegarderUnPatient(patient)).thenReturn(patient);
+        mockMvc.perform(post("/patient/update/8")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("structureId", "2")
+                        .param("prenom", "Phil")
+                        .param("nom", "Developer")
+                        .param("genre", "M")
+                        .param("dateDeNaissance", "1983-07-18")
+                        .param("adresse", "")
+                        .param("telephone", "000-111-2222"))
+                .andDo(print())
+                .andExpect(view().name("redirect:/patients/liste"))
+                .andExpect(status().is(302));
+    }
+
+
 }
