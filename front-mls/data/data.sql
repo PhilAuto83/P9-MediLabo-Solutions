@@ -1,4 +1,4 @@
-DROP DATABASE IF EXISTS mls;
+-- création du schéma mls qui contient les utilisateurs et les structures
 CREATE DATABASE mls;
 USE mls;
 
@@ -18,17 +18,6 @@ CREATE TABLE user (
                      FOREIGN KEY(structure_id) REFERENCES structure(id)
 );
 
-CREATE TABLE coordonnees_patient (
-        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-        structure_id INT NOT NULL,
-        nom VARCHAR(30) NOT NULL,
-        prenom VARCHAR(30) NOT NULL,
-        date_de_naissance DATE NOT NULL,
-        genre VARCHAR(1) NOT NULL,
-        adresse VARCHAR(50),
-        telephone VARCHAR(12)
-);
-
 INSERT INTO structure (name)
 VALUES
     ('MLS'),
@@ -41,6 +30,21 @@ VALUES
     ('Joe', 'Louis','USER','joe.louis@test.fr',2,'$2a$10$XeE2pyiMLbkJbXz46tzRf.SFSqlyBQAKis0dzL1jRlHMYHvhxME32'),
     ('Samantha', 'Doc','USER','sam.doc@test.fr',3,'$2a$10$XeE2pyiMLbkJbXz46tzRf.SFSqlyBQAKis0dzL1jRlHMYHvhxME32'),
     ('Denis', 'La Malice','USER','denis.lm@test.fr',2,'$2a$10$XeE2pyiMLbkJbXz46tzRf.SFSqlyBQAKis0dzL1jRlHMYHvhxME32');
+
+-- création du schéma mls_coordonnées avec les coordonnées des patients
+CREATE DATABASE mls_coordonnees;
+USE mls_coordonnees;
+CREATE TABLE coordonnees_patient (
+        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        structure_id INT NOT NULL,
+        nom VARCHAR(30) NOT NULL,
+        prenom VARCHAR(30) NOT NULL,
+        date_de_naissance DATE NOT NULL,
+        genre VARCHAR(1) NOT NULL,
+        adresse VARCHAR(50),
+        telephone VARCHAR(12)
+);
+
 
 INSERT INTO coordonnees_patient(structure_id, nom, prenom, date_de_naissance, genre, adresse, telephone)
 VALUES

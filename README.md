@@ -16,6 +16,10 @@ Pour la partie container, les bases de données mysql et plus tard mongo auront 
 
 ## <span style="color: grey;">Architecture du projet</span>
 
+Voici le schéma de fonctionnement de l'application :
+
+![Architecture MLS](front-mls/src/main/resources/static/images/architecture_mls_pm.png "Architecture MLS")
+
 ## <span style="color: white;">Déploiement du projet</span> 
 
 ## <span style="color: limegreen;">Green code</span>
@@ -24,5 +28,5 @@ Pour la partie container, les bases de données mysql et plus tard mongo auront 
   - passage au format webp
   - gain sur la taille de l'image : 154 ko à 6 ko
 - Partage du serveur de base de données _**MySQL**_ avec deux schémas :
-  - un schéma **mls** qui contient la tables des utilisateurs de l'application et la table des structures associées aux utilisateurs et qui est liée au service front **mls-front**
+  - un schéma **mls** qui contient la tables des utilisateurs de l'application et la table des structures associées aux utilisateurs et qui est liée au service front **front-mls**
   - un schéma **mls_coordonnees** qui contient les données des coordonnées des patients et qui est liée au service back-end **mls-coordonnees-patient**
