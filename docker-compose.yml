@@ -1,6 +1,34 @@
 services:
+  front-mls:
+    container_name: front-mls
+    environment:
+      DATABASE_URL: "jdbc:mysql://mls-mysql:3306/mls?allowPublicKeyRetrieval=true&autoReconnect=true&useSSL=false"
+      GATEWAY_URL: "http://mls-gateway:8081"
+      GATEWAY_USER: phildev
+      GATEWAY_PWD: mls2024@
+    build:
+      context: ./front-mls
+      dockerfile: Dockerfile
+    depends_on:
+      - mls-mysql
+      - mls-gateway
+    ports:
+      - "8080:8080"
+  mls-coordonnees-patient:
+    container_name: mls-coordonnees-patient
+    environment:
+      DATABASE_URL: "jdbc:mysql://mls-mysql:3306/mls_coordonnees?allowPublicKeyRetrieval=true&autoReconnect=true&useSSL=false"
+      EUREKA_SERVER: "http://eureka-server:8089/eureka"
+    build:
+      context: ./mls-coordonnees-patient
+      dockerfile: Dockerfile
+    depends_on:
+      - mls-mysql
+      - mls-gateway
   eureka-server:
     container_name: eureka-server
+    environment:
+      EUREKA_SERVER: "http://eureka-server:8089/eureka"
     build:
       context: ./eureka-server
       dockerfile: Dockerfile
@@ -12,11 +40,9 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: mls
-      MYSQL_PASS: mls
+      MYSQL_PASSWORD: mls
     volumes:
       - mysql-data:/var/lib/mysql
-    expose:
-      - "3306"
   mls-gateway:
     container_name: mls-gateway
     environment:
@@ -24,23 +50,22 @@ services:
     build:
       context: ./mls-gateway
       dockerfile: Dockerfile
-    depends_on:
-      - eureka-server
     ports:
       - "8081:8081"
+    depends_on:
+      - eureka-server
   mls-mongo:
     container_name: mls-mongo
     image: mongo:latest
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: mls
-    expose:
-      - "27017"
     volumes:
       - mongo-data:/data/db
 volumes:
   mysql-data:
   mongo-data:
+
 
 
 
