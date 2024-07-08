@@ -24,6 +24,9 @@ import java.security.Principal;
 import java.util.List;
 import java.util.regex.Pattern;
 
+/**
+ * Cette classe est un controller qui gère la récupération, la création, la mise à jour et la suppression des patients associés à une structure.
+ */
 @Controller
 public class PatientController {
 

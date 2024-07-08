@@ -113,3 +113,13 @@ Wfront-mls/src/test/java/com/phildev/front/mls/controller/UtilisateurControllerT
 Qfront-mls/src/test/java/com/phildev/front/mls/controller/LoginControllerTest.java,5\b\5b004f810631061e995dbf6b95f198007419d8ad
 Å
 Qmls-gateway/src/test/java/com/phildev/mls/gateway/MlsGatewayApplicationTests.java,a\4\a4c08fff383ab4c1592f996a5a2364fefaf55f59
+Ñ
+Tfront-mls/src/main/java/com/phildev/front/mls/controller/FichePatientController.java,3\2\32ab322bb7e904d192e795123d525cf72ed98f59
+~
+Nfront-mls/src/main/java/com/phildev/front/mls/service/FichePatientService.java,b\2\b2c0c4e4bc1f36535822e3fb3973a6e8c94d4a53
+u
+Efront-mls/src/main/java/com/phildev/front/mls/model/FichePatient.java,d\e\def86dd45b6bc4dd78b9417f11ecf9c4da6ac3fa
+p
+@front-mls/src/main/java/com/phildev/front/mls/utils/Utility.java,e\4\e4ecb68daeda0f3bf14f182deab6ea4bb868ad5c
+à
+Xfront-mls/src/main/java/com/phildev/front/mls/controller/RecherchePatientController.java,1\5\157ea60a9306b48027a4fbc5fcc2621e19caa9c9

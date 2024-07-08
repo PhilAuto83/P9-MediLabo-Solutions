@@ -13,9 +13,9 @@
         <div>
             <div class="navbar-nav d-flex justify-content-around align-items-baseline">
                 <a class="nav-item nav-link active" th:href="@{/home}">Home</a>
+                <a class="nav-item nav-link" th:href="@{/patient/recherche}">Rechercher un patient</a>
                 <a class="nav-item nav-link" th:href="@{/patient/ajout}">Ajouter un patient</a>
                 <a class="nav-item nav-link" th:href="@{/patients/liste}">Liste des patients</a>
-                <a class="nav-item nav-link" th:href="@{/patient}">Fiche patient</a>
                 <div class="row">
                     <form th:action="@{/logout}" method="POST">
                         <input type="submit" value="Logout" />
