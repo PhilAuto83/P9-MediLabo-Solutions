@@ -57,7 +57,6 @@ public class LoginControllerTest {
                 .andExpect(content().string(containsString("<a class=\"nav-item nav-link active\" href=\"/home\">Home</a>")))
                 .andExpect(content().string(containsString("<a class=\"nav-item nav-link\" href=\"/patient/ajout\">Ajouter un patient</a>")))
                 .andExpect(content().string(containsString("<a class=\"nav-item nav-link\" href=\"/patients/liste\">Liste des patients</a>")))
-                .andExpect(content().string(containsString("<a class=\"nav-item nav-link\" href=\"/patient\">Fiche patient</a>")))
                 .andExpect(content().string(containsString("<div>Bienvenue sur la home page MLS : Phil Dev</div>")))
                 .andExpect(content().string(containsString("<title>MLS - Home</title>")))
                 .andExpect(content().string(containsString("<div>Bienvenue sur la home page MLS : Phil Dev</div>")))

@@ -13,7 +13,6 @@
         <div>
             <div class="navbar-nav d-flex justify-content-around align-items-baseline">
                 <a class="nav-item nav-link active" th:href="@{/home}">Home</a>
-                <a class="nav-item nav-link" th:href="@{/patient/recherche}">Rechercher un patient</a>
                 <a class="nav-item nav-link" th:href="@{/patient/ajout}">Ajouter un patient</a>
                 <a class="nav-item nav-link" th:href="@{/patients/liste}">Liste des patients</a>
                 <div class="row">
@@ -45,6 +44,9 @@
         </tr>
         </tbody>
     </table>
+    <div th:if="${patientErreur != null}" class="text-center">
+        <span th:text="${patientErreur}" class="fs-4 text-danger"></span>
+    </div>
     <div class="fs-2">Historique du patient</div>
 
     <div class="fs-2">Rapport Diabète</div>

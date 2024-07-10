@@ -23,8 +23,6 @@ v
 Ffront-mls/src/main/java/com/phildev/front/mls/service/UserService.java,0\9\098e7889706e8bc6ea1dafcde99ed0e9f15d05ab
 }
 Mfront-mls/src/main/java/com/phildev/front/mls/controller/LoginController.java,c\6\c6de8c19bcfc10f22f12ddc572d2e7e4111433fe
-{
-Kfront-mls/src/test/java/com/phildev/front/mls/FrontMlsApplicationTests.java,c\f\cf44578760f2348d42dcf1e7595600bbc5c19cd6
 Ö
 Ufront-mls/src/main/java/com/phildev/front/mls/config/CustomAuthenticationFailure.java,d\b\dbb032464e3cd0d749f7b6d343124f5ebdd6003c
 r
@@ -53,8 +51,6 @@ rmls-coordonnees-patient/src/main/java/com/phildev/mls/donnees/patient/repositor
 lmls-coordonnees-patient/src/main/java/com/phildev/mls/donnees/patient/service/CoordonneesPatientService.java,5\1\51bddddc87ced8389b02e7455709e35d79b5306f
 ¢
 rmls-coordonnees-patient/src/main/java/com/phildev/mls/donnees/patient/controller/CoordonneesPatientController.java,0\1\01439b156cf26b0a60df9f24e42f69b9cb255130
-ú
-lmls-coordonnees-patient/src/test/java/com/phildev/mls/donnees/patient/MlsDonneesPatientApplicationTests.java,1\a\1a40cfc8d654bf7bd35dd593c2669ab39c896050
 9
 	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 G
@@ -111,8 +107,6 @@ Ffront-mls/src/test/java/com/phildev/front/mls/utils/PrincipalTest.java,5\e\5e6
 Wfront-mls/src/test/java/com/phildev/front/mls/controller/UtilisateurControllerTest.java,0\4\048c07d8cec9293855e9505e1b056b535562b625
 Å
 Qfront-mls/src/test/java/com/phildev/front/mls/controller/LoginControllerTest.java,5\b\5b004f810631061e995dbf6b95f198007419d8ad
-Å
-Qmls-gateway/src/test/java/com/phildev/mls/gateway/MlsGatewayApplicationTests.java,a\4\a4c08fff383ab4c1592f996a5a2364fefaf55f59
 Ñ
 Tfront-mls/src/main/java/com/phildev/front/mls/controller/FichePatientController.java,3\2\32ab322bb7e904d192e795123d525cf72ed98f59
 ~

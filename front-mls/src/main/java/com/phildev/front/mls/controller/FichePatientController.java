@@ -32,11 +32,10 @@ public class FichePatientController {
         try{
             FichePatient fichePatient = fichePatientService.recupereLaFichePatient(id);
             model.addAttribute("fiche", fichePatient);
-            return "fiche_patient";
         }catch(ResponseNotFoundException responseNotFoundException){
             logger.error("Le patient n'a pas été trouvé avec son id {}", id);
             model.addAttribute("patientErreur", "Le patient n'a pas été trouvé avec son id "+id);
-            return "recherche_patient";
         }
+        return "fiche_patient";
     }
 }
