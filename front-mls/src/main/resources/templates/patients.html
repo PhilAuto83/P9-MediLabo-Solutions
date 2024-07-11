@@ -22,7 +22,7 @@
             </div>
         </div>
     </nav>
-    <div class="fs-2">Voici la liste des patients</div>
+    <div class="fs-4 text-center mt-2">Voici la liste des patients</div>
     <div th:if="${erreurSuppression != null}">
         <span th:text="${erreurSuppression}"></span>
     </div>
@@ -54,6 +54,23 @@
         </tr>
         </tbody>
     </table>
+    <nav th:if="${pageCoordonnees != null && pageCoordonnees.totalPages > 0}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item">
+                <a class="page-link" th:href="@{'/patients/liste?pageNo='+${pageActuelle < 2? pageActuelle : pageActuelle -1}}" aria-label="Précédent">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li th:each="pageNumber : ${#numbers.sequence(1, pageCoordonnees.totalPages)}" class="page-item">
+                <a th:text="${pageNumber}" class="page-link" th:href="@{'/patients/liste?pageNo='+${pageNumber}}"></a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" th:href="@{'/patients/liste?pageNo='+${pageActuelle < pageCoordonnees.totalPages? pageActuelle +1 : pageActuelle}}" aria-label="Suivant">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
     <div th:if="${listePatientsErreur != null}" class="text-center">
         <span th:text="${listePatientsErreur}" class="fs-4 text-danger"></span>
     </div>

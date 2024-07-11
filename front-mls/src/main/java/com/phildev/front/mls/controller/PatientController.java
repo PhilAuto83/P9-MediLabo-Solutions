@@ -23,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 /**
@@ -45,10 +46,12 @@ public class PatientController {
      * @return une vue qui renvoie la liste des patients que le user connecté a le droit de gérer
      */
     @GetMapping("/patients/liste")
-    public ModelAndView recupereToutesLesCoordonneesPatientAvecPagination(Principal principal){
+    public ModelAndView recupereToutesLesCoordonneesPatientAvecPagination(Principal principal, @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo){
         ModelAndView mav = new ModelAndView("patients");
+        int currentPage  = (pageNo != null)? pageNo : 1;
+        mav.addObject("pageActuelle", currentPage);
         try{
-            Page<CoordonneesPatient> pageCoordonnees = patientService.recupereToutesLesCoordonneesPatientAvecPagination(principal, 1);
+            Page<CoordonneesPatient> pageCoordonnees = patientService.recupereToutesLesCoordonneesPatientAvecPagination(principal, pageNo);
             if(pageCoordonnees.getContent().isEmpty()){
                 mav.addObject("listePatientsErreur", "Il n'y a pas de patients sur cette structure actuellement");
                 logger.info("La page ne contient pas de coordonnées patient sur la structure gérée par {}", principal.getName());
@@ -56,6 +59,7 @@ public class PatientController {
                 mav.addObject("pageCoordonnees", pageCoordonnees);
                 logger.info("Le service mls-coordonnees-patient a retourné une liste de {} patients pour le user {}", pageCoordonnees.getContent().size(), principal.getName());
             }
+
         }catch(ResponseNotFoundException exception){
             logger.error("Une erreur est survenue {}", exception.getMessage());
             mav.addObject("erreurBackend", "Une erreur est survenue lors de la récupération de la liste patients, veuillez réessayer ultérieurement");
