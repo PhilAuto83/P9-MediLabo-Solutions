@@ -128,4 +128,6 @@ public class CoordonneesPatientController {
         LOGGER.error("Pas de patient trouvé avec cet id : {}",id);
         throw new PatientNonTrouveException("Pas de patient trouvé avec cet id : " + id);
     }
+
+
 }

@@ -8,6 +8,8 @@ import com.phildev.mls.donnees.patient.model.CoordonneesPatient;
 import com.phildev.mls.donnees.patient.service.CoordonneesPatientService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -242,7 +244,32 @@ public class CoordonneesPatientControllerTests {
 
         mockMvc.perform(delete("/coordonneesPatient/delete/2"))
                 .andExpect(jsonPath("$", is("Le patient avec l id 2 a bien été supprimé")));
+    }
 
+    @ParameterizedTest(name = "Test de récupération d un patient avec son nom {0} et prénom {1}")
+    @CsvSource(value = {"Valide, Patient", "VALIDE, PATIENT", "vAliDE, PatienT"})
+    public void testRecuperationPatientAvecNomPrenom(String nom, String prenom) throws Exception {
+        CoordonneesPatient patientValide = new CoordonneesPatient(11L,2,"VALIDE","PATIENT", LocalDate.of(1988,4,1),"M","","");
+        when(coordonneesPatientService.getAllCoordonneesPatientByNomEtPrenom("VALIDE", "PATIENT")).thenReturn(patientValide);
+        mockMvc.perform(get("/coordonneesPatient")
+                        .param("nom", nom)
+                        .param("prenom", prenom))
+                .andDo(print())
+                .andExpect(jsonPath("$.nom", is("VALIDE")))
+                .andExpect(jsonPath("$.prenom", is("PATIENT")))
+                .andExpect(jsonPath("$.dateDeNaissance", is("1988-04-01")))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Test d'un patient non trouvé avec son nom prenom qui renvoie une 404")
+    public void testRecuperationPatientAvecNomPrenomNonTrouve() throws Exception {
+        when(coordonneesPatientService.getAllCoordonneesPatientByNomEtPrenom("VALIDE", "PATIENT")).thenReturn(null);
+        mockMvc.perform(get("/coordonneesPatient")
+                        .param("nom", "VALIDE")
+                        .param("prenom", "PATIENT"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 
 }

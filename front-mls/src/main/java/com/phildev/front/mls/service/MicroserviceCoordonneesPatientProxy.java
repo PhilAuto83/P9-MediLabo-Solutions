@@ -18,6 +18,9 @@ public interface MicroserviceCoordonneesPatientProxy {
     @GetMapping("/gateway/coordonneesPatient/structure/{id}")
     public List<CoordonneesPatient> recupereCoordonneesParStructure(@PathVariable("id") Integer id);
 
+    @GetMapping("/gateway/coordonneesPatient")
+    public CoordonneesPatient recupereCoordonneesParNomPrenom(@RequestParam("nom") String nom, @RequestParam("prenom") String prenom);
+
 
     @DeleteMapping("/gateway/coordonneesPatient/delete/{id}")
     ResponseEntity<String> supprimerPatient(@PathVariable("id") Long id);

@@ -58,6 +58,7 @@ public class PatientService {
     }
 
     public CoordonneesPatient sauvegarderUnPatient(CoordonneesPatient coordonneesPatient){
+
         return microserviceCoordonneesPatientProxy.sauvegarderUnPatient(coordonneesPatient);
     }
 
