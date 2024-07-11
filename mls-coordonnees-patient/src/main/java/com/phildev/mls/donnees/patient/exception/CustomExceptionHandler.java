@@ -57,7 +57,7 @@ public class CustomExceptionHandler {
         return response;
     }
 
-    @ExceptionHandler({PatientNonTrouveException.class, StructureNonTrouveeException.class})
+    @ExceptionHandler({PageNonTrouveeException.class, PatientNonTrouveException.class, StructureNonTrouveeException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, Object> handle404Exception(HttpServletRequest request, RuntimeException exception){
         Map<String, Object> response = new HashMap<>();

@@ -115,5 +115,5 @@ u
 Efront-mls/src/main/java/com/phildev/front/mls/model/FichePatient.java,d\e\def86dd45b6bc4dd78b9417f11ecf9c4da6ac3fa
 p
 @front-mls/src/main/java/com/phildev/front/mls/utils/Utility.java,e\4\e4ecb68daeda0f3bf14f182deab6ea4bb868ad5c
-ˆ
-Xfront-mls/src/main/java/com/phildev/front/mls/controller/RecherchePatientController.java,1\5\157ea60a9306b48027a4fbc5fcc2621e19caa9c9
+œ
+lmls-coordonnees-patient/src/main/java/com/phildev/mls/donnees/patient/exception/PageNonTrouveeException.java,0\4\04e3c14759bcc12606bd3143cb538b6414388687

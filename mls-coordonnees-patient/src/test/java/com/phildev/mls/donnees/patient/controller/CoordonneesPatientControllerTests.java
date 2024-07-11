@@ -11,6 +11,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -37,6 +41,77 @@ public class CoordonneesPatientControllerTests {
     private CoordonneesPatientService coordonneesPatientService;
 
     private static final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
+
+    @Test
+    @DisplayName(value = "Test recherche coordonnees patient pour la première page avec le numéro de structure valide 1 et une liste de 2 patients en retour")
+    public void testAffichageDePageAvecStructureValide() throws Exception {
+        PageImpl<CoordonneesPatient> page = new PageImpl<>(Arrays.asList(
+                new CoordonneesPatient(2L,1,"Test", "Phil", LocalDate.of(1980, Month.APRIL,12),"M","",""),
+                new CoordonneesPatient(1L,1,"Jones", "Tom", LocalDate.of(1980, Month.APRIL,12),"M","1 rue des tests","000-444-5555")
+        ));
+        when(coordonneesPatientService.getAllCoordonneesPatientByStructureId(1, 0)).thenReturn(page);
+        mockMvc.perform(get("/coordonneesPatient/structure/1/page")
+                        .param("pageNo", "1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content",hasSize(2)))
+                .andExpect(jsonPath("$.totalPages",is(1)))
+                .andExpect(jsonPath("$.numberOfElements",is(2)))
+                .andExpect(jsonPath("$.totalElements",is(2)))
+                .andExpect(jsonPath("$.content[0].nom", is("Test")))
+                .andExpect(jsonPath("$.content[1].nom", is("Jones")))
+                .andExpect(jsonPath("$.content[1].telephone", is("000-444-5555")))
+                .andExpect(jsonPath("$.content[0].dateDeNaissance", is("1980-04-12")));
+    }
+
+    @Test
+    @DisplayName(value = "Test recherche coordonnees patient pour la deuxième page qui n'existe pas")
+    public void testAffichagePage2NonExistante() throws Exception {
+        Pageable pageable = PageRequest.of(0, 5);
+        PageImpl<CoordonneesPatient> page = new PageImpl<>(Arrays.asList(
+                new CoordonneesPatient(2L,1,"Test", "Phil", LocalDate.of(1980, Month.APRIL,12),"M","",""),
+                new CoordonneesPatient(1L,1,"Jones", "Tom", LocalDate.of(1980, Month.APRIL,12),"M","1 rue des tests","000-444-5555")
+        ), pageable, 1);
+        when(coordonneesPatientService.getAllCoordonneesPatientByStructureId(1, 1)).thenReturn(page);
+        mockMvc.perform(get("/coordonneesPatient/structure/1/page")
+                        .param("pageNo", "2"))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message",is("La page demandée n'existe pas car le nombre total de pages est de 1 pour la structure 1")));
+    }
+
+    @Test
+    @DisplayName(value = "Test recherche coordonnees patient pour la première page avec infos nombre total elements 10 et nombre de pages 2")
+    public void testAffichagePage1AvecInfosTotalElements10EtNbPages2() throws Exception {
+        Pageable pageable = PageRequest.of(0, 5);
+        PageImpl<CoordonneesPatient> page = new PageImpl<>(Arrays.asList(
+                new CoordonneesPatient(2L,1,"Test", "Phil", LocalDate.of(1980, Month.APRIL,12),"M","",""),
+                new CoordonneesPatient(1L,1,"Jones", "Tom", LocalDate.of(1980, Month.APRIL,12),"M","1 rue des tests","000-444-5555")
+        ), pageable, 10);
+        when(coordonneesPatientService.getAllCoordonneesPatientByStructureId(1, 0)).thenReturn(page);
+        mockMvc.perform(get("/coordonneesPatient/structure/1/page")
+                        .param("pageNo", "1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content",hasSize(2)))
+                .andExpect(jsonPath("$.totalPages",is(2)))
+                .andExpect(jsonPath("$.totalElements",is(10)))
+                .andExpect(jsonPath("$.numberOfElements",is(2)));
+
+    }
+
+
+    @Test
+    @DisplayName(value = "Test recherche coordonnees patient pour la première page renvoie null avec 404")
+    public void testAffichageDePageRenvoie404() throws Exception {
+        when(coordonneesPatientService.getAllCoordonneesPatientByStructureId(1, 0)).thenReturn(null);
+        mockMvc.perform(get("/coordonneesPatient/structure/1/page")
+                        .param("pageNo", "1"))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message",is("Pas de structure trouvée avec l'id 1")));
+    }
 
     @Test
     @DisplayName(value = "Test recherche coordonnees patient avec le numéro de structure valide 1 et une liste de 2 patients en retour")

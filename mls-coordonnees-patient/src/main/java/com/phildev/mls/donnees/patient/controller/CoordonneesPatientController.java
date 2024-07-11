@@ -1,5 +1,6 @@
 package com.phildev.mls.donnees.patient.controller;
 
+import com.phildev.mls.donnees.patient.exception.PageNonTrouveeException;
 import com.phildev.mls.donnees.patient.exception.PatientException;
 import com.phildev.mls.donnees.patient.exception.PatientNonTrouveException;
 import com.phildev.mls.donnees.patient.exception.StructureNonTrouveeException;
@@ -8,9 +9,11 @@ import com.phildev.mls.donnees.patient.service.CoordonneesPatientService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +30,26 @@ public class CoordonneesPatientController {
 
     @Autowired
     private CoordonneesPatientService coordonneesPatientService;
+
+
+    /**
+     * Cette méthode retourne la liste des coordonnées de tous les patients par structure avec leur nom, prénom, adresse, n° de téléphone sous forme de page avec 5 éléments par page
+     * @return une page de {@link CoordonneesPatient}
+     */
+    @GetMapping("/coordonneesPatient/structure/{id}/page")
+    public Page<CoordonneesPatient> getAllCoordonneesPatientByStructureId(@PathVariable("id")@NotNull(message = "l'id ne doit pas être vide") Integer id, @RequestParam(value = "pageNo") int pageNo){
+        Page<CoordonneesPatient> coordonneesPatients = coordonneesPatientService.getAllCoordonneesPatientByStructureId(id, pageNo-1);
+        if(coordonneesPatients != null && pageNo > coordonneesPatients.getTotalPages()){
+            LOGGER.error("La page demandée n'existe pas car le nombre total de pages est de {} pour la structure {}", coordonneesPatients.getTotalPages(), id);
+            throw new PageNonTrouveeException(String.format("La page demandée n'existe pas car le nombre total de pages est de %s pour la structure %s", coordonneesPatients.getTotalPages(), id));
+        }else if(coordonneesPatients == null || coordonneesPatients.isEmpty()){
+            LOGGER.error("Pas de structure trouvée avec l'id {}", id);
+            throw new StructureNonTrouveeException("Pas de structure trouvée avec l'id "+id);
+        }else{
+            LOGGER.info("La page demandée {} contient {} éléments avec {} éléments", pageNo, coordonneesPatients.getTotalPages(), coordonneesPatients.getNumberOfElements());
+            return coordonneesPatients;
+        }
+    }
 
     /**
      * Cette méthode retourne la liste des coordonnées de tous les patients par structure avec leur nom, prénom, adresse, n° de téléphone
