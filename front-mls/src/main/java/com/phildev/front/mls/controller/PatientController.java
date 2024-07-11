@@ -14,6 +14,7 @@ import jakarta.validation.constraints.NotBlank;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,20 +40,25 @@ public class PatientController {
     private UserService userService;
 
     /**
-     * Cette méthode renvoie la liste des patients associés à la structure du user connecté
+     * Cette méthode renvoie la première page contenant 5 éléments maximum avec la liste des patients associés à la structure du user connecté
      * @param principal qui représente le user connecté
      * @return une vue qui renvoie la liste des patients que le user connecté a le droit de gérer
      */
     @GetMapping("/patients/liste")
-    public ModelAndView recupereToutesLesCoordonneesPatient(Principal principal){
+    public ModelAndView recupereToutesLesCoordonneesPatientAvecPagination(Principal principal){
         ModelAndView mav = new ModelAndView("patients");
         try{
-        List<CoordonneesPatient> coordonneesList = patientService.recupereToutesLesCoordonneesPatient(principal);
-            mav.addObject("coordonnees_patient", coordonneesList);
-            logger.info("Le service mls-coordonnees-patient a retourné une liste de {} patients pour le user {}", coordonneesList.size(), principal.getName());
+            Page<CoordonneesPatient> pageCoordonnees = patientService.recupereToutesLesCoordonneesPatientAvecPagination(principal, 1);
+            if(pageCoordonnees.getContent().isEmpty()){
+                mav.addObject("listePatientsErreur", "Il n'y a pas de patients sur cette structure actuellement");
+                logger.info("La page ne contient pas de coordonnées patient sur la structure gérée par {}", principal.getName());
+            }else{
+                mav.addObject("pageCoordonnees", pageCoordonnees);
+                logger.info("Le service mls-coordonnees-patient a retourné une liste de {} patients pour le user {}", pageCoordonnees.getContent().size(), principal.getName());
+            }
         }catch(ResponseNotFoundException exception){
-            logger.error("Le service mls-coordonnees-patient ne renvoie aucun patient associé au user {}", principal.getName());
-            mav.addObject("listeError", "La structure n'a aucun patient pour le moment");
+            logger.error("Une erreur est survenue {}", exception.getMessage());
+            mav.addObject("erreurBackend", "Une erreur est survenue lors de la récupération de la liste patients, veuillez réessayer ultérieurement");
         }
         return mav;
     }

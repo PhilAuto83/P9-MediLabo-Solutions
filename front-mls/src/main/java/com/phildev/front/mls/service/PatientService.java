@@ -1,6 +1,8 @@
 package com.phildev.front.mls.service;
 
 
+import com.phildev.front.mls.error.BadRequestException;
+import com.phildev.front.mls.error.ResponseNotFoundException;
 import com.phildev.front.mls.model.CoordonneesPatient;
 import com.phildev.front.mls.model.User;
 import com.phildev.front.mls.repository.UserRepository;
@@ -8,6 +10,7 @@ import feign.FeignException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -63,4 +66,13 @@ public class PatientService {
     }
 
 
+    public Page<CoordonneesPatient> recupereToutesLesCoordonneesPatientAvecPagination(Principal principal, int pageNo) {
+        User user = userRepository.findByEmail(principal.getName());
+        try {
+            return microserviceCoordonneesPatientProxy.recupereCoordonneesParStructureAvecPagination(user.getStructureId(), pageNo);
+        }catch (FeignException exception){
+            logger.info("L'erreur suivante est survenue pour la structure {} : {}", user.getStructureId(), exception.getMessage());
+            throw new ResponseNotFoundException(exception.getMessage());
+        }
+    }
 }

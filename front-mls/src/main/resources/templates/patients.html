@@ -38,8 +38,8 @@
             <th scope="col">Actions</th>
         </tr>
         </thead>
-        <tbody th:unless="${#lists.isEmpty(coordonnees_patient)}">
-        <tr th:each="patient :${coordonnees_patient}">
+        <tbody th:if="${listePatientsErreur == null && pageCoordonnees != null}">
+        <tr th:each="patient :${pageCoordonnees.content}">
             <td th:text="${patient.prenom}"></td>
             <td th:text="${patient.nom}"></td>
             <td th:text="${patient.dateDeNaissance}"></td>
@@ -54,8 +54,11 @@
         </tr>
         </tbody>
     </table>
-    <div th:if="${listeError != null}" class="text-center">
-        <span th:text="${listeError}" class="fs-4 text-danger"></span>
+    <div th:if="${listePatientsErreur != null}" class="text-center">
+        <span th:text="${listePatientsErreur}" class="fs-4 text-danger"></span>
+    </div>
+    <div th:if="${erreurBackend != null}" class="text-center">
+        <span th:text="${erreurBackend}" class="fs-4 text-danger"></span>
     </div>
 
 

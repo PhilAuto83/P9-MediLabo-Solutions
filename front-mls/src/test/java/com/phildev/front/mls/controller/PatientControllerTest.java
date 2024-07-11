@@ -14,6 +14,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -52,7 +55,9 @@ public class PatientControllerTest {
     @WithMockUser
     @DisplayName("Récupérer la liste avec 1 patient associé à la structure")
     public void recuperationListePatients() throws Exception {
-        when(patientService.recupereToutesLesCoordonneesPatient(any())).thenReturn(List.of(new CoordonneesPatient(1L, 2,"DEV", "PHIL", LocalDate.of(1988,5,21), "M","12 rue du Test", "000-555-7777")));
+        Page<CoordonneesPatient> page =  new PageImpl<>(List.of(new CoordonneesPatient(1L, 2,"DEV", "PHIL", LocalDate.of(1988,5,21), "M","12 rue du Test", "000-555-7777"))
+        , PageRequest.of(0,5), 1);
+        when(patientService.recupereToutesLesCoordonneesPatientAvecPagination(any(), anyInt())).thenReturn(page);
         mockMvc.perform(get("/patients/liste"))
                 .andDo(print())
                 .andExpect(content().string(containsString("<title>MLS - Liste des patients</title>")))
@@ -73,12 +78,12 @@ public class PatientControllerTest {
     @WithMockUser
     @DisplayName("Test message d'erreur avec liste vide")
     public void recuperationListePatientsVide() throws Exception {
-        when(patientService.recupereToutesLesCoordonneesPatient(any())).thenThrow(ResponseNotFoundException.class);
+        when(patientService.recupereToutesLesCoordonneesPatientAvecPagination(any(), anyInt())).thenThrow(ResponseNotFoundException.class);
         mockMvc.perform(get("/patients/liste"))
                 .andDo(print())
                 .andExpect(content().string(containsString("<title>MLS - Liste des patients</title>")))
                 .andExpect(view().name("patients"))
-                .andExpect(content().string(containsString("<span class=\"fs-4 text-danger\">La structure n&#39;a aucun patient pour le moment</span>")))
+                .andExpect(content().string(containsString("<span class=\"fs-4 text-danger\">Une erreur est survenue lors de la récupération de la liste patients, veuillez réessayer ultérieurement</span>")))
                 .andExpect(status().isOk());
     }
 

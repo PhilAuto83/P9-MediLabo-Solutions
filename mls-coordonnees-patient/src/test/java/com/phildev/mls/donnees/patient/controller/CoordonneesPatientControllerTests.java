@@ -110,35 +110,9 @@ public class CoordonneesPatientControllerTests {
                         .param("pageNo", "1"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message",is("Pas de structure trouvée avec l'id 1")));
+                .andExpect(jsonPath("$.message",is("Pas de patient trouvé sur la structure 1")));
     }
 
-    @Test
-    @DisplayName(value = "Test recherche coordonnees patient avec le numéro de structure valide 1 et une liste de 2 patients en retour")
-    public void testAvecStructureValide() throws Exception {
-        when(coordonneesPatientService.getAllCoordonneesPatientByStructureId(1)).thenReturn(Arrays.asList(
-                new CoordonneesPatient(2L,1,"Test", "Phil", LocalDate.of(1980, Month.APRIL,12),"M","",""),
-                new CoordonneesPatient(1L,1,"Jones", "Tom", LocalDate.of(1980, Month.APRIL,12),"M","1 rue des tests","000-444-5555")
-        ));
-        mockMvc.perform(get("/coordonneesPatient/structure/1"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$",hasSize(2)))
-                .andExpect(jsonPath("$[0].nom", is("Test")))
-                .andExpect(jsonPath("$[1].nom", is("Jones")))
-                .andExpect(jsonPath("$[1].telephone", is("000-444-5555")))
-                .andExpect(jsonPath("$[0].dateDeNaissance", is("1980-04-12")));
-    }
-
-    @Test
-    @DisplayName(value="Test recherche coordonnees patient avec numéro de structure inconnue qui renvoie une exception")
-    public void testAvecStructureInconnue() throws Exception {
-        when(coordonneesPatientService.getAllCoordonneesPatientByStructureId(2)).thenReturn(Collections.emptyList());
-        mockMvc.perform(get("/coordonneesPatient/structure/2"))
-                .andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message", is("Pas de structure trouvée avec l'id 2")));
-    }
 
     @Test
     @DisplayName(value="Test recherche coordonnees patient avec id patient inexistant qui renvoie une exception")
@@ -156,7 +130,6 @@ public class CoordonneesPatientControllerTests {
         mockMvc.perform(get("/coordonneesPatient/ "))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
-
     }
 
     @Test

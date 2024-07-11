@@ -3,6 +3,7 @@ package com.phildev.front.mls.service;
 
 import com.phildev.front.mls.model.CoordonneesPatient;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,5 +27,8 @@ public interface MicroserviceCoordonneesPatientProxy {
 
     @GetMapping("/gateway/coordonneesPatient/{id}")
     CoordonneesPatient recuperePatient(@PathVariable("id") Long id);
+
+    @GetMapping("/gateway/coordonneesPatient/structure/{id}/page")
+    Page<CoordonneesPatient> recupereCoordonneesParStructureAvecPagination(@PathVariable("id") Integer id, @RequestParam("pageNo") int pageNo);
 
 }

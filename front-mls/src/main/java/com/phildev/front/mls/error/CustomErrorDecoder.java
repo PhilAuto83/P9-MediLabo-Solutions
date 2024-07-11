@@ -21,9 +21,9 @@ public class CustomErrorDecoder implements ErrorDecoder {
         }
         return switch (response.status()) {
             case 400 ->
-                    new BadRequestException(originalException.getMessage() != null ? originalException.getMessage() : "Bad Request");
+                    new BadRequestException(originalException != null ? originalException.getMessage() : "Bad Request");
             case 404 ->
-                    new ResponseNotFoundException(originalException.getMessage() != null ? originalException.getMessage() : "Not found");
+                    new ResponseNotFoundException(originalException != null ? originalException.getMessage() : "Not found");
             default -> errorDecoder.decode(methodKey, response);
         };
     }

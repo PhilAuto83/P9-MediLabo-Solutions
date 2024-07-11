@@ -9,7 +9,6 @@ import com.phildev.mls.donnees.patient.service.CoordonneesPatientService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -42,29 +40,14 @@ public class CoordonneesPatientController {
         if(coordonneesPatients != null && pageNo > coordonneesPatients.getTotalPages()){
             LOGGER.error("La page demandée n'existe pas car le nombre total de pages est de {} pour la structure {}", coordonneesPatients.getTotalPages(), id);
             throw new PageNonTrouveeException(String.format("La page demandée n'existe pas car le nombre total de pages est de %s pour la structure %s", coordonneesPatients.getTotalPages(), id));
-        }else if(coordonneesPatients == null || coordonneesPatients.isEmpty()){
-            LOGGER.error("Pas de structure trouvée avec l'id {}", id);
-            throw new StructureNonTrouveeException("Pas de structure trouvée avec l'id "+id);
+        }else if(coordonneesPatients == null || coordonneesPatients.getContent().isEmpty()){
+            LOGGER.error("Pas de patient trouvé sur la structure {}", id);
+            throw new StructureNonTrouveeException("Pas de patient trouvé sur la structure "+id);
         }else{
             LOGGER.info("La page demandée {} contient {} éléments avec {} éléments", pageNo, coordonneesPatients.getTotalPages(), coordonneesPatients.getNumberOfElements());
             return coordonneesPatients;
         }
     }
-
-    /**
-     * Cette méthode retourne la liste des coordonnées de tous les patients par structure avec leur nom, prénom, adresse, n° de téléphone
-     * @return une liste de {@link CoordonneesPatient}
-     */
-    @GetMapping("/coordonneesPatient/structure/{id}")
-    public List<CoordonneesPatient> getAllCoordonneesPatientByStructureId(@PathVariable("id")@NotNull(message = "l'id ne doit pas être vide") Integer id){
-        List<CoordonneesPatient> coordonneesPatients = coordonneesPatientService.getAllCoordonneesPatientByStructureId(id);
-        if(coordonneesPatients.isEmpty()){
-             LOGGER.error("Pas de structure trouvée avec l'id {}", id);
-             throw new StructureNonTrouveeException("Pas de structure trouvée avec l'id "+id);
-         }
-        return coordonneesPatients;
-    }
-
 
 
     /**
