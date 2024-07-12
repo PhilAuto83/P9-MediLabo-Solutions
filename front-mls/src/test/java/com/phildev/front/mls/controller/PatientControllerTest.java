@@ -234,7 +234,7 @@ public class PatientControllerTest {
                 .andDo(print())
                 .andExpect(view().name("ajout_patient"))
                 .andExpect(model().attributeExists("backendError"))
-                .andExpect(content().string(containsString("<div class=\"fs-4 text-danger\">Erreur du backend</div>")))
+                .andExpect(content().string(containsString("<div class=\"text-danger\" style=\"font-size: 0.8rem\">Erreur du backend</div>")))
                 .andExpect(status().isOk());
     }
 
@@ -258,7 +258,7 @@ public class PatientControllerTest {
                 .andDo(print())
                 .andExpect(view().name("ajout_patient"))
                 .andExpect(model().attributeExists("backendError"))
-                .andExpect(content().string(containsString(" <div class=\"fs-4 text-danger\">Pas de patient créé</div>")))
+                .andExpect(content().string(containsString(" <div class=\"text-danger\" style=\"font-size: 0.8rem\">Pas de patient créé</div>")))
                 .andExpect(status().isOk());
     }
 
@@ -303,6 +303,28 @@ public class PatientControllerTest {
                 .andDo(print())
                 .andExpect(view().name("redirect:/patients/liste"))
                 .andExpect(status().is(302));
+    }
+
+    @Test
+    @WithMockUser(username = "tester@mls.fr")
+    @DisplayName("Mise à jour patient existant sur une autre structure")
+    public void updatePatientExistantSurUneAutreStructure() throws Exception {
+        CoordonneesPatient patient = new CoordonneesPatient(8L,2, "Developer","Phil", LocalDate.of(1983, 7,  18), "M","","000-111-2222");
+        when(patientService.miseAJourPatient(patient)).thenThrow(new PatientExistantException("Le patient existe sur une autre structure"));
+        mockMvc.perform(post("/patient/update/8")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("structureId", "2")
+                        .param("prenom", "Phil")
+                        .param("nom", "Developer")
+                        .param("genre", "M")
+                        .param("dateDeNaissance", "1983-07-18")
+                        .param("adresse", "")
+                        .param("telephone", "000-111-2222"))
+                .andDo(print())
+                .andExpect(content().string(containsString("<div class=\"text-danger\" style=\"font-size: 0.8rem\">Le patient existe sur une autre structure</div>")))
+                .andExpect(view().name("update_patient"))
+                .andExpect(status().is(200));
     }
 
 

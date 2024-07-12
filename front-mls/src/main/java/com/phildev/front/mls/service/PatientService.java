@@ -75,6 +75,11 @@ public class PatientService {
         }
     }
 
+    /**
+     * Cette méthode met à jour un patient en base de données et vérifie au prélalble que le patient n'existe pas déjà sur une autre structure avec le nom/prénom mis à jour
+     * @param coordonneesPatient qui est l'objet à mettre à jour
+     * @return les coordonnées d'un patient {@link CoordonneesPatient}
+     */
     public CoordonneesPatient miseAJourPatient(CoordonneesPatient coordonneesPatient){
         Long patientActuelId = coordonneesPatient.getId();
         CoordonneesPatient patientActuelEnBaseDeDonnees = microserviceCoordonneesPatientProxy.recuperePatient(patientActuelId);
