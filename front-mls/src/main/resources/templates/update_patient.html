@@ -67,7 +67,7 @@
         </div>
         <button type="submit" class="btn btn-primary mt-2">Mise à jour</button>
         <div th:if="${backendError != null}">
-            <div th:text="${backendError}"></div>
+            <div th:text="${backendError}" class="text-danger" style="font-size: 0.8rem"></div>
         </div>
 
     </form>

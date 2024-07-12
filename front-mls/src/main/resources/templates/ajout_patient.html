@@ -65,8 +65,8 @@
             <p class="text-danger" th:if="${telephoneError != null}" th:text="${telephoneError}"></p>
         </div>
         <button type="submit" class="btn btn-primary mt-2">Ajouter le patient</button>
-        <div th:if="${backendError != null}" class="fs-4 text-danger">
-            <div th:text="${backendError}"></div>
+        <div th:if="${backendError != null}">
+            <div th:text="${backendError}" class="text-danger" style="font-size: 0.8rem"></div>
         </div>
     </form>
 

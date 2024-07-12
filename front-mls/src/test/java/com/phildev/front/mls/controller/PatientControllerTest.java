@@ -234,7 +234,7 @@ public class PatientControllerTest {
                 .andDo(print())
                 .andExpect(view().name("ajout_patient"))
                 .andExpect(model().attributeExists("backendError"))
-                .andExpect(content().string(containsString(" <div>Erreur du backend</div>")))
+                .andExpect(content().string(containsString("<div class=\"fs-4 text-danger\">Erreur du backend</div>")))
                 .andExpect(status().isOk());
     }
 
@@ -258,7 +258,7 @@ public class PatientControllerTest {
                 .andDo(print())
                 .andExpect(view().name("ajout_patient"))
                 .andExpect(model().attributeExists("backendError"))
-                .andExpect(content().string(containsString(" <div>Pas de patient créé</div>")))
+                .andExpect(content().string(containsString(" <div class=\"fs-4 text-danger\">Pas de patient créé</div>")))
                 .andExpect(status().isOk());
     }
 
@@ -289,7 +289,7 @@ public class PatientControllerTest {
     @DisplayName("Mise à jour patient valide")
     public void updatePatientValide() throws Exception {
         CoordonneesPatient patient = new CoordonneesPatient(8L,2, "Developer","Phil", LocalDate.of(1983, 7,  18), "M","","000-111-2222");
-        when(patientService.sauvegarderUnPatient(patient)).thenReturn(patient);
+        when(patientService.miseAJourPatient(patient)).thenReturn(patient);
         mockMvc.perform(post("/patient/update/8")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)

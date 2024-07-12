@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PatientService {
@@ -70,6 +71,22 @@ public class PatientService {
             throw new PatientExistantException(String.format("Le patient %s %s existe déjà sur votre structure ou une autre.", patient.getPrenom(), patient.getNom()));
 
         }catch(ResponseNotFoundException responseNotFoundException){
+            return microserviceCoordonneesPatientProxy.sauvegarderUnPatient(coordonneesPatient);
+        }
+    }
+
+    public CoordonneesPatient miseAJourPatient(CoordonneesPatient coordonneesPatient){
+        Long patientActuelId = coordonneesPatient.getId();
+        CoordonneesPatient patientActuelEnBaseDeDonnees = microserviceCoordonneesPatientProxy.recuperePatient(patientActuelId);
+        if(coordonneesPatient.getNom().equalsIgnoreCase(patientActuelEnBaseDeDonnees.getNom()) && coordonneesPatient.getPrenom().equalsIgnoreCase(patientActuelEnBaseDeDonnees.getPrenom())){
+            logger.info("Le patient est mis à jour avec le même nom {} prénom {}", coordonneesPatient.getNom(), coordonneesPatient.getPrenom());
+            return microserviceCoordonneesPatientProxy.sauvegarderUnPatient(coordonneesPatient);
+        }else {
+            CoordonneesPatient patientAvecMemeNomPrenom = microserviceCoordonneesPatientProxy.recuperePatientParNomPrenom(coordonneesPatient.getNom(), coordonneesPatient.getPrenom());
+            if(!Objects.equals(patientAvecMemeNomPrenom.getId(), patientActuelId)){
+                logger.error("Un autre patient existe avec le même nom en base données sur la structure {}", patientAvecMemeNomPrenom.getStructureId());
+                throw new PatientExistantException("Un autre patient existe avec le même nom en base données sur la structure "+patientAvecMemeNomPrenom.getStructureId());
+            }
             return microserviceCoordonneesPatientProxy.sauvegarderUnPatient(coordonneesPatient);
         }
     }

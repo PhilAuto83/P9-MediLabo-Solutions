@@ -132,7 +132,7 @@ public class PatientController {
             logger.info("Le patient {}]{} a été ajouté à la structure n° {} ", patient.getPrenom(), patient.getNom(), patient.getStructureId());
             return "redirect:/patients/liste";
 
-        }catch(ResponseNotFoundException | BadRequestException |PatientExistantException exception){
+        }catch(ResponseNotFoundException | BadRequestException | PatientExistantException exception){
             logger.error(exception.getMessage());
             model.addAttribute("backendError", exception.getMessage());
             return "ajout_patient";
@@ -186,8 +186,8 @@ public class PatientController {
         }
         try{
             coordonneesPatient.setId(id);
-            CoordonneesPatient patient = patientService.sauvegarderUnPatient(coordonneesPatient);
-            logger.info("Le patient {}]{} a été mis à jour à la structure n° {} ", patient.getPrenom(), patient.getNom(), patient.getStructureId());
+            CoordonneesPatient patient = patientService.miseAJourPatient(coordonneesPatient);
+            logger.info("Le patient {} {} a été mis à jour à la structure n° {} ", patient.getPrenom(), patient.getNom(), patient.getStructureId());
             return "redirect:/patients/liste";
 
         }catch(FeignException  | PatientExistantException exception){
