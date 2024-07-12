@@ -39,3 +39,5 @@ Voici le schéma de fonctionnement de l'application :
 - Partage du serveur de base de données _**MySQL**_ avec deux schémas :
   - un schéma **mls** qui contient la tables des utilisateurs de l'application et la table des structures associées aux utilisateurs et qui est liée au service front **front-mls**
   - un schéma **mls_coordonnees** qui contient les données des coordonnées des patients et qui est liée au service back-end **mls-coordonnees-patient**
+
+>Ressources eco-conception : https://ecoresponsable.numerique.gouv.fr/thematiques/evaluation/
