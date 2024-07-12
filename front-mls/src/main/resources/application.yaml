@@ -25,6 +25,9 @@ spring:
             url: ${GATEWAY_URL}
 server:
   port: 8080
+  servlet:
+    encoding:
+      charset: UTF-8
 gateway-user: ${GATEWAY_USER}
 gateway-pwd:  ${GATEWAY_PWD}
 logging:
