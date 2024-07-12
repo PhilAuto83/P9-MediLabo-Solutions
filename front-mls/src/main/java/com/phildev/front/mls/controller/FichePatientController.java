@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
  * mais aussi l'historique des notes sur le patient ainsi que la génération du rapport de diabète.
  *
  */
-
 @Controller
 public class FichePatientController {
 

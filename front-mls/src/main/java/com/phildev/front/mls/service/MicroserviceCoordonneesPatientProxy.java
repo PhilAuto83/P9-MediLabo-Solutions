@@ -31,6 +31,9 @@ public interface MicroserviceCoordonneesPatientProxy {
     @GetMapping("/gateway/coordonneesPatient/{id}")
     CoordonneesPatient recuperePatient(@PathVariable("id") Long id);
 
+    @GetMapping("/gateway/coordonneesPatient")
+    CoordonneesPatient recuperePatientParNomPrenom(@RequestParam("nom") String nom, @RequestParam("prenom") String prenom);
+
     @GetMapping("/gateway/coordonneesPatient/structure/{id}/page")
     Page<CoordonneesPatient> recupereCoordonneesParStructureAvecPagination(@PathVariable("id") Integer id, @RequestParam("pageNo") int pageNo);
 

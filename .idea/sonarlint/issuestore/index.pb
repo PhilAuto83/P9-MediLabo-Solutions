@@ -121,3 +121,5 @@ lmls-coordonnees-patient/src/main/java/com/phildev/mls/donnees/patient/exception
 Tfront-mls/src/test/java/com/phildev/front/mls/controller/FichePatientController.java,5\e\5ea58d31efa7ca4d7247bd70445c26ed1486f452
 à
 Xfront-mls/src/test/java/com/phildev/front/mls/controller/FichePatientControllerTest.java,2\9\29ba1f5a3a9e91af5ab20de785b84a0c15b2a28b
+Å
+Qfront-mls/src/main/java/com/phildev/front/mls/error/PatientExistantException.java,7\5\75901baf73fe4c9c85b19c3e8cd7cb43d1b61270

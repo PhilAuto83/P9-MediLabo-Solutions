@@ -2,6 +2,7 @@ package com.phildev.front.mls.service;
 
 
 import com.phildev.front.mls.error.BadRequestException;
+import com.phildev.front.mls.error.PatientExistantException;
 import com.phildev.front.mls.error.ResponseNotFoundException;
 import com.phildev.front.mls.model.CoordonneesPatient;
 import com.phildev.front.mls.model.User;
@@ -57,10 +58,22 @@ public class PatientService {
         }
     }
 
+    /**
+     * Cette méthode sauvegarde un patient en base de données et vérifie au prélalble que le patient n'existe pas déjà
+     * @param coordonneesPatient qui est l'objet à sauvergarder
+     * @return les coordonnées d'un patient {@link CoordonneesPatient}
+     */
     public CoordonneesPatient sauvegarderUnPatient(CoordonneesPatient coordonneesPatient){
+        try{
+            CoordonneesPatient patient  = microserviceCoordonneesPatientProxy.recuperePatientParNomPrenom(coordonneesPatient.getNom(), coordonneesPatient.getPrenom());
+            logger.error("Le patient {} {} existe déjà en base de données", patient.getPrenom(), patient.getNom());
+            throw new PatientExistantException(String.format("Le patient %s %s existe déjà sur votre structure ou une autre.", patient.getPrenom(), patient.getNom()));
 
-        return microserviceCoordonneesPatientProxy.sauvegarderUnPatient(coordonneesPatient);
+        }catch(ResponseNotFoundException responseNotFoundException){
+            return microserviceCoordonneesPatientProxy.sauvegarderUnPatient(coordonneesPatient);
+        }
     }
+
 
     public CoordonneesPatient recuperePatient(Long id) {
         return microserviceCoordonneesPatientProxy.recuperePatient(id);

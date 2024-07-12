@@ -1,7 +1,9 @@
 package com.phildev.front.mls.controller;
 
 import com.phildev.front.mls.error.BadRequestException;
+import com.phildev.front.mls.error.PatientExistantException;
 import com.phildev.front.mls.error.ResponseNotFoundException;
+import com.phildev.front.mls.error.TelephoneFormatException;
 import com.phildev.front.mls.model.CoordonneesPatient;
 import com.phildev.front.mls.model.User;
 import com.phildev.front.mls.service.PatientService;
@@ -150,6 +152,27 @@ public class PatientControllerTest {
 
     @Test
     @WithMockUser(username = "tester@mls.fr")
+    @DisplayName("Création patient qui existe déjà en base de données")
+    public void creerPatientExistant() throws Exception {
+        CoordonneesPatient patient = new CoordonneesPatient(null,2, "Developer","Phil", LocalDate.of(1983, 7,  18), "M","","000-111-2222");
+        when(patientService.sauvegarderUnPatient(patient)).thenThrow(new PatientExistantException("Le patient test existe déjà en base de données"));
+        mockMvc.perform(post("/patient")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("structureId", "2")
+                        .param("prenom", "Phil")
+                        .param("nom", "Developer")
+                        .param("genre", "M")
+                        .param("dateDeNaissance", "1983-07-18")
+                        .param("adresse", "")
+                        .param("telephone", "000-111-2222"))
+                .andDo(print())
+                .andExpect(view().name("ajout_patient"))
+                .andExpect(status().is(200));
+    }
+
+    @Test
+    @WithMockUser(username = "tester@mls.fr")
     @DisplayName("Création patient invalide avec des champs non conformes")
     public void redirigerVersPagePatientAvecErreurApresSaisieInvalide() throws Exception {
         mockMvc.perform(post("/patient")
@@ -259,6 +282,7 @@ public class PatientControllerTest {
                 .andExpect(content().string(containsString("<input type=\"text\" class=\"form-control\" id=\"telephone\" name=\"telephone\" value=\"000-111-8888\">")))
                 .andExpect(status().isOk());
     }
+
 
     @Test
     @WithMockUser(username = "tester@mls.fr")

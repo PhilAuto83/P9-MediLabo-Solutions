@@ -2,6 +2,7 @@ package com.phildev.front.mls.controller;
 
 
 import com.phildev.front.mls.error.BadRequestException;
+import com.phildev.front.mls.error.PatientExistantException;
 import com.phildev.front.mls.error.ResponseNotFoundException;
 import com.phildev.front.mls.model.CoordonneesPatient;
 import com.phildev.front.mls.model.User;
@@ -131,7 +132,7 @@ public class PatientController {
             logger.info("Le patient {}]{} a été ajouté à la structure n° {} ", patient.getPrenom(), patient.getNom(), patient.getStructureId());
             return "redirect:/patients/liste";
 
-        }catch(ResponseNotFoundException | BadRequestException exception){
+        }catch(ResponseNotFoundException | BadRequestException |PatientExistantException exception){
             logger.error(exception.getMessage());
             model.addAttribute("backendError", exception.getMessage());
             return "ajout_patient";
@@ -189,7 +190,7 @@ public class PatientController {
             logger.info("Le patient {}]{} a été mis à jour à la structure n° {} ", patient.getPrenom(), patient.getNom(), patient.getStructureId());
             return "redirect:/patients/liste";
 
-        }catch(FeignException exception){
+        }catch(FeignException  | PatientExistantException exception){
             logger.error(exception.getMessage());
             model.addAttribute("backendError", exception.getMessage());
             return "update_patient";
