@@ -8,11 +8,11 @@ import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -25,8 +25,8 @@ public class NotePatientController {
     private NotePatientService notePatientService;
 
     @GetMapping("/patient/notes")
-    public List<NotePatient> recupererLesNotesParPatient(@RequestParam("patientId") @NotNull(message ="l'id du patient ne peut pas être null") Integer patientId){
-                return notePatientService.recupererLesNotesParPatient(patientId);
+    public Page<NotePatient> recupererLesNotesParPatientParPaqe(@RequestParam("patientId") @NotNull(message ="l'id du patient ne peut pas être null") Integer patientId, @RequestParam("pageNo") Integer pageNo){
+        return notePatientService.recupererLesNotesParPatientParPage(patientId, pageNo);
     }
 
     @PostMapping("/patient/note")
@@ -43,6 +43,7 @@ public class NotePatientController {
             throw new NoteNonSupprimeeException("La note avec l'id "+id+" n'a pas été supprimée");
 
         }else{
+            logger.info("La note du patient avec l'id {} a bien été supprimée", id);
             return ResponseEntity.ok("La note du patient avec l'id "+id+ " a été supprimée avec succès");
         }
     }
