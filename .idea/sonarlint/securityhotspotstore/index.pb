@@ -143,3 +143,7 @@ Tmls-notes-patient/src/main/java/com/phildev/mls/notes/patient/model/NotePatient
 cmls-notes-patient/src/main/java/com/phildev/mls/notes/patient/controller/NotePatientController.java,b\3\b3e5c073518ac204d430899beeac013f85ef148d
 “
 cmls-notes-patient/src/main/java/com/phildev/mls/notes/patient/exception/CustomExceptionHandler.java,b\f\bf2c45a59dea2cf05db48c3f3914af8f58a2a5c7
+–
+fmls-notes-patient/src/main/java/com/phildev/mls/notes/patient/exception/NoteNonSupprimeeException.java,f\d\fd224189e7e44e4d0f61d867933a4b5b3f91d4cd
+”
+dmls-notes-patient/src/main/java/com/phildev/mls/notes/patient/exception/NoteNonTrouveeException.java,b\e\be46ddb134b8bf58b3a293c24d53ff70d8a0b12d

@@ -8,8 +8,11 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @EnableDiscoveryClient
 public class NotesPatientApplication {
 
+
+
 	public static void main(String[] args) {
 		SpringApplication.run(NotesPatientApplication.class, args);
 	}
+
 
 }

@@ -1,5 +1,6 @@
 package com.phildev.mls.notes.patient.model;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -21,6 +22,7 @@ public class NotePatient {
 
     private String patient;
 
+    @NotBlank(message = "la note ne peut pas être nulle ou vide")
     private String note;
 
 }

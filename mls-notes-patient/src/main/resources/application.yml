@@ -12,3 +12,8 @@ eureka:
   client:
     serviceUrl:
       defaultZone: ${EUREKA_SERVER} #http://localhost:8089/eureka
+
+logging:
+  level:
+    root: error
+    com.phildev.mls.notes.patient: debug
