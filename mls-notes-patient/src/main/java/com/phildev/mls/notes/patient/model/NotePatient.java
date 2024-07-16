@@ -1,7 +1,9 @@
 package com.phildev.mls.notes.patient.model;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -10,6 +12,8 @@ import java.time.LocalDateTime;
 
 @Document(collection = "notes-patient")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class NotePatient {
 
     @Id

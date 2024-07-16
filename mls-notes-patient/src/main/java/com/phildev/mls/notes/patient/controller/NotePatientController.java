@@ -30,7 +30,7 @@ public class NotePatientController {
     }
 
     @PostMapping("/patient/note")
-    public NotePatient recupererLesNotesParPatient(@Valid @RequestBody NotePatient note){
+    public NotePatient ajouterUneNote(@Valid @RequestBody NotePatient note){
         return notePatientService.ajouterUneNote(note);
     }
 
