@@ -21,7 +21,9 @@ spring:
     openfeign:
       client:
         config:
-          mls-gateway:
+          mls-gateway-coordonnees:
+            url: ${GATEWAY_URL}
+          mls-gateway-notes:
             url: ${GATEWAY_URL}
 server:
   port: 8080

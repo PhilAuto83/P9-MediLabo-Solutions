@@ -1,7 +1,6 @@
 package com.phildev.front.mls.service;
 
 
-import com.phildev.front.mls.error.BadRequestException;
 import com.phildev.front.mls.error.PatientExistantException;
 import com.phildev.front.mls.error.ResponseNotFoundException;
 import com.phildev.front.mls.model.CoordonneesPatient;
@@ -12,13 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;

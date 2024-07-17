@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Cette interface permet grâce à Feign d'appeler le micro service gateway qui lui appelle le microservice back-end mls-coordonnees-patient
  */
-@FeignClient(name ="mls-gateway")
+@FeignClient(name ="mls-gateway-coordonnees")
 public interface MicroserviceCoordonneesPatientProxy {
 
     @GetMapping("/gateway/coordonneesPatient/structure/{id}")
