@@ -25,6 +25,19 @@ services:
     depends_on:
       - mls-mysql
       - mls-gateway
+      - eureka-server
+  mls-notes-patient:
+    container_name: mls-notes-patient
+    environment:
+      MONGO_DATABASE_URL: "mongodb://mls:notes@mls-mongo:27017/mls?authMode=scram-sha1"
+      EUREKA_SERVER: "http://eureka-server:8089/eureka"
+    build:
+      context: ./mls-notes-patient
+      dockerfile: Dockerfile
+    depends_on:
+      - mls-mongo
+      - mls-gateway
+      - eureka-server
   eureka-server:
     container_name: eureka-server
     environment:
@@ -41,6 +54,7 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: mls
       MYSQL_PASSWORD: mls
+    restart: always
     volumes:
       - mysql-data:/var/lib/mysql
   mls-gateway:
@@ -60,6 +74,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: mls
+    restart: always
     volumes:
       - mongo-data:/data/db
 volumes:

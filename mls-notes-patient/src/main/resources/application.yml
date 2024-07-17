@@ -4,8 +4,6 @@ spring:
   data:
     mongodb:
       uri: ${MONGO_DATABASE_URL}
-      username: ${MONGO_USER}
-      password: ${MONGO_PWD}
 server:
   port: 9010
 eureka:

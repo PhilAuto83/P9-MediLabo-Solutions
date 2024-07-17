@@ -35,6 +35,8 @@ Voici le schéma de fonctionnement de l'application :
 - Utilisation de [squoosh](https://squoosh.app/) pour mettre les images au format webp et les compresser au maximum :
   - passage au format webp
   - gain sur la taille de l'image : 154 ko à 6 ko
+- Utilisation de CDN(content delivery network) pour de meilleures temps de réponse selon l'emplacement des utilisateurs
+- Possibilité au niveau des machines hébergeant le code de faire des arrêts sur les périodes inactives comme la nuit
 - Utilisation de la pagination pour de meilleurs temps de réponse ce qui constitue une bonne pratique de Green IT
 - Partage du serveur de base de données _**MySQL**_ avec deux schémas :
   - un schéma **mls** qui contient la tables des utilisateurs de l'application et la table des structures associées aux utilisateurs et qui est liée au service front **front-mls**

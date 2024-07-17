@@ -8,7 +8,13 @@ spring:
           - id: coordonnees-patient
             uri: lb://mls-coordonnees-patient
             predicates:
-              - Path=gateway/**
+              - Path=/gateway/coordonneesPatient/**
+            filters:
+              - StripPrefix=1
+          - id: notes-patient
+            uri: lb://mls-notes-patient
+            predicates:
+              - Path=/gateway/patient/**
             filters:
               - StripPrefix=1
   security:

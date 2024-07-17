@@ -44,7 +44,7 @@ public class CoordonneesPatientController {
             LOGGER.error("Pas de patient trouvé sur la structure {}", id);
             throw new StructureNonTrouveeException("Pas de patient trouvé sur la structure "+id);
         }else{
-            LOGGER.info("La page demandée {} contient {} éléments avec {} éléments", pageNo, coordonneesPatients.getTotalPages(), coordonneesPatients.getNumberOfElements());
+            LOGGER.info("La page demandée {} contient {} éléments", pageNo, coordonneesPatients.getNumberOfElements());
             return coordonneesPatients;
         }
     }
