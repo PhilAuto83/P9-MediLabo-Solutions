@@ -66,7 +66,7 @@ public class NotePatientControllerTest {
                 .andDo(print())
                 .andExpect(jsonPath("$.note", is("First note")))
                 .andExpect(jsonPath("$.patient", is("PHIL DEV")))
-                .andExpect(jsonPath("$.patient_id", is(5)))
+                .andExpect(jsonPath("$.patientId", is(5)))
                 .andExpect(status().isOk());
     }
 

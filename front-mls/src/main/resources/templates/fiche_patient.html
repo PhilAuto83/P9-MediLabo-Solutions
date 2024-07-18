@@ -58,7 +58,7 @@
         </thead>
         <tbody th:if="${notes != null && fiche != null}">
         <tr th:each="note :${notes.content}">
-            <td th:text="${note.creationDate}"></td>
+            <td th:text="${note.dateCreation}"></td>
             <td th:text="${note.note}"></td>
             <td class="d-flex justify-content-around" >
                 <a th:href="@{/patient/{patientId}(patientId=${fiche.id})/note/{id}(id=${note.id})}">Supprimer</a>

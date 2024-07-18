@@ -17,7 +17,7 @@ public class NotePatient {
     private String id;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-    private LocalDateTime creationDate;
+    private LocalDateTime dateCreation;
 
     private Integer patientId;
 
