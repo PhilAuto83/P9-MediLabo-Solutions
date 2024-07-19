@@ -12,9 +12,9 @@ import java.util.List;
 @Repository
 public interface NotePatientRepository extends MongoRepository<NotePatient, String> {
 
-    @Query("{'patient_id': ?0}")
+    @Query("{'patientId': ?0}")
     List<NotePatient> findByPatientId(Integer patientId);
 
-    @Query("{'patient_id': ?0}")
+    @Query("{'patientId': ?0}")
     Page<NotePatient> findByPatientIdWithPage(Integer patientId, Pageable pageable);
 }

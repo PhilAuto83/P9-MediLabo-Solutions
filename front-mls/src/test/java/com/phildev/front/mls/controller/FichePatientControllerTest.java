@@ -1,16 +1,14 @@
 package com.phildev.front.mls.controller;
 
-import com.phildev.front.mls.error.ResponseNotFoundException;
+import com.phildev.front.mls.error.FichePatientNotFoundException;
 import com.phildev.front.mls.model.CoordonneesPatient;
 import com.phildev.front.mls.model.NotePatient;
 import com.phildev.front.mls.service.FichePatientService;
 import com.phildev.front.mls.service.MicroserviceCoordonneesPatientProxy;
 import com.phildev.front.mls.service.MicroserviceNotesPatientProxy;
 import com.phildev.front.mls.service.NotePatientService;
-import feign.FeignException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -26,8 +24,8 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -69,7 +67,7 @@ public class FichePatientControllerTest {
     @WithMockUser
     @DisplayName("Test message d'erreur sur fiche patient si le service proxy renvoie une erreur")
     public void testFichePatientAvecErreurSiProxyRenvoieUneErreur() throws Exception {
-        when(microserviceCoordonneesPatientProxy.recuperePatient(1L)).thenThrow(ResponseNotFoundException.class);
+        when(microserviceCoordonneesPatientProxy.recuperePatient(1L)).thenThrow(FichePatientNotFoundException.class);
         mockMvc.perform(get("/patient/fiche/1/pageNo/0"))
                 .andDo(print())
                 .andExpect(model().attributeExists("patientErreur"))

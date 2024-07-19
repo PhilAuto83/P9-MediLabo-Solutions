@@ -15,9 +15,9 @@ public interface MicroserviceNotesPatientProxy {
     @GetMapping("/gateway/patient/notes")
     public Page<NotePatient> recupererLesNotesParPatientParPaqe(@RequestParam("patientId") Integer patientId, @RequestParam("pageNo") Integer pageNo);
 
-    @PostMapping("/gateway//patient/note")
+    @PostMapping("/gateway/patient/note")
     public NotePatient ajouterUneNote(@Valid @RequestBody NotePatient note);
 
-    @DeleteMapping("/gateway//patient/note/{id}")
+    @DeleteMapping("/gateway/patient/note/{id}")
     public ResponseEntity<String> supprimerLaNote(@PathVariable("id") String id);
 }

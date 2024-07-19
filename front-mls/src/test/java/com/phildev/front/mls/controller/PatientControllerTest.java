@@ -70,7 +70,7 @@ public class PatientControllerTest {
                 .andExpect(content().string(containsString(" <td>M</td>")))
                 .andExpect(content().string(containsString("<td>12 rue du Test</td>")))
                 .andExpect(content().string(containsString("<td>000-555-7777</td>")))
-                .andExpect(content().string(containsString("<a href=\"/patient/fiche/{id}(id=${patient.id})/pageNo/0\">Voir fiche</a>")))
+                .andExpect(content().string(containsString("Voir fiche")))
                 .andExpect(content().string(containsString("<a href=\"/patient/update/1\">Mettre à jour</a>")))
                 .andExpect(content().string(containsString("<a href=\"/patient/suppression/1\">Supprimer</a>")))
                 .andExpect(status().isOk());

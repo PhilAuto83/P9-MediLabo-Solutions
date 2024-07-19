@@ -47,7 +47,7 @@
             <td th:text="${patient.adresse}"></td>
             <td th:text="${patient.telephone}"></td>
             <td class="d-flex justify-content-around" >
-                <a th:href="@{/patient/fiche/{id}(id=${patient.id})/pageNo/0}">Voir fiche</a>
+                <a th:href="@{'/patient/fiche/'+${patient.id}+'/pageNo/0'}">Voir fiche</a>
                 <a th:href="@{/patient/update/{id}(id=${patient.id})}">Mettre à jour</a>
                 <a th:href="@{/patient/suppression/{id}(id=${patient.id})}">Supprimer</a>
             </td>
