@@ -27,7 +27,7 @@ public class NotePatientService {
 
 
     public Page<NotePatient> recupererLesNotesParPatientParPage(Integer patientId, int pageNumber) {
-        Pageable pageable = PageRequest.of(pageNumber, 5, Sort.by("creation_date"));
+        Pageable pageable = PageRequest.of(pageNumber, 5, Sort.by("dateCreation").descending());
         Page<NotePatient> notes = notePatientRepository.findByPatientIdWithPage(patientId, pageable);
         if(notes.isEmpty()){
             logger.error("Aucune note trouvée avec l'id patient {} pour la page {}", patientId, pageNumber);

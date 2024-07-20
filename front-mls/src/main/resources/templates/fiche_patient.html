@@ -23,7 +23,7 @@
             </div>
         </div>
     </nav>
-    <div class="fs-4 text-center mt-2">Informations générales</div>
+    <div class="fs-4 text-center mt-4">Informations générales</div>
     <table class="table table-striped">
         <thead class="thead-dark">
         <tr>
@@ -47,20 +47,20 @@
     <div th:if="${patientErreur != null}" class="text-center">
         <span th:text="${patientErreur}" class="text-danger" style="font-size: 1rem"></span>
     </div>
-    <div class="fs-4 text-center mt-2">Historique du patient</div>
+    <div class="fs-4 text-center mt-4">Historique du patient</div>
     <table class="table table-striped">
         <thead class="thead-dark">
         <tr>
-            <th scope="col">Date de visite</th>
-            <th scope="col">Note</th>
-            <th scope="col">Actions</th>
+            <th scope="col" class="col-2">Date de visite</th>
+            <th scope="col" class="col-6">Note</th>
+            <th scope="col" class="col-4 text-center">Actions</th>
         </tr>
         </thead>
         <tbody th:if="${notes != null && fiche != null}">
-        <tr th:each="note :${notes.content}">
-            <td th:text="${note.dateCreation}"></td>
-            <td th:text="${note.note}"></td>
-            <td class="d-flex justify-content-around" >
+        <tr th:each="note :${notes.content}" style="height: 8vh">
+            <td th:text="${#temporals.format(note.dateCreation, 'yyyy-MM-dd hh:mm:ss')}" class="col-2"></td>
+            <td th:text="${note.note}" class="col-8"></td>
+            <td class="col-2 text-center">
                 <a th:href="@{/patient/{patientId}/note/{id}(patientId=${fiche.id}, id=${note.id})}">Supprimer</a>
             </td>
         </tr>
@@ -69,15 +69,15 @@
     <nav th:if="${notes != null && notes.totalPages > 0 && fiche != null}">
         <ul class="pagination justify-content-center">
             <li class="page-item">
-                <a class="page-link" th:href="@{'/patient/note/'+${fiche.id}+'/pageNo/'+${pageActuelle < 1? pageActuelle : pageActuelle -1}}" aria-label="Précédent">
+                <a class="page-link" th:href="@{'/patient/fiche/'+${fiche.id}+'/pageNo/'+${pageActuelle < 1? pageActuelle : pageActuelle -1}}" aria-label="Précédent">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
             <li th:each="pageNumber : ${#numbers.sequence(1, notes.totalPages)}" class="page-item">
-                <a th:text="${pageNumber}" class="page-link" th:href="@{'/patient/note/'+${fiche.id}+'/pageNo/'+${pageNumber -1}}"></a>
+                <a th:text="${pageNumber}" class="page-link" th:href="@{'/patient/fiche/'+${fiche.id}+'/pageNo/'+${pageNumber -1}}"></a>
             </li>
             <li class="page-item">
-                <a class="page-link" th:href="@{'/patient/note/'+${fiche.id}+'/pageNo/'+${pageActuelle +1 < notes.totalPages? pageActuelle +1: pageActuelle}}" aria-label="Suivant">
+                <a class="page-link" th:href="@{'/patient/fiche/'+${fiche.id}+'/pageNo/'+${pageActuelle +1 < notes.totalPages? pageActuelle +1: pageActuelle}}" aria-label="Suivant">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
@@ -98,21 +98,23 @@
         </div>
         <div class="form-group text-center">
             <label for="note" class="form-label">Rédiger la note</label>
-            <textarea class="form-control" id="note" rows="10" placeholder="Tapez votre texte..." th:field="*{note}"></textarea>
+            <textarea class="form-control" id="note" cols="3" rows="5" placeholder="Tapez votre texte..." th:field="*{note}"></textarea>
         </div>
         <p class="text-danger" th:if="${#fields.hasErrors('note')}" th:errors="*{note}"></p>
         <div class="d-flex justify-content-center">
             <button type="submit" class="btn btn-primary mt-2 col-4">Ajouter la note</button>
         </div>
-
     </form>
     <div th:if="${noteErreur != null}" class="text-center">
         <span th:text="${noteErreur}" class="text-danger" style="font-size: 1rem"></span>
     </div>
+    <div class="fs-4 text-center mt-4">Rapport Diabète</div>
+    <form th:action="@{/patient/rapport}" method="get"  class="col-10 col-sm-6 mx-auto">
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary mt-2 col-4">Générer le rapport</button>
+        </div>
 
-    <div class="fs-4 text-center mt-2">Rapport Diabète</div>
-
-
+    </form>
 </div>
 </body>
 </html>
