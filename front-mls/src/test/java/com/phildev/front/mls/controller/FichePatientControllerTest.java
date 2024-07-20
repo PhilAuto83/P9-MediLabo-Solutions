@@ -54,7 +54,7 @@ public class FichePatientControllerTest {
         mockMvc.perform(get("/patient/fiche/1/pageNo/0"))
                 .andDo(print())
                 .andExpect(view().name("fiche_patient"))
-                .andExpect(content().string(containsString("<div class=\"fs-4 text-center mt-2\">Informations générales</div>")))
+                .andExpect(content().string(containsString("<div class=\"fs-4 text-center mt-4\">Informations générales</div>")))
                 .andExpect(content().string(containsString("<td>PHIL</td>")))
                 .andExpect(content().string(containsString("<td>TEST</td>")))
                 .andExpect(content().string(containsString("<td>34</td>")))
