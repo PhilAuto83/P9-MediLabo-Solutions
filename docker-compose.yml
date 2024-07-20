@@ -10,8 +10,12 @@ services:
       context: ./front-mls
       dockerfile: Dockerfile
     depends_on:
-      - mls-mysql
-      - mls-gateway
+      mls-coordonnees-patient:
+        condition: service_started
+      mls-mysql:
+        condition: service_started
+      mls-gateway:
+        condition: service_started
     ports:
       - "8080:8080"
   mls-coordonnees-patient:
@@ -23,9 +27,12 @@ services:
       context: ./mls-coordonnees-patient
       dockerfile: Dockerfile
     depends_on:
-      - mls-mysql
-      - mls-gateway
-      - eureka-server
+      mls-mysql:
+        condition: service_started
+      mls-gateway:
+        condition: service_started
+      eureka-server:
+        condition: service_healthy
   mls-notes-patient:
     container_name: mls-notes-patient
     environment:
@@ -35,9 +42,12 @@ services:
       context: ./mls-notes-patient
       dockerfile: Dockerfile
     depends_on:
-      - mls-mongo
-      - mls-gateway
-      - eureka-server
+      mls-mongo:
+        condition: service_started
+      mls-gateway:
+        condition: service_started
+      eureka-server:
+        condition: service_healthy
   eureka-server:
     container_name: eureka-server
     environment:
@@ -47,6 +57,11 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8089:8089"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://eureka-server:8089"]
+      retries: 10
+      interval: 10s
+      timeout: 60s
   mls-mysql:
     container_name: mls-mysql
     image: mysql:latest
@@ -67,7 +82,8 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      - eureka-server
+      eureka-server:
+        condition: service_healthy
   mls-mongo:
     container_name: mls-mongo
     image: mongo:latest
