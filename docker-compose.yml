@@ -10,12 +10,16 @@ services:
       context: ./front-mls
       dockerfile: Dockerfile
     depends_on:
+      mls-notes-patient:
+        condition: service_healthy
       mls-coordonnees-patient:
-        condition: service_started
+        condition: service_healthy
       mls-mysql:
         condition: service_started
-      mls-gateway:
+      mls-mongo:
         condition: service_started
+      mls-gateway:
+        condition: service_healthy
     ports:
       - "8080:8080"
   mls-coordonnees-patient:
@@ -30,9 +34,15 @@ services:
       mls-mysql:
         condition: service_started
       mls-gateway:
-        condition: service_started
+        condition: service_healthy
       eureka-server:
         condition: service_healthy
+    healthcheck:
+      test: "wget -T5 -qO- http://localhost:9000/actuator/health | grep UP || exit 1"
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
   mls-notes-patient:
     container_name: mls-notes-patient
     environment:
@@ -45,9 +55,15 @@ services:
       mls-mongo:
         condition: service_started
       mls-gateway:
-        condition: service_started
+        condition: service_healthy
       eureka-server:
         condition: service_healthy
+    healthcheck:
+      test: "wget -T5 -qO- http://localhost:9010/actuator/health | grep UP || exit 1"
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
   eureka-server:
     container_name: eureka-server
     environment:
@@ -58,10 +74,11 @@ services:
     ports:
       - "8089:8089"
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://eureka-server:8089"]
-      retries: 10
-      interval: 10s
-      timeout: 60s
+      test: "wget -T5 -qO- http://localhost:8089/actuator/health | grep UP || exit 1"
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
   mls-mysql:
     container_name: mls-mysql
     image: mysql:latest
@@ -84,6 +101,12 @@ services:
     depends_on:
       eureka-server:
         condition: service_healthy
+    healthcheck:
+      test: "wget -T5 -qO- http://localhost:8081/actuator/health | grep UP || exit 1"
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
   mls-mongo:
     container_name: mls-mongo
     image: mongo:latest

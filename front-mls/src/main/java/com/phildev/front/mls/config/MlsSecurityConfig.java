@@ -28,7 +28,7 @@ public class MlsSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(auth ->{
-                    auth.requestMatchers( "/login","/js/**","/css/**","/images/**").permitAll();
+                    auth.requestMatchers( "/login","/js/**","/css/**","/images/**", "/actuator/**").permitAll();
                     auth.requestMatchers("/admin", "/utilisateurs/liste").hasRole("ADMIN");
                     auth.requestMatchers("/home").hasRole("USER");
                     auth.anyRequest().authenticated();

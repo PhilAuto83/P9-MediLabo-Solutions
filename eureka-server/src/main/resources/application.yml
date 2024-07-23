@@ -9,3 +9,8 @@ eureka:
       defaultZone: ${EUREKA_SERVER} #http://localhost:8089/eureka
 server:
   port: 8089
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

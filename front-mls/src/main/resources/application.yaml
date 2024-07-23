@@ -29,6 +29,11 @@ server:
   servlet:
     encoding:
       charset: UTF-8
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
 gateway-user: ${GATEWAY_USER}
 gateway-pwd:  ${GATEWAY_PWD}
 logging:
