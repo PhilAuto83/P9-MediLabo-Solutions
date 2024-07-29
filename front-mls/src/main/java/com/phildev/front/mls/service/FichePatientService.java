@@ -41,7 +41,7 @@ public class FichePatientService {
     }
 
     public NotePatient ajouterUneNote(NotePatient notePatient){
-            return microserviceNotesPatientProxy.ajouterUneNote(notePatient);
+        return microserviceNotesPatientProxy.ajouterUneNote(notePatient);
     }
 
 }
