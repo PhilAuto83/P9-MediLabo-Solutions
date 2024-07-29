@@ -83,13 +83,18 @@ public class PatientService {
             logger.info("Le patient est mis à jour avec le même nom {} prénom {}", coordonneesPatient.getNom(), coordonneesPatient.getPrenom());
             return microserviceCoordonneesPatientProxy.sauvegarderUnPatient(coordonneesPatient);
         }else {
-            CoordonneesPatient patientAvecMemeNomPrenom = microserviceCoordonneesPatientProxy.recuperePatientParNomPrenom(coordonneesPatient.getNom(), coordonneesPatient.getPrenom());
-            if(!Objects.equals(patientAvecMemeNomPrenom.getId(), patientActuelId)){
-                logger.error("Un autre patient existe avec le même nom en base données sur la structure {}", patientAvecMemeNomPrenom.getStructureId());
-                throw new PatientExistantException("Un autre patient existe avec le même nom en base données sur la structure "+patientAvecMemeNomPrenom.getStructureId());
+            try {
+                CoordonneesPatient patientAvecMemeNomPrenom = microserviceCoordonneesPatientProxy.recuperePatientParNomPrenom(coordonneesPatient.getNom(), coordonneesPatient.getPrenom());
+                if (!Objects.equals(patientAvecMemeNomPrenom.getId(), patientActuelId)) {
+                    logger.error("Un autre patient existe avec le même nom en base données sur la structure {}", patientAvecMemeNomPrenom.getStructureId());
+                    throw new PatientExistantException("Un autre patient existe avec le même nom en base données sur la structure " + patientAvecMemeNomPrenom.getStructureId());
+                }
+            }catch(ResponseNotFoundException responseNotFoundException){
+                logger.info("Pas de patient trouvé en base de données avec le prénom {} et le nom {}, le patient peut être mis à jour", coordonneesPatient.getPrenom(), coordonneesPatient.getNom());
+                return microserviceCoordonneesPatientProxy.sauvegarderUnPatient(coordonneesPatient);
             }
-            return microserviceCoordonneesPatientProxy.sauvegarderUnPatient(coordonneesPatient);
         }
+        return microserviceCoordonneesPatientProxy.sauvegarderUnPatient(coordonneesPatient);
     }
 
 
