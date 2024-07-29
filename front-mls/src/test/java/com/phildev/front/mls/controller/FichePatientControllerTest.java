@@ -61,7 +61,7 @@ public class FichePatientControllerTest {
         Page<NotePatient> notes = new PageImpl<>(List.of(notePatient), PageRequest.of(0,1),1);
 
         when(microserviceCoordonneesPatientProxy.recuperePatient(1L)).thenReturn(patient);
-        when(microserviceNotesPatientProxy.recupererLesNotesParPatientParPaqe(1,0)).thenReturn(notes);
+        when(microserviceNotesPatientProxy.recupererLesNotesParPatientParPage(1,0)).thenReturn(notes);
         mockMvc.perform(get("/patient/fiche/1/pageNo/0"))
                 .andDo(print())
                 .andExpect(view().name("fiche_patient"))
@@ -97,7 +97,7 @@ public class FichePatientControllerTest {
     void testNotePatientSiProxyRenvoieUneErreur() throws Exception {
         CoordonneesPatient patient = new CoordonneesPatient(1L, 2, "TEST", "PHIL", LocalDate.of(1990,5,21),  "M", "15 rue des tests", "000-555-9999");
         when(microserviceCoordonneesPatientProxy.recuperePatient(1L)).thenReturn(patient);
-        when(microserviceNotesPatientProxy.recupererLesNotesParPatientParPaqe(1,  0)).thenThrow(ResponseNotFoundException.class);
+        when(microserviceNotesPatientProxy.recupererLesNotesParPatientParPage(1,  0)).thenThrow(ResponseNotFoundException.class);
         mockMvc.perform(get("/patient/fiche/1/pageNo/0"))
                 .andDo(print())
                 .andExpect(model().attributeExists("noteErreur"))
@@ -114,7 +114,7 @@ public class FichePatientControllerTest {
         NotePatient notePatient  = new NotePatient("123456a", LocalDateTime.now(),1,"PHIL TEST","First note");
         Page<NotePatient> notes = new PageImpl<>(List.of(notePatient), PageRequest.of(0,1),1);
         when(microserviceCoordonneesPatientProxy.recuperePatient(1L)).thenReturn(patient);
-        when(microserviceNotesPatientProxy.recupererLesNotesParPatientParPaqe(1,  0)).thenReturn(notes);
+        when(microserviceNotesPatientProxy.recupererLesNotesParPatientParPage(1,  0)).thenReturn(notes);
         when(microserviceNotesPatientProxy.supprimerLaNote("123456a")).thenReturn(ResponseEntity.ok("La note a été supprimée"));
         mockMvc.perform(get("/patient/1/note/123456a"))
                 .andDo(print())
@@ -131,7 +131,7 @@ public class FichePatientControllerTest {
         NotePatient notePatient  = new NotePatient("123456a", LocalDateTime.now(),1,"PHIL TEST","First note");
         Page<NotePatient> notes = new PageImpl<>(List.of(notePatient), PageRequest.of(0,1),1);
         when(microserviceCoordonneesPatientProxy.recuperePatient(1L)).thenReturn(patient);
-        when(microserviceNotesPatientProxy.recupererLesNotesParPatientParPaqe(1,  0)).thenReturn(notes);
+        when(microserviceNotesPatientProxy.recupererLesNotesParPatientParPage(1,  0)).thenReturn(notes);
         when(microserviceNotesPatientProxy.supprimerLaNote("123456a")).thenThrow(new BadRequestException("Bad request"));
         mockMvc.perform(get("/patient/1/note/123456a"))
                 .andDo(print())
@@ -149,7 +149,7 @@ public class FichePatientControllerTest {
         NotePatient notePatient  = new NotePatient("123456a", LocalDateTime.now(),1,"PHIL TEST","First note");
         Page<NotePatient> notes = new PageImpl<>(List.of(notePatient), PageRequest.of(0,1),1);
         when(microserviceCoordonneesPatientProxy.recuperePatient(1L)).thenReturn(patient);
-        when(microserviceNotesPatientProxy.recupererLesNotesParPatientParPaqe(1,  0)).thenReturn(notes);
+        when(microserviceNotesPatientProxy.recupererLesNotesParPatientParPage(1,  0)).thenReturn(notes);
         when(microserviceNotesPatientProxy.supprimerLaNote("123456a")).thenThrow(new ResponseNotFoundException("La note n'existe pas"));
         mockMvc.perform(get("/patient/1/note/123456a"))
                 .andDo(print())

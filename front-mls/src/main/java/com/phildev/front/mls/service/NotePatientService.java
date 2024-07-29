@@ -17,7 +17,7 @@ public class NotePatientService {
     private MicroserviceNotesPatientProxy microserviceNotesPatientProxy;
 
     public Page<NotePatient> recupererLesNotesParPatient(Integer patientId, Integer pageNo){
-        return microserviceNotesPatientProxy.recupererLesNotesParPatientParPaqe(patientId, pageNo);
+        return microserviceNotesPatientProxy.recupererLesNotesParPatientParPage(patientId, pageNo);
     }
 
     public void supprimerLaNote(String id) {

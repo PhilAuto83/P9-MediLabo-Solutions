@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @FeignClient(name ="mls-gateway-notes")
 public interface MicroserviceNotesPatientProxy {
     @GetMapping("/gateway/patient/notes")
-    public Page<NotePatient> recupererLesNotesParPatientParPaqe(@RequestParam("patientId") Integer patientId, @RequestParam("pageNo") Integer pageNo);
+    public Page<NotePatient> recupererLesNotesParPatientParPage(@RequestParam("patientId") Integer patientId, @RequestParam("pageNo") Integer pageNo);
 
     @PostMapping("/gateway/patient/note")
     public NotePatient ajouterUneNote(@Valid @RequestBody NotePatient note);

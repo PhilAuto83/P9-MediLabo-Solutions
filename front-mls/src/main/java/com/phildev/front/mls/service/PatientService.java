@@ -40,7 +40,7 @@ public class PatientService {
         try {
             return microserviceCoordonneesPatientProxy.recupereCoordonneesParStructure(user.getStructureId());
         }catch (FeignException exception){
-            logger.info("Pas de patient présent en base de données pour la structure {}", user.getStructureId());
+            logger.error("Pas de patient présent en base de données pour la structure {}", user.getStructureId());
             return Collections.emptyList();
         }
     }
@@ -51,7 +51,7 @@ public class PatientService {
             logger.info("Le patient avec l'id {} a bien été supprimé", id);
         }else{
             logger.error("Le patient {} n'a pas été supprimé", id);
-            throw new RuntimeException(String .format("Le patient %d n'a pas été supprimé", id));
+            throw new RuntimeException(String.format("Le patient %d n'a pas été supprimé", id));
         }
     }
 
@@ -72,7 +72,7 @@ public class PatientService {
     }
 
     /**
-     * Cette méthode met à jour un patient en base de données et vérifie au prélalble que le patient n'existe pas déjà sur une autre structure avec le nom/prénom mis à jour
+     * Cette méthode met à jour un patient en base de données et vérifie au préalable que le patient n'existe pas déjà sur une autre structure avec le nom/prénom mis à jour
      * @param coordonneesPatient qui est l'objet à mettre à jour
      * @return les coordonnées d'un patient {@link CoordonneesPatient}
      */
@@ -102,7 +102,7 @@ public class PatientService {
         User user = userRepository.findByEmail(principal.getName());
         try {
             return microserviceCoordonneesPatientProxy.recupereCoordonneesParStructureAvecPagination(user.getStructureId(), pageNo);
-        }catch (FeignException exception){
+        }catch (ResponseNotFoundException exception){
             logger.info("L'erreur suivante est survenue pour la structure {} : {}", user.getStructureId(), exception.getMessage());
             throw new ResponseNotFoundException(exception.getMessage());
         }
