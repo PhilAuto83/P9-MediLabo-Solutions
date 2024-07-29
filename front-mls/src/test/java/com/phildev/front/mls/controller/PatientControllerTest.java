@@ -3,14 +3,10 @@ package com.phildev.front.mls.controller;
 import com.phildev.front.mls.error.BadRequestException;
 import com.phildev.front.mls.error.PatientExistantException;
 import com.phildev.front.mls.error.ResponseNotFoundException;
-import com.phildev.front.mls.error.TelephoneFormatException;
 import com.phildev.front.mls.model.CoordonneesPatient;
 import com.phildev.front.mls.model.User;
 import com.phildev.front.mls.service.PatientService;
 import com.phildev.front.mls.service.UserService;
-import com.phildev.front.mls.utils.PrincipalTest;
-import feign.FeignException;
-import feign.Request;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +21,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.security.Principal;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
@@ -48,8 +43,6 @@ public class PatientControllerTest {
 
     @MockBean
     private UserService userService;
-
-    private static final Principal PRINCIPAL = new PrincipalTest();
 
 
 

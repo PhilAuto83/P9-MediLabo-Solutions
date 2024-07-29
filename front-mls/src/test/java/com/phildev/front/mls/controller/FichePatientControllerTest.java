@@ -31,6 +31,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -170,6 +171,60 @@ public class FichePatientControllerTest {
                         .param("patientId", "8")
                         .param("patient", "Phil Developer"))
                 .andDo(print())
+                .andExpect(redirectedUrl("/patient/fiche/8/pageNo/0"))
+                .andExpect(status().is(302));
+    }
+
+    @Test
+    @WithMockUser
+    @DisplayName("Ajout d'une note pour un patient")
+    void testAjoutNotePatientValide() throws Exception {
+        NotePatient notePatient  = new NotePatient("123456a", LocalDateTime.now(),8,"Phil Developer","First note");
+        when(microserviceNotesPatientProxy.ajouterUneNote(any(NotePatient.class))).thenReturn(notePatient);
+        mockMvc.perform(post("/patient/note")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("dateCreation", (String) null)
+                        .param("note", "First note")
+                        .param("patientId", "8")
+                        .param("patient", "Phil Developer"))
+                .andDo(print())
+                .andExpect(redirectedUrl("/patient/fiche/8/pageNo/0"))
+                .andExpect(status().is(302));
+    }
+
+    @Test
+    @WithMockUser
+    @DisplayName("Test appel du microservice note patient avec retour BadRequestException")
+    void testAjoutNotePatientAvecRetourBadRequestException() throws Exception {
+        when(microserviceNotesPatientProxy.ajouterUneNote(any(NotePatient.class))).thenThrow(new BadRequestException("Bad request"));
+        mockMvc.perform(post("/patient/note")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("dateCreation", (String) null)
+                        .param("note", "First note")
+                        .param("patientId", "8")
+                        .param("patient", "Phil Developer"))
+                .andDo(print())
+                .andExpect(flash().attribute("noteErreur", "Bad request"))
+                .andExpect(redirectedUrl("/patient/fiche/8/pageNo/0"))
+                .andExpect(status().is(302));
+    }
+
+    @Test
+    @WithMockUser
+    @DisplayName("Test appel du microservice note patient avec retour ResponseNotFoundException")
+    void testAjoutNotePatientAvecRetourResponseNotFoundException() throws Exception {
+        when(microserviceNotesPatientProxy.ajouterUneNote(any(NotePatient.class))).thenThrow(new ResponseNotFoundException("Not found"));
+        mockMvc.perform(post("/patient/note")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("dateCreation", (String) null)
+                        .param("note", "First note")
+                        .param("patientId", "8")
+                        .param("patient", "Phil Developer"))
+                .andDo(print())
+                .andExpect(flash().attribute("noteErreur", "Not found"))
                 .andExpect(redirectedUrl("/patient/fiche/8/pageNo/0"))
                 .andExpect(status().is(302));
     }
