@@ -1,7 +1,10 @@
 package com.phildev.front.mls.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.phildev.front.mls.error.BadRequestException;
 import com.phildev.front.mls.error.FichePatientNotFoundException;
+import com.phildev.front.mls.error.PatientExistantException;
 import com.phildev.front.mls.error.ResponseNotFoundException;
 import com.phildev.front.mls.model.CoordonneesPatient;
 import com.phildev.front.mls.model.NotePatient;
@@ -11,6 +14,7 @@ import com.phildev.front.mls.service.MicroserviceNotesPatientProxy;
 import com.phildev.front.mls.service.NotePatientService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,18 +25,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import javax.sound.sampled.AudioFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -156,5 +158,19 @@ public class FichePatientControllerTest {
                 .andExpect(flash().attribute("noteSuppressionErreur", "La note n'existe pas"));
     }
 
-
+    @Test
+    @WithMockUser
+    @DisplayName("Ajout d'une note vide pour le patient")
+    void testAjoutNotePatientVide() throws Exception {
+        mockMvc.perform(post("/patient/note")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("dateCreation", (String) null)
+                        .param("note", (String) null)
+                        .param("patientId", "8")
+                        .param("patient", "Phil Developer"))
+                .andDo(print())
+                .andExpect(redirectedUrl("/patient/fiche/8/pageNo/0"))
+                .andExpect(status().is(302));
+    }
 }

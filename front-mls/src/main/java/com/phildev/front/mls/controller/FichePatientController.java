@@ -81,12 +81,13 @@ public class FichePatientController {
     public String ajouterUneNote(@ModelAttribute("note")@Valid NotePatient notePatient, BindingResult result, RedirectAttributes model){
         if(result.hasErrors()){
             logger.error("Le champ du formulaire {} n' a pas été correctement rempli", result.getFieldError().getField());
+            return "redirect:/patient/fiche/"+notePatient.getPatientId()+"/pageNo/0";
         }
         try{
             notePatient.setDateCreation(LocalDateTime.now());
             NotePatient  noteSaved = fichePatientService.ajouterUneNote(notePatient);
             logger.info("La note {} a été sauvegardée avec succès pour le patient {}", noteSaved.getId(), notePatient.getPatient());
-        }catch(BadRequestException |ResponseNotFoundException exception){
+        }catch(BadRequestException | ResponseNotFoundException exception){
             logger.error(exception.getMessage());
             model.addFlashAttribute("noteErreur", exception.getMessage());
         }
