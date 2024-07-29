@@ -1,4 +1,4 @@
--- création du schéma mls qui contient les utilisateurs et les structures
+docker-- création du schéma mls qui contient les utilisateurs et les structures
 CREATE DATABASE mls;
 USE mls;
 

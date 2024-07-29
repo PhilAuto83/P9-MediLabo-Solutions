@@ -14,29 +14,29 @@
                 <img th:src="@{/images/mls-banner.webp}" alt="mls logo" class="img-thumbnail col-10 col-md-8 mx-auto"/>
             </div>
             <div th:if="${param.error}" class="d-flex justify-content-between alert alert-danger alert-dismissible fade show p-2 col-10 col-md-6 mx-auto mt-2" role="alert">
-                Invalid username and password.
+                Nom d'utilisateur ou mot de passe erroné.
                 <button type="button" class="close p-0 border-0" onclick="redirectToLoginPage()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div th:if="${param.sessionError}" class="d-flex justify-content-between alert alert-danger alert-dismissible fade show p-2 col-10 col-md-6 mx-auto mt-2" role="alert">
-                Session already in use.
+                La session est déjà utilisée.
                 <button type="button" class="close p-0 border-0" onclick="redirectToLoginPage()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div th:if="${param.logout}" class="d-flex justify-content-between alert alert-success alert-dismissible fade show p-2 col-10 col-md-6 mx-auto mt-2" role="alert">
-                You have been logged out.
+                Vous avez été déconnecté(e) avec succès.
                 <button type="button" class="close p-0 border-0" onclick="redirectToLoginPage()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="row mt-2 text-center">
-                <label for="username" class="col-md-8 mx-auto fw-bold">Username:</label>
+                <label for="username" class="col-md-8 mx-auto fw-bold">Nom d'utilisateur:</label>
                 <input type="text" id="username" name="username" class="col-10 col-md-6 mx-auto text-center border-primary"/>
             </div>
             <div class="row mt-2 text-center">
-                <label for="password" class="col-8 mx-auto fw-bold" >Password:</label>
+                <label for="password" class="col-8 mx-auto fw-bold" >Mot de passe:</label>
                 <input type="password" id="password" name="password" class="col-10 col-md-6 mx-auto text-center border-primary" />
             </div>
             <div class="row mt-4">
