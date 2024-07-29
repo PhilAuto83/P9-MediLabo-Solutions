@@ -25,13 +25,13 @@ public class CustomAuthenticationFailure implements AuthenticationFailureHandler
         @Override
         public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
             if(exception instanceof SessionAuthenticationException){
-                logger.error("Session is no longer valid due to maximum session set to 1 for current user");
+                logger.error("Le nombre maximum de session ouverte est fixé à 1");
                 response.sendRedirect("login?sessionError");
             }else{
                 if(request.getUserPrincipal() != null){
-                    logger.error("Invalid credentials typed by user so authentication fails for user {}",request.getUserPrincipal().getName() );
+                    logger.error("Le login ou le mot de passe est incorrect pour l'utilisateur {}",request.getUserPrincipal().getName() );
                 }else{
-                    logger.error("Invalid credentials typed or unknown user in the app.");
+                    logger.error("Le login ou le mot de passe est incorrect ou l'utilisateur n'est pas enregistré dans l'application.");
                 }
                 response.sendRedirect("login?error");
             }

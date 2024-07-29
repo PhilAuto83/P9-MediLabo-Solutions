@@ -1,6 +1,8 @@
 package com.phildev.front.mls.controller;
 
+import com.phildev.front.mls.error.BadRequestException;
 import com.phildev.front.mls.error.FichePatientNotFoundException;
+import com.phildev.front.mls.error.ResponseNotFoundException;
 import com.phildev.front.mls.model.CoordonneesPatient;
 import com.phildev.front.mls.model.NotePatient;
 import com.phildev.front.mls.service.FichePatientService;
@@ -15,9 +17,15 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.sound.sampled.AudioFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,8 +51,8 @@ public class FichePatientControllerTest {
 
     @Test
     @WithMockUser
-    @DisplayName("Test fiche patient avec calcul de l'âge du patient")
-    public void testFichePatientAvecCalculAgePatient() throws Exception {
+    @DisplayName("Test fiche patient avec calcul de l'âge du patient et affichage d'une note")
+    void testFichePatientAvecCalculAgePatient() throws Exception {
         CoordonneesPatient patient = new CoordonneesPatient(1L, 2, "TEST", "PHIL", LocalDate.of(1990,5,21),  "M", "15 rue des tests", "000-555-9999");
         NotePatient notePatient  = new NotePatient("123456a", LocalDateTime.now(),1,"PHIL TEST","First note");
         Page<NotePatient> notes = new PageImpl<>(List.of(notePatient), PageRequest.of(0,1),1);
@@ -60,13 +68,18 @@ public class FichePatientControllerTest {
                 .andExpect(content().string(containsString("<td>34</td>")))
                 .andExpect(content().string(containsString("<td>15 rue des tests</td>")))
                 .andExpect(content().string(containsString("<td>000-555-9999</td>")))
+                .andExpect(content().string(containsString("<div class=\"fs-4 text-center mt-4\">Historique du patient</div>")))
+                .andExpect(content().string(containsString("<td style=\"white-space: pre-line\" class=\"col-8\">First note</td>")))
+                .andExpect(content().string(containsString("<a href=\"/patient/1/note/123456a\">Supprimer</a>")))
                 .andExpect(status().isOk());
     }
+
+
 
     @Test
     @WithMockUser
     @DisplayName("Test message d'erreur sur fiche patient si le service proxy renvoie une erreur")
-    public void testFichePatientAvecErreurSiProxyRenvoieUneErreur() throws Exception {
+    void testFichePatientAvecErreurSiProxyRenvoieUneErreur() throws Exception {
         when(microserviceCoordonneesPatientProxy.recuperePatient(1L)).thenThrow(FichePatientNotFoundException.class);
         mockMvc.perform(get("/patient/fiche/1/pageNo/0"))
                 .andDo(print())
@@ -74,4 +87,74 @@ public class FichePatientControllerTest {
                 .andExpect(content().string(containsString("Le patient n&#39;a pas été trouvé avec son id 1")))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    @WithMockUser
+    @DisplayName("Test message d'erreur sur note patient si le service proxy renvoie une erreur")
+    void testNotePatientSiProxyRenvoieUneErreur() throws Exception {
+        CoordonneesPatient patient = new CoordonneesPatient(1L, 2, "TEST", "PHIL", LocalDate.of(1990,5,21),  "M", "15 rue des tests", "000-555-9999");
+        when(microserviceCoordonneesPatientProxy.recuperePatient(1L)).thenReturn(patient);
+        when(microserviceNotesPatientProxy.recupererLesNotesParPatientParPaqe(1,  0)).thenThrow(ResponseNotFoundException.class);
+        mockMvc.perform(get("/patient/fiche/1/pageNo/0"))
+                .andDo(print())
+                .andExpect(model().attributeExists("noteErreur"))
+                .andExpect(content().string(containsString("<span class=\"text-danger\" style=\"font-size: 1rem\">Le patient n&#39;a pas encore de notes</span>")))
+                .andExpect(status().isOk());
+    }
+
+
+    @Test
+    @WithMockUser
+    @DisplayName("Test suppression d'une note")
+    void testSuppressionNotePatient() throws Exception {
+        CoordonneesPatient patient = new CoordonneesPatient(1L, 2, "TEST", "PHIL", LocalDate.of(1990,5,21),  "M", "15 rue des tests", "000-555-9999");
+        NotePatient notePatient  = new NotePatient("123456a", LocalDateTime.now(),1,"PHIL TEST","First note");
+        Page<NotePatient> notes = new PageImpl<>(List.of(notePatient), PageRequest.of(0,1),1);
+        when(microserviceCoordonneesPatientProxy.recuperePatient(1L)).thenReturn(patient);
+        when(microserviceNotesPatientProxy.recupererLesNotesParPatientParPaqe(1,  0)).thenReturn(notes);
+        when(microserviceNotesPatientProxy.supprimerLaNote("123456a")).thenReturn(ResponseEntity.ok("La note a été supprimée"));
+        mockMvc.perform(get("/patient/1/note/123456a"))
+                .andDo(print())
+                .andExpect(status().is(302))
+                .andExpect(view().name("redirect:/patient/fiche/1/pageNo/0"))
+                .andExpect(redirectedUrl("/patient/fiche/1/pageNo/0"));
+    }
+
+    @Test
+    @WithMockUser
+    @DisplayName("Test suppression d'une note avec erreur BadRequestException")
+    void testSuppressionNotePatientErreur400() throws Exception {
+        CoordonneesPatient patient = new CoordonneesPatient(1L, 2, "TEST", "PHIL", LocalDate.of(1990,5,21),  "M", "15 rue des tests", "000-555-9999");
+        NotePatient notePatient  = new NotePatient("123456a", LocalDateTime.now(),1,"PHIL TEST","First note");
+        Page<NotePatient> notes = new PageImpl<>(List.of(notePatient), PageRequest.of(0,1),1);
+        when(microserviceCoordonneesPatientProxy.recuperePatient(1L)).thenReturn(patient);
+        when(microserviceNotesPatientProxy.recupererLesNotesParPatientParPaqe(1,  0)).thenReturn(notes);
+        when(microserviceNotesPatientProxy.supprimerLaNote("123456a")).thenThrow(new BadRequestException("Bad request"));
+        mockMvc.perform(get("/patient/1/note/123456a"))
+                .andDo(print())
+                .andExpect(status().is(302))
+                .andExpect(view().name("redirect:/patient/fiche/1/pageNo/0"))
+                .andExpect(redirectedUrl("/patient/fiche/1/pageNo/0"))
+                .andExpect(flash().attribute("noteSuppressionErreur", "Bad request"));
+    }
+
+    @Test
+    @WithMockUser
+    @DisplayName("Test suppression d'une note avec erreur ResponseNotFoundException")
+    void testSuppressionNotePatientErreur404() throws Exception {
+        CoordonneesPatient patient = new CoordonneesPatient(1L, 2, "TEST", "PHIL", LocalDate.of(1990,5,21),  "M", "15 rue des tests", "000-555-9999");
+        NotePatient notePatient  = new NotePatient("123456a", LocalDateTime.now(),1,"PHIL TEST","First note");
+        Page<NotePatient> notes = new PageImpl<>(List.of(notePatient), PageRequest.of(0,1),1);
+        when(microserviceCoordonneesPatientProxy.recuperePatient(1L)).thenReturn(patient);
+        when(microserviceNotesPatientProxy.recupererLesNotesParPatientParPaqe(1,  0)).thenReturn(notes);
+        when(microserviceNotesPatientProxy.supprimerLaNote("123456a")).thenThrow(new ResponseNotFoundException("La note n'existe pas"));
+        mockMvc.perform(get("/patient/1/note/123456a"))
+                .andDo(print())
+                .andExpect(status().is(302))
+                .andExpect(view().name("redirect:/patient/fiche/1/pageNo/0"))
+                .andExpect(redirectedUrl("/patient/fiche/1/pageNo/0"))
+                .andExpect(flash().attribute("noteSuppressionErreur", "La note n'existe pas"));
+    }
+
+
 }

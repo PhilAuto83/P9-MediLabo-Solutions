@@ -40,8 +40,8 @@ public class FichePatientController {
     private NotePatientService notePatientService;
 
 
-    @GetMapping("patient/fiche/{id}/pageNo/{pageNo}")
-    public String afficheLesInfosPatient(@PathVariable("id") Long id, @PathVariable("pageNo") Integer pageNo, Model model){
+    @GetMapping(value = "patient/fiche/{id}/pageNo/{pageNo}")
+    public String afficheLesInfosPatient(@PathVariable("id") Long id, @PathVariable("pageNo") Integer pageNo, Model model,  @ModelAttribute("noteSuppressionErreur") String noteSuppressionErreur){
         NotePatient nouvelleNote = new NotePatient();
         model.addAttribute("note", nouvelleNote);
         try{
@@ -53,7 +53,10 @@ public class FichePatientController {
             nouvelleNote.setPatient(String.format("%s %s", fichePatient.getPrenom(), fichePatient.getNom()));
             Page<NotePatient> notes = notePatientService.recupererLesNotesParPatient(id.intValue(), pageActuelle);
             model.addAttribute("notes", notes);
-        }catch(ResponseNotFoundException responseNotFoundException){
+        }catch(BadRequestException | ResponseNotFoundException responseNotFoundException){
+            if(noteSuppressionErreur != null){
+                model.addAttribute("noteSuppressionErreur", noteSuppressionErreur);
+            }
             model.addAttribute("noteErreur", "Le patient n'a pas encore de notes");
         }catch(FichePatientNotFoundException exception){
             logger.error("Le patient n'a pas été trouvé avec son id {}", id);
@@ -63,13 +66,13 @@ public class FichePatientController {
     }
 
     @GetMapping("patient/{patientId}/note/{id}")
-    public String supprimerNotePatient(@PathVariable("patientId") Integer patientId, @PathVariable("id")String id, Model model){
+    public String supprimerNotePatient(@PathVariable("patientId") Integer patientId, @PathVariable("id")String id, RedirectAttributes model){
         try{
             notePatientService.supprimerLaNote(id);
             logger.info("La note {} a bien été supprimée", id);
         }catch(BadRequestException |ResponseNotFoundException exception){
             logger.error(exception.getMessage());
-            model.addAttribute("noteErreur", exception.getMessage());
+            model.addFlashAttribute("noteSuppressionErreur", exception.getMessage());
         }
         return "redirect:/patient/fiche/"+patientId+"/pageNo/0";
     }

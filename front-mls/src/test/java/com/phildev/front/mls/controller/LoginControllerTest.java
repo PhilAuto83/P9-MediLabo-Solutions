@@ -33,7 +33,7 @@ public class LoginControllerTest {
     @Test
     @WithMockUser(roles ="ADMIN", username = "admin@mls.fr")
     @DisplayName("Test de l'affichage de la page de l admin")
-    public void testAffichageAdminPage() throws Exception {
+    void testAffichageAdminPage() throws Exception {
         when(structureService.getStructureNameById(any())).thenReturn("MLS");
         when(userService.findByEmail("admin@mls.fr")).thenReturn(new User(20, "Phil", "Dev", 2, "ADMIN", "admin@mls.fr", "pwd"));
         mockMvc.perform(get("/admin"))
@@ -48,7 +48,7 @@ public class LoginControllerTest {
     @Test
     @WithMockUser( username = "user@mls.fr")
     @DisplayName("Test de l'affichage de la page d un utilisateur classique")
-    public void testAffichageHomePageUser() throws Exception {
+    void testAffichageHomePageUser() throws Exception {
         when(structureService.getStructureNameById(any())).thenReturn("Cabinet Dr Sam");
         when(userService.findByEmail("user@mls.fr")).thenReturn(new User(20, "Phil", "Dev", 3, "USER", "user@mls.fr", "pwd"));
         mockMvc.perform(get("/home"))
@@ -63,4 +63,5 @@ public class LoginControllerTest {
                 .andExpect(content().string(containsString("<div>Vous faites partie de la structure : Cabinet Dr Sam</div>")))
                 .andExpect(status().isOk());
     }
+
 }

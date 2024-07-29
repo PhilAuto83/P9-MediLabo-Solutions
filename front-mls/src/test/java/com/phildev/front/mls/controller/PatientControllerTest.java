@@ -56,7 +56,7 @@ public class PatientControllerTest {
     @Test
     @WithMockUser
     @DisplayName("Récupérer la liste avec 1 patient associé à la structure")
-    public void recuperationListePatients() throws Exception {
+    void recuperationListePatients() throws Exception {
         Page<CoordonneesPatient> page =  new PageImpl<>(List.of(new CoordonneesPatient(1L, 2,"DEV", "PHIL", LocalDate.of(1988,5,21), "M","12 rue du Test", "000-555-7777"))
         , PageRequest.of(0,5), 1);
         when(patientService.recupereToutesLesCoordonneesPatientAvecPagination(any(), anyInt())).thenReturn(page);
@@ -79,7 +79,7 @@ public class PatientControllerTest {
     @Test
     @WithMockUser
     @DisplayName("Test message d'erreur avec liste vide")
-    public void recuperationListePatientsVide() throws Exception {
+    void recuperationListePatientsVide() throws Exception {
         when(patientService.recupereToutesLesCoordonneesPatientAvecPagination(any(), anyInt())).thenThrow(ResponseNotFoundException.class);
         mockMvc.perform(get("/patients/liste"))
                 .andDo(print())
@@ -92,7 +92,7 @@ public class PatientControllerTest {
     @Test
     @WithMockUser
     @DisplayName("Supprimer un patient avec redirection vers la liste des patients")
-    public void supprimerUnPatient() throws Exception {
+    void supprimerUnPatient() throws Exception {
         doNothing().when(patientService).supprimerPatient(2L);
         mockMvc.perform(get("/patient/suppression/2"))
                 .andDo(print())
@@ -103,7 +103,7 @@ public class PatientControllerTest {
     @Test
     @WithMockUser
     @DisplayName("Gérer l'exception lors de la suppression d'un patient")
-    public void gestionExceptionSuppressionUnPatient() throws Exception {
+    void gestionExceptionSuppressionUnPatient() throws Exception {
         doThrow((RuntimeException.class)).when(patientService).supprimerPatient(2L);
         mockMvc.perform(get("/patient/suppression/2"))
                 .andDo(print())
@@ -115,7 +115,7 @@ public class PatientControllerTest {
     @Test
     @WithMockUser(username = "tester@mls.fr")
     @DisplayName("Affichage du formulaire de création patient")
-    public void afficherLeFormulairePatientAvecSucces() throws Exception {
+    void afficherLeFormulairePatientAvecSucces() throws Exception {
         when(userService.findByEmail("tester@mls.fr")).thenReturn(new User(4, "Joe","Louis",3,  "USER","tester@mls.fr","123456"));
         mockMvc.perform(get("/patient/ajout"))
                 .andDo(print())
@@ -132,7 +132,7 @@ public class PatientControllerTest {
     @Test
     @WithMockUser(username = "tester@mls.fr")
     @DisplayName("Création patient valide")
-    public void creerPatientValide() throws Exception {
+    void creerPatientValide() throws Exception {
         CoordonneesPatient patient = new CoordonneesPatient(null,2, "Developer","Phil", LocalDate.of(1983, 7,  18), "M","","000-111-2222");
         when(patientService.sauvegarderUnPatient(patient)).thenReturn(patient);
         mockMvc.perform(post("/patient")
@@ -153,7 +153,7 @@ public class PatientControllerTest {
     @Test
     @WithMockUser(username = "tester@mls.fr")
     @DisplayName("Création patient qui existe déjà en base de données")
-    public void creerPatientExistant() throws Exception {
+    void creerPatientExistant() throws Exception {
         CoordonneesPatient patient = new CoordonneesPatient(null,2, "Developer","Phil", LocalDate.of(1983, 7,  18), "M","","000-111-2222");
         when(patientService.sauvegarderUnPatient(patient)).thenThrow(new PatientExistantException("Le patient test existe déjà en base de données"));
         mockMvc.perform(post("/patient")
@@ -174,7 +174,7 @@ public class PatientControllerTest {
     @Test
     @WithMockUser(username = "tester@mls.fr")
     @DisplayName("Création patient invalide avec des champs non conformes")
-    public void redirigerVersPagePatientAvecErreurApresSaisieInvalide() throws Exception {
+    void redirigerVersPagePatientAvecErreurApresSaisieInvalide() throws Exception {
         mockMvc.perform(post("/patient")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -197,7 +197,7 @@ public class PatientControllerTest {
     @Test
     @WithMockUser(username = "tester@mls.fr")
     @DisplayName("Création patient invalide avec champs téléphone invalide")
-    public void redirigerVersPagePatientAvecChampsTelephoneInvalide() throws Exception {
+    void redirigerVersPagePatientAvecChampsTelephoneInvalide() throws Exception {
         mockMvc.perform(post("/patient")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -217,7 +217,7 @@ public class PatientControllerTest {
     @Test
     @WithMockUser(username = "tester@mls.fr")
     @DisplayName("Création patient invalide lors d'une exception BadRequestException levée côté backend")
-    public void redirigerVersPagePatientAvecBadRequestException() throws Exception {
+    void redirigerVersPagePatientAvecBadRequestException() throws Exception {
         CoordonneesPatient patient = new CoordonneesPatient(null,2, "Test","Sofia", LocalDate.of(1983, 5,  18), "F","12 rue des tests","000-111-8888");
 
         when(patientService.sauvegarderUnPatient(patient)).thenThrow(new BadRequestException("Erreur du backend"));
@@ -241,7 +241,7 @@ public class PatientControllerTest {
     @Test
     @WithMockUser(username = "tester@mls.fr")
     @DisplayName("Création patient invalide lors d'une exception ResponseNotFoundException levée côté backend")
-    public void redirigerVersPagePatientAvecResponseNotFoundException() throws Exception {
+    void redirigerVersPagePatientAvecResponseNotFoundException() throws Exception {
         CoordonneesPatient patient = new CoordonneesPatient(null,2, "Test","Sofia", LocalDate.of(1983, 5,  18), "F","12 rue des tests","000-111-8888");
 
         when(patientService.sauvegarderUnPatient(patient)).thenThrow(new ResponseNotFoundException("Pas de patient créé"));
@@ -265,7 +265,7 @@ public class PatientControllerTest {
     @Test
     @WithMockUser(username = "tester@mls.fr")
     @DisplayName("Test affichage du formulaire pour mettre à jour le patient 6")
-    public void testMiseAJourPatientValide() throws Exception {
+    void testMiseAJourPatientValide() throws Exception {
         CoordonneesPatient patient = new CoordonneesPatient(6L,2, "Test","Sofia", LocalDate.of(1983, 5,  18), "F","12 rue des tests","000-111-8888");
                when(patientService.recuperePatient(6L)).thenReturn(patient);
                mockMvc.perform(get("/patient/update/6"))
@@ -287,7 +287,7 @@ public class PatientControllerTest {
     @Test
     @WithMockUser(username = "tester@mls.fr")
     @DisplayName("Mise à jour patient valide")
-    public void updatePatientValide() throws Exception {
+    void updatePatientValide() throws Exception {
         CoordonneesPatient patient = new CoordonneesPatient(8L,2, "Developer","Phil", LocalDate.of(1983, 7,  18), "M","","000-111-2222");
         when(patientService.miseAJourPatient(patient)).thenReturn(patient);
         mockMvc.perform(post("/patient/update/8")
@@ -308,7 +308,7 @@ public class PatientControllerTest {
     @Test
     @WithMockUser(username = "tester@mls.fr")
     @DisplayName("Mise à jour patient existant sur une autre structure")
-    public void updatePatientExistantSurUneAutreStructure() throws Exception {
+    void updatePatientExistantSurUneAutreStructure() throws Exception {
         CoordonneesPatient patient = new CoordonneesPatient(8L,2, "Developer","Phil", LocalDate.of(1983, 7,  18), "M","","000-111-2222");
         when(patientService.miseAJourPatient(patient)).thenThrow(new PatientExistantException("Le patient existe sur une autre structure"));
         mockMvc.perform(post("/patient/update/8")
@@ -326,6 +326,4 @@ public class PatientControllerTest {
                 .andExpect(view().name("update_patient"))
                 .andExpect(status().is(200));
     }
-
-
 }
