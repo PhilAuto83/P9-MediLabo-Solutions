@@ -6,6 +6,7 @@ Le projet est organisé avec plusieurs microservices qui communiquent entre eux 
 >- **mls-coordonnees-patient** : qui représente un service back-end qui renvoie les coordonnées des patients. 
 >Les données sont stockées dans une base de données mysql partagée avec le service front pour respecter certains principes du green code.
 >- **mls-notes-patient** : qui représente un service back-end qui renvoie les notes du praticien sur le patient avec une base de données mongo pour persister les données
+>- **mls-diabete** : qui représente un service back-end qui récupère les données des microservices mls-notes-patient et mls-coordonnees-patient pour produire un diagnostic diabète au front-end
 >- **mls-gateway** : qui est la gateway protégeant les appels aux services back-end. Le front n'appellera pas directement les services back.
 >- **eureka-server** : qui est un edge microservice représentant un server de registre détectant les microservices et leur état une fois déclaré en tant que client.
 
