@@ -11,10 +11,7 @@ import com.phildev.front.mls.service.UserService;
 import feign.FeignException;
 import io.micrometer.common.util.StringUtils;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,23 +20,22 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
-import java.util.List;
-import java.util.Optional;
 import java.util.regex.Pattern;
 
 /**
  * Cette classe est un controller qui gère la récupération, la création, la mise à jour et la suppression des patients associés à une structure.
  */
 @Controller
+@Slf4j
 public class PatientController {
 
-    private static Logger logger = LoggerFactory.getLogger(PatientController.class);
+    private final PatientService patientService;
+    private final UserService userService;
 
-    @Autowired
-    private PatientService patientService;
-
-    @Autowired
-    private UserService userService;
+    public PatientController(PatientService patientService, UserService userService) {
+        this.patientService = patientService;
+        this.userService = userService;
+    }
 
     /**
      * Cette méthode renvoie la première page contenant 5 éléments maximum avec la liste des patients associés à la structure du user connecté
@@ -55,14 +51,13 @@ public class PatientController {
             Page<CoordonneesPatient> pageCoordonnees = patientService.recupereToutesLesCoordonneesPatientAvecPagination(principal, pageNo);
             if(pageCoordonnees.getContent().isEmpty()){
                 mav.addObject("listePatientsErreur", "Il n'y a pas de patients sur cette structure actuellement");
-                logger.info("La page ne contient pas de coordonnées patient sur la structure gérée par {}", principal.getName());
+                log.info("La page ne contient pas de coordonnées patient sur la structure gérée par {}", principal.getName());
             }else{
                 mav.addObject("pageCoordonnees", pageCoordonnees);
-                logger.info("Le service mls-coordonnees-patient a retourné une liste de {} patients pour le user {}", pageCoordonnees.getContent().size(), principal.getName());
+                log.info("Le service mls-coordonnees-patient a retourné une liste de {} patients pour le user {}", pageCoordonnees.getContent().size(), principal.getName());
             }
-
         }catch(ResponseNotFoundException exception){
-            logger.error("Une erreur est survenue {}", exception.getMessage());
+            log.error("Une erreur est survenue {}", exception.getMessage());
             mav.addObject("erreurBackend", "Une erreur est survenue lors de la récupération de la liste patients, veuillez réessayer ultérieurement");
         }
         return mav;
@@ -79,7 +74,7 @@ public class PatientController {
     public String supprimerPatient(@PathVariable("id") Long id, Model model, Principal principal){
         try{
             patientService.supprimerPatient(id);
-            logger.info("Le patient {} a bien été supprimé", id);
+            log.info("Le patient {} a bien été supprimé", id);
         }catch (RuntimeException exception){
             model.addAttribute("erreurSuppression", exception.getMessage());
             return "patients";
@@ -120,20 +115,20 @@ public class PatientController {
             return "ajout_patient";
         } else{
             if(StringUtils.isNotBlank(coordonneesPatient.getTelephone()) && !Pattern.matches("^[0-9]{3}-[0-9]{3}-[0-9]{4}", coordonneesPatient.getTelephone())){
-                logger.error("Le numéro de téléphone doit respecter le format suivant 111-444-7777");
+                log.error("Le numéro de téléphone doit respecter le format suivant 111-444-7777");
                 model.addAttribute("telephoneError", "Le numéro de téléphone doit respecter le format suivant 111-444-7777");
                 return "ajout_patient";
             }else{
-                logger.info("Pas d'erreur sur la validation des champs de création du patient {} {}", coordonneesPatient.getPrenom(), coordonneesPatient.getNom());
+                log.info("Pas d'erreur sur la validation des champs de création du patient {} {}", coordonneesPatient.getPrenom(), coordonneesPatient.getNom());
             }
         }
         try{
             CoordonneesPatient patient = patientService.sauvegarderUnPatient(coordonneesPatient);
-            logger.info("Le patient {}]{} a été ajouté à la structure n° {} ", patient.getPrenom(), patient.getNom(), patient.getStructureId());
+            log.info("Le patient {}]{} a été ajouté à la structure n° {} ", patient.getPrenom(), patient.getNom(), patient.getStructureId());
             return "redirect:/patients/liste";
 
         }catch(ResponseNotFoundException | BadRequestException | PatientExistantException exception){
-            logger.error(exception.getMessage());
+            log.error(exception.getMessage());
             model.addAttribute("backendError", exception.getMessage());
             return "ajout_patient";
         }
@@ -151,11 +146,11 @@ public class PatientController {
         try{
             CoordonneesPatient patient  = patientService.recuperePatient(id);
             model.addAttribute("patient", patient);
-            logger.info("Patient {} {} prêt à être mis à jour", patient.getPrenom(), patient.getNom());
+            log.info("Patient {} {} prêt à être mis à jour", patient.getPrenom(), patient.getNom());
             return "update_patient";
         }catch(ResponseNotFoundException exception){
             model.addAttribute("patientError", exception.getMessage());
-            logger.error("Le patient avec l'id {} n' a pas été trouvé ", id);
+            log.error("Le patient avec l'id {} n' a pas été trouvé ", id);
             return "redirect:/patients/liste";
         }
     }
@@ -177,21 +172,21 @@ public class PatientController {
             return "update_patient";
         } else{
             if(StringUtils.isNotBlank(coordonneesPatient.getTelephone()) && !Pattern.matches("^[0-9]{3}-[0-9]{3}-[0-9]{4}", coordonneesPatient.getTelephone())){
-                logger.error("Le numéro de téléphone doit respecter le format suivant 111-444-7777");
+                log.error("Le numéro de téléphone doit respecter le format suivant 111-444-7777");
                 model.addAttribute("telephoneError", "Le numéro de téléphone doit respecter le format suivant 111-444-7777");
                 return "update_patient";
             }else{
-                logger.info("Pas d'erreur sur la validation des champs de création du patient {} {}", coordonneesPatient.getPrenom(), coordonneesPatient.getNom());
+                log.info("Pas d'erreur sur la validation des champs de création du patient {} {}", coordonneesPatient.getPrenom(), coordonneesPatient.getNom());
             }
         }
         try{
             coordonneesPatient.setId(id);
             CoordonneesPatient patient = patientService.miseAJourPatient(coordonneesPatient);
-            logger.info("Le patient {} {} a été mis à jour à la structure n° {} ", patient.getPrenom(), patient.getNom(), patient.getStructureId());
+            log.info("Le patient {} {} a été mis à jour à la structure n° {} ", patient.getPrenom(), patient.getNom(), patient.getStructureId());
             return "redirect:/patients/liste";
 
         }catch(FeignException  | PatientExistantException exception){
-            logger.error(exception.getMessage());
+            log.error(exception.getMessage());
             model.addAttribute("backendError", exception.getMessage());
             return "update_patient";
         }

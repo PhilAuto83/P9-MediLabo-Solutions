@@ -1,12 +1,10 @@
 package com.phildev.front.mls.service;
 
-
 import com.phildev.front.mls.dto.UserDTO;
 import com.phildev.front.mls.model.Structure;
 import com.phildev.front.mls.model.User;
 import com.phildev.front.mls.repository.StructureRepository;
 import com.phildev.front.mls.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,13 +15,15 @@ import java.util.Map;
 @Service
     public class UtilisateurService {
 
-        @Autowired
-        private UserRepository userRepository;
+        private final UserRepository userRepository;
+        private final StructureRepository structureRepository;
 
-        @Autowired
-        private StructureRepository structureRepository;
+    public UtilisateurService(UserRepository userRepository, StructureRepository structureRepository) {
+        this.userRepository = userRepository;
+        this.structureRepository = structureRepository;
+    }
 
-        public List<UserDTO> afficheUtilisateurs(){
+    public List<UserDTO> afficheUtilisateurs(){
             List<UserDTO> userDTOS = new ArrayList<>();
             List<User> users = userRepository.findAll();
             List<Structure> structures = structureRepository.findAll();

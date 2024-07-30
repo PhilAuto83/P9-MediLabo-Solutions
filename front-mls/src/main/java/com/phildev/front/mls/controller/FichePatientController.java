@@ -8,9 +8,7 @@ import com.phildev.front.mls.model.NotePatient;
 import com.phildev.front.mls.service.FichePatientService;
 import com.phildev.front.mls.service.NotePatientService;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,15 +27,15 @@ import java.time.LocalDateTime;
  *
  */
 @Controller
+@Slf4j
 public class FichePatientController {
+    private final FichePatientService fichePatientService;
+    private final NotePatientService notePatientService;
 
-    private static final Logger logger = LoggerFactory.getLogger(FichePatientController.class);
-
-    @Autowired
-    private FichePatientService fichePatientService;
-
-    @Autowired
-    private NotePatientService notePatientService;
+    public FichePatientController(FichePatientService fichePatientService, NotePatientService notePatientService) {
+        this.fichePatientService = fichePatientService;
+        this.notePatientService = notePatientService;
+    }
 
 
     @GetMapping(value = "patient/fiche/{id}/pageNo/{pageNo}")
@@ -59,7 +57,7 @@ public class FichePatientController {
             }
             model.addAttribute("noteErreur", "Le patient n'a pas encore de notes");
         }catch(FichePatientNotFoundException exception){
-            logger.error("Le patient n'a pas été trouvé avec son id {}", id);
+            log.error("Le patient n'a pas été trouvé avec son id {}", id);
             model.addAttribute("patientErreur", String.format("Le patient n'a pas été trouvé avec son id %s ",id));
         }
         return "fiche_patient";
@@ -69,9 +67,9 @@ public class FichePatientController {
     public String supprimerNotePatient(@PathVariable("patientId") Integer patientId, @PathVariable("id")String id, RedirectAttributes model){
         try{
             notePatientService.supprimerLaNote(id);
-            logger.info("La note {} a bien été supprimée", id);
+            log.info("La note {} a bien été supprimée", id);
         }catch(BadRequestException |ResponseNotFoundException exception){
-            logger.error(exception.getMessage());
+            log.error(exception.getMessage());
             model.addFlashAttribute("noteSuppressionErreur", exception.getMessage());
         }
         return "redirect:/patient/fiche/"+patientId+"/pageNo/0";
@@ -80,15 +78,15 @@ public class FichePatientController {
     @PostMapping(value = "patient/note", consumes = "application/x-www-form-urlencoded")
     public String ajouterUneNote(@ModelAttribute("note")@Valid NotePatient notePatient, BindingResult result, RedirectAttributes model){
         if(result.hasErrors()){
-            logger.error("Le champ du formulaire {} n' a pas été correctement rempli", result.getFieldError().getField());
+            log.error("Le champ du formulaire {} n' a pas été correctement rempli", result.getFieldError().getField());
             return "redirect:/patient/fiche/"+notePatient.getPatientId()+"/pageNo/0";
         }
         try{
             notePatient.setDateCreation(LocalDateTime.now());
             NotePatient  noteSaved = fichePatientService.ajouterUneNote(notePatient);
-            logger.info("La note {} a été sauvegardée avec succès pour le patient {}", noteSaved.getId(), notePatient.getPatient());
+            log.info("La note {} a été sauvegardée avec succès pour le patient {}", noteSaved.getId(), notePatient.getPatient());
         }catch(BadRequestException | ResponseNotFoundException exception){
-            logger.error(exception.getMessage());
+            log.error(exception.getMessage());
             model.addFlashAttribute("noteErreur", exception.getMessage());
         }
         return "redirect:/patient/fiche/"+notePatient.getPatientId()+"/pageNo/0";

@@ -6,21 +6,19 @@ import com.phildev.front.mls.model.CoordonneesPatient;
 import com.phildev.front.mls.model.FichePatient;
 import com.phildev.front.mls.model.NotePatient;
 import com.phildev.front.mls.utils.Utility;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class FichePatientService {
+    private final MicroserviceCoordonneesPatientProxy microserviceCoordonneesPatientProxy;
+    private final MicroserviceNotesPatientProxy microserviceNotesPatientProxy;
 
-    private static final Logger logger = LoggerFactory.getLogger(FichePatientService.class);
-
-    @Autowired
-    private MicroserviceCoordonneesPatientProxy microserviceCoordonneesPatientProxy;
-
-    @Autowired
-    private MicroserviceNotesPatientProxy microserviceNotesPatientProxy;
+    public FichePatientService(MicroserviceCoordonneesPatientProxy microserviceCoordonneesPatientProxy, MicroserviceNotesPatientProxy microserviceNotesPatientProxy) {
+        this.microserviceCoordonneesPatientProxy = microserviceCoordonneesPatientProxy;
+        this.microserviceNotesPatientProxy = microserviceNotesPatientProxy;
+    }
 
     public FichePatient recupereLaFichePatient(Long id){
         try{
@@ -35,7 +33,7 @@ public class FichePatientService {
             fichePatient.setTelephone(coordonneesPatient.getTelephone());
             return fichePatient;
         }catch(ResponseNotFoundException exception){
-            logger.error("Un problème est survenue {}", exception.getMessage(),exception);
+            log.error("Un problème est survenue {}", exception.getMessage(),exception);
             throw new FichePatientNotFoundException(exception.getMessage());
         }
     }

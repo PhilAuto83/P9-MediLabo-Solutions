@@ -24,6 +24,8 @@ spring:
             url: ${GATEWAY_URL}
           mls-gateway-notes:
             url: ${GATEWAY_URL}
+          mls-gateway-diabete:
+            url: ${GATEWAY_URL}
   thymeleaf:
     encoding: UTF-8
 server:

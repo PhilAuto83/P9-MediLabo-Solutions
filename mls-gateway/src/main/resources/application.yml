@@ -17,6 +17,12 @@ spring:
               - Path=/gateway/patient/**
             filters:
               - StripPrefix=1
+          - id: diagnostic-diabete
+            uri: lb://mls-diabete
+            predicates:
+              - Path=/gateway/diabete/**
+            filters:
+              - StripPrefix=1
   security:
     user:
       name: phildev

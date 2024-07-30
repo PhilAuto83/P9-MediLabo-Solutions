@@ -3,7 +3,6 @@ package com.phildev.front.mls.controller;
 import com.phildev.front.mls.model.User;
 import com.phildev.front.mls.service.StructureService;
 import com.phildev.front.mls.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,12 +11,14 @@ import java.security.Principal;
 
 @Controller
 public class LoginController {
+    private final UserService userService;
 
-    @Autowired
-    private UserService userService;
+    private final StructureService structureService;
 
-    @Autowired
-    private StructureService structureService;
+    public LoginController(UserService userService, StructureService structureService) {
+        this.userService = userService;
+        this.structureService = structureService;
+    }
 
     /**
      * This method is the login endpoint which displays the login view

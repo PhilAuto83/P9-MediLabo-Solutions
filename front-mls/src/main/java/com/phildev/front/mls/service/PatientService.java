@@ -7,9 +7,7 @@ import com.phildev.front.mls.model.CoordonneesPatient;
 import com.phildev.front.mls.model.User;
 import com.phildev.front.mls.repository.UserRepository;
 import feign.FeignException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,15 +18,15 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@Slf4j
 public class PatientService {
+    private final UserRepository userRepository;
+    private final MicroserviceCoordonneesPatientProxy microserviceCoordonneesPatientProxy;
 
-    private static final Logger logger = LoggerFactory.getLogger(PatientService.class);
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private MicroserviceCoordonneesPatientProxy microserviceCoordonneesPatientProxy;
+    public PatientService(UserRepository userRepository, MicroserviceCoordonneesPatientProxy microserviceCoordonneesPatientProxy) {
+        this.userRepository = userRepository;
+        this.microserviceCoordonneesPatientProxy = microserviceCoordonneesPatientProxy;
+    }
 
     /**
      * Cette méthode permet de récupérer tous les coordonnées des patients associés à la structure de l'utilisateur connecté
@@ -40,7 +38,7 @@ public class PatientService {
         try {
             return microserviceCoordonneesPatientProxy.recupereCoordonneesParStructure(user.getStructureId());
         }catch (FeignException exception){
-            logger.error("Pas de patient présent en base de données pour la structure {}", user.getStructureId());
+            log.error("Pas de patient présent en base de données pour la structure {}", user.getStructureId());
             return Collections.emptyList();
         }
     }
@@ -48,9 +46,9 @@ public class PatientService {
     public void supprimerPatient(Long id) {
         ResponseEntity<String> response = microserviceCoordonneesPatientProxy.supprimerPatient(id);
         if (response.getStatusCode().value()==200){
-            logger.info("Le patient avec l'id {} a bien été supprimé", id);
+            log.info("Le patient avec l'id {} a bien été supprimé", id);
         }else{
-            logger.error("Le patient {} n'a pas été supprimé", id);
+            log.error("Le patient {} n'a pas été supprimé", id);
             throw new RuntimeException(String.format("Le patient %d n'a pas été supprimé", id));
         }
     }
@@ -63,7 +61,7 @@ public class PatientService {
     public CoordonneesPatient sauvegarderUnPatient(CoordonneesPatient coordonneesPatient){
         try{
             CoordonneesPatient patient  = microserviceCoordonneesPatientProxy.recuperePatientParNomPrenom(coordonneesPatient.getNom(), coordonneesPatient.getPrenom());
-            logger.error("Le patient {} {} existe déjà en base de données", patient.getPrenom(), patient.getNom());
+            log.error("Le patient {} {} existe déjà en base de données", patient.getPrenom(), patient.getNom());
             throw new PatientExistantException(String.format("Le patient %s %s existe déjà sur votre structure ou une autre.", patient.getPrenom(), patient.getNom()));
 
         }catch(ResponseNotFoundException responseNotFoundException){
@@ -80,17 +78,17 @@ public class PatientService {
         Long patientActuelId = coordonneesPatient.getId();
         CoordonneesPatient patientActuelEnBaseDeDonnees = microserviceCoordonneesPatientProxy.recuperePatient(patientActuelId);
         if(coordonneesPatient.getNom().equalsIgnoreCase(patientActuelEnBaseDeDonnees.getNom()) && coordonneesPatient.getPrenom().equalsIgnoreCase(patientActuelEnBaseDeDonnees.getPrenom())){
-            logger.info("Le patient est mis à jour avec le même nom {} prénom {}", coordonneesPatient.getNom(), coordonneesPatient.getPrenom());
+            log.info("Le patient est mis à jour avec le même nom {} prénom {}", coordonneesPatient.getNom(), coordonneesPatient.getPrenom());
             return microserviceCoordonneesPatientProxy.sauvegarderUnPatient(coordonneesPatient);
         }else {
             try {
                 CoordonneesPatient patientAvecMemeNomPrenom = microserviceCoordonneesPatientProxy.recuperePatientParNomPrenom(coordonneesPatient.getNom(), coordonneesPatient.getPrenom());
                 if (!Objects.equals(patientAvecMemeNomPrenom.getId(), patientActuelId)) {
-                    logger.error("Un autre patient existe avec le même nom en base données sur la structure {}", patientAvecMemeNomPrenom.getStructureId());
+                    log.error("Un autre patient existe avec le même nom en base données sur la structure {}", patientAvecMemeNomPrenom.getStructureId());
                     throw new PatientExistantException("Un autre patient existe avec le même nom en base données sur la structure " + patientAvecMemeNomPrenom.getStructureId());
                 }
             }catch(ResponseNotFoundException responseNotFoundException){
-                logger.info("Pas de patient trouvé en base de données avec le prénom {} et le nom {}, le patient peut être mis à jour", coordonneesPatient.getPrenom(), coordonneesPatient.getNom());
+                log.info("Pas de patient trouvé en base de données avec le prénom {} et le nom {}, le patient peut être mis à jour", coordonneesPatient.getPrenom(), coordonneesPatient.getNom());
                 return microserviceCoordonneesPatientProxy.sauvegarderUnPatient(coordonneesPatient);
             }
         }
@@ -108,7 +106,7 @@ public class PatientService {
         try {
             return microserviceCoordonneesPatientProxy.recupereCoordonneesParStructureAvecPagination(user.getStructureId(), pageNo);
         }catch (ResponseNotFoundException exception){
-            logger.info("L'erreur suivante est survenue pour la structure {} : {}", user.getStructureId(), exception.getMessage());
+            log.info("L'erreur suivante est survenue pour la structure {} : {}", user.getStructureId(), exception.getMessage());
             throw new ResponseNotFoundException(exception.getMessage());
         }
     }
