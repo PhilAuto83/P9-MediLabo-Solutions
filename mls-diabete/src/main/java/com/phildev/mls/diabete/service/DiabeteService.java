@@ -45,27 +45,27 @@ public class DiabeteService {
     private boolean aNiveauRisqueLimite(Integer patientId){
         Map<String, Object> infosAgeSexe = getAgeSexePatient(Long.valueOf(patientId));
         int nbDeclencheurs = getNombreDeclencheurs(patientId);
-        return nbDeclencheurs <= 5 && ((int) infosAgeSexe.get("age")) > 30;
+        return nbDeclencheurs >=2 && nbDeclencheurs <= 5 && ((int) infosAgeSexe.get("age")) > 30;
     }
 
     private boolean aNiveauRisqueDanger(Integer patientId){
         Map<String, Object> infosAgeSexe = getAgeSexePatient(Long.valueOf(patientId));
         int nbDeclencheurs = getNombreDeclencheurs(patientId);
-        if(((int) infosAgeSexe.get("age")) > 30 && nbDeclencheurs >= 6){
+        if(((int) infosAgeSexe.get("age")) < 30 && infosAgeSexe.get("sexe").equals("F") && nbDeclencheurs >= 4 && nbDeclencheurs <=6){
             return true;
-        }else if (((int) infosAgeSexe.get("age")) < 30 && infosAgeSexe.get("sexe").equals("M") && nbDeclencheurs >=3){
+        }else if (((int) infosAgeSexe.get("age")) < 30 && infosAgeSexe.get("sexe").equals("M") && nbDeclencheurs >=3 && nbDeclencheurs <=4){
             return true;
-        }else return ((int) infosAgeSexe.get("age")) < 30 && infosAgeSexe.get("sexe").equals("F") && nbDeclencheurs >= 4;
+        }else return ((int) infosAgeSexe.get("age")) > 30 && nbDeclencheurs >= 6 && nbDeclencheurs <= 7;
     }
 
     private boolean aNiveauRisquePrecoce(Integer patientId){
         Map<String, Object> infosAgeSexe = getAgeSexePatient(Long.valueOf(patientId));
         int nbDeclencheurs = getNombreDeclencheurs(patientId);
-        if(((int) infosAgeSexe.get("age")) > 30 && nbDeclencheurs >= 8){
+        if (((int) infosAgeSexe.get("age")) < 30 && infosAgeSexe.get("sexe").equals("M") && nbDeclencheurs >=5){
             return true;
-        }else if (((int) infosAgeSexe.get("age")) < 30 && infosAgeSexe.get("sexe").equals("M") && nbDeclencheurs >=5){
+        }else if(((int) infosAgeSexe.get("age")) < 30 && infosAgeSexe.get("sexe").equals("F") && nbDeclencheurs >= 7){
             return true;
-        }else return ((int) infosAgeSexe.get("age")) < 30 && infosAgeSexe.get("sexe").equals("F") && nbDeclencheurs >= 7;
+        }else return(((int) infosAgeSexe.get("age")) > 30 && nbDeclencheurs >= 8);
     }
 
     private int getNombreDeclencheurs(Integer patientId){
