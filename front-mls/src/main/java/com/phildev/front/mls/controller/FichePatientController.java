@@ -5,6 +5,7 @@ import com.phildev.front.mls.error.FichePatientNotFoundException;
 import com.phildev.front.mls.error.ResponseNotFoundException;
 import com.phildev.front.mls.model.FichePatient;
 import com.phildev.front.mls.model.NotePatient;
+import com.phildev.front.mls.service.DiabeteService;
 import com.phildev.front.mls.service.FichePatientService;
 import com.phildev.front.mls.service.NotePatientService;
 import jakarta.validation.Valid;
@@ -32,14 +33,17 @@ public class FichePatientController {
     private final FichePatientService fichePatientService;
     private final NotePatientService notePatientService;
 
-    public FichePatientController(FichePatientService fichePatientService, NotePatientService notePatientService) {
+    private final DiabeteService diabeteService;
+
+    public FichePatientController(FichePatientService fichePatientService, NotePatientService notePatientService, DiabeteService diabeteService) {
         this.fichePatientService = fichePatientService;
         this.notePatientService = notePatientService;
+        this.diabeteService = diabeteService;
     }
 
 
     @GetMapping(value = "patient/fiche/{id}/pageNo/{pageNo}")
-    public String afficheLesInfosPatient(@PathVariable("id") Long id, @PathVariable("pageNo") Integer pageNo, Model model,  @ModelAttribute("noteSuppressionErreur") String noteSuppressionErreur){
+    public String afficheLesInfosPatient(@PathVariable("id") Long id, @PathVariable("pageNo") Integer pageNo, Model model){
         NotePatient nouvelleNote = new NotePatient();
         model.addAttribute("note", nouvelleNote);
         try{
@@ -51,10 +55,10 @@ public class FichePatientController {
             nouvelleNote.setPatient(String.format("%s %s", fichePatient.getPrenom(), fichePatient.getNom()));
             Page<NotePatient> notes = notePatientService.recupererLesNotesParPatient(id.intValue(), pageActuelle);
             model.addAttribute("notes", notes);
+            String diabeteDiagnostic = diabeteService.calculDiagnosticDiabete(id.intValue());
+            model.addAttribute("diabeteDiagnostic", diabeteDiagnostic);
         }catch(BadRequestException | ResponseNotFoundException responseNotFoundException){
-            if(noteSuppressionErreur != null){
-                model.addAttribute("noteSuppressionErreur", noteSuppressionErreur);
-            }
+            model.addAttribute("diagnosticErreur", "Les informations pour calculer le rapport sont insuffisantes");
             model.addAttribute("noteErreur", "Le patient n'a pas encore de notes");
         }catch(FichePatientNotFoundException exception){
             log.error("Le patient n'a pas été trouvé avec son id {}", id);

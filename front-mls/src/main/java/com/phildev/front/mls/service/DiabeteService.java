@@ -15,7 +15,6 @@ public class DiabeteService {
     }
 
     public String calculDiagnosticDiabete(Integer patientId){
-
         try{
             log.info("Appel du service back end mls-diabete via la gateway pour calcul du diagnostic du patient {}", patientId);
             return microserviceDiabeteProxy.calculNiveauRisqueDiabete(patientId);

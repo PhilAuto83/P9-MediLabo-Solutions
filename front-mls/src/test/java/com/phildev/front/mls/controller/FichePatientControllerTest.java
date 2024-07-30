@@ -8,10 +8,7 @@ import com.phildev.front.mls.error.PatientExistantException;
 import com.phildev.front.mls.error.ResponseNotFoundException;
 import com.phildev.front.mls.model.CoordonneesPatient;
 import com.phildev.front.mls.model.NotePatient;
-import com.phildev.front.mls.service.FichePatientService;
-import com.phildev.front.mls.service.MicroserviceCoordonneesPatientProxy;
-import com.phildev.front.mls.service.MicroserviceNotesPatientProxy;
-import com.phildev.front.mls.service.NotePatientService;
+import com.phildev.front.mls.service.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
@@ -40,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-@WebMvcTest({FichePatientController.class, FichePatientService.class, NotePatientService.class})
+@WebMvcTest({FichePatientController.class, FichePatientService.class, NotePatientService.class, DiabeteService.class})
 public class FichePatientControllerTest {
 
     @Autowired
@@ -52,6 +49,9 @@ public class FichePatientControllerTest {
     @MockBean
     private MicroserviceCoordonneesPatientProxy microserviceCoordonneesPatientProxy;
 
+    @MockBean
+    private MicroserviceDiabeteProxy microserviceDiabeteProxy;
+
     @Test
     @WithMockUser
     @DisplayName("Test fiche patient avec calcul de l'âge du patient et affichage d'une note")
@@ -62,6 +62,7 @@ public class FichePatientControllerTest {
 
         when(microserviceCoordonneesPatientProxy.recuperePatient(1L)).thenReturn(patient);
         when(microserviceNotesPatientProxy.recupererLesNotesParPatientParPage(1,0)).thenReturn(notes);
+        when(microserviceDiabeteProxy.calculNiveauRisqueDiabete(1)).thenReturn("None");
         mockMvc.perform(get("/patient/fiche/1/pageNo/0"))
                 .andDo(print())
                 .andExpect(view().name("fiche_patient"))
@@ -84,6 +85,7 @@ public class FichePatientControllerTest {
     @DisplayName("Test message d'erreur sur fiche patient si le service proxy renvoie une erreur")
     void testFichePatientAvecErreurSiProxyRenvoieUneErreur() throws Exception {
         when(microserviceCoordonneesPatientProxy.recuperePatient(1L)).thenThrow(FichePatientNotFoundException.class);
+        when(microserviceDiabeteProxy.calculNiveauRisqueDiabete(1)).thenReturn("None");
         mockMvc.perform(get("/patient/fiche/1/pageNo/0"))
                 .andDo(print())
                 .andExpect(model().attributeExists("patientErreur"))
@@ -97,6 +99,7 @@ public class FichePatientControllerTest {
     void testNotePatientSiProxyRenvoieUneErreur() throws Exception {
         CoordonneesPatient patient = new CoordonneesPatient(1L, 2, "TEST", "PHIL", LocalDate.of(1990,5,21),  "M", "15 rue des tests", "000-555-9999");
         when(microserviceCoordonneesPatientProxy.recuperePatient(1L)).thenReturn(patient);
+        when(microserviceDiabeteProxy.calculNiveauRisqueDiabete(1)).thenReturn("None");
         when(microserviceNotesPatientProxy.recupererLesNotesParPatientParPage(1,  0)).thenThrow(ResponseNotFoundException.class);
         mockMvc.perform(get("/patient/fiche/1/pageNo/0"))
                 .andDo(print())
@@ -115,6 +118,7 @@ public class FichePatientControllerTest {
         Page<NotePatient> notes = new PageImpl<>(List.of(notePatient), PageRequest.of(0,1),1);
         when(microserviceCoordonneesPatientProxy.recuperePatient(1L)).thenReturn(patient);
         when(microserviceNotesPatientProxy.recupererLesNotesParPatientParPage(1,  0)).thenReturn(notes);
+        when(microserviceDiabeteProxy.calculNiveauRisqueDiabete(1)).thenReturn("None");
         when(microserviceNotesPatientProxy.supprimerLaNote("123456a")).thenReturn(ResponseEntity.ok("La note a été supprimée"));
         mockMvc.perform(get("/patient/1/note/123456a"))
                 .andDo(print())
@@ -131,6 +135,7 @@ public class FichePatientControllerTest {
         NotePatient notePatient  = new NotePatient("123456a", LocalDateTime.now(),1,"PHIL TEST","First note");
         Page<NotePatient> notes = new PageImpl<>(List.of(notePatient), PageRequest.of(0,1),1);
         when(microserviceCoordonneesPatientProxy.recuperePatient(1L)).thenReturn(patient);
+        when(microserviceDiabeteProxy.calculNiveauRisqueDiabete(1)).thenReturn("None");
         when(microserviceNotesPatientProxy.recupererLesNotesParPatientParPage(1,  0)).thenReturn(notes);
         when(microserviceNotesPatientProxy.supprimerLaNote("123456a")).thenThrow(new BadRequestException("Bad request"));
         mockMvc.perform(get("/patient/1/note/123456a"))
@@ -149,6 +154,7 @@ public class FichePatientControllerTest {
         NotePatient notePatient  = new NotePatient("123456a", LocalDateTime.now(),1,"PHIL TEST","First note");
         Page<NotePatient> notes = new PageImpl<>(List.of(notePatient), PageRequest.of(0,1),1);
         when(microserviceCoordonneesPatientProxy.recuperePatient(1L)).thenReturn(patient);
+        when(microserviceDiabeteProxy.calculNiveauRisqueDiabete(1)).thenReturn("None");
         when(microserviceNotesPatientProxy.recupererLesNotesParPatientParPage(1,  0)).thenReturn(notes);
         when(microserviceNotesPatientProxy.supprimerLaNote("123456a")).thenThrow(new ResponseNotFoundException("La note n'existe pas"));
         mockMvc.perform(get("/patient/1/note/123456a"))
@@ -163,6 +169,7 @@ public class FichePatientControllerTest {
     @WithMockUser
     @DisplayName("Ajout d'une note vide pour le patient")
     void testAjoutNotePatientVide() throws Exception {
+        when(microserviceDiabeteProxy.calculNiveauRisqueDiabete(8)).thenReturn("None");
         mockMvc.perform(post("/patient/note")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -181,6 +188,7 @@ public class FichePatientControllerTest {
     void testAjoutNotePatientValide() throws Exception {
         NotePatient notePatient  = new NotePatient("123456a", LocalDateTime.now(),8,"Phil Developer","First note");
         when(microserviceNotesPatientProxy.ajouterUneNote(any(NotePatient.class))).thenReturn(notePatient);
+        when(microserviceDiabeteProxy.calculNiveauRisqueDiabete(8)).thenReturn("None");
         mockMvc.perform(post("/patient/note")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -198,6 +206,7 @@ public class FichePatientControllerTest {
     @DisplayName("Test appel du microservice note patient avec retour BadRequestException")
     void testAjoutNotePatientAvecRetourBadRequestException() throws Exception {
         when(microserviceNotesPatientProxy.ajouterUneNote(any(NotePatient.class))).thenThrow(new BadRequestException("Bad request"));
+        when(microserviceDiabeteProxy.calculNiveauRisqueDiabete(8)).thenReturn("None");
         mockMvc.perform(post("/patient/note")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -216,6 +225,7 @@ public class FichePatientControllerTest {
     @DisplayName("Test appel du microservice note patient avec retour ResponseNotFoundException")
     void testAjoutNotePatientAvecRetourResponseNotFoundException() throws Exception {
         when(microserviceNotesPatientProxy.ajouterUneNote(any(NotePatient.class))).thenThrow(new ResponseNotFoundException("Not found"));
+        when(microserviceDiabeteProxy.calculNiveauRisqueDiabete(8)).thenReturn("None");
         mockMvc.perform(post("/patient/note")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
