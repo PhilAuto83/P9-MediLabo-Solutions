@@ -14,6 +14,8 @@ services:
         condition: service_healthy
       mls-coordonnees-patient:
         condition: service_healthy
+      mls-diabete:
+        condition: service_healthy
       mls-mysql:
         condition: service_started
       mls-mongo:
@@ -33,6 +35,31 @@ services:
     depends_on:
       mls-mysql:
         condition: service_started
+      mls-gateway:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    healthcheck:
+      test: "wget -T5 -qO- http://localhost:9000/actuator/health | grep UP || exit 1"
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+  mls-diabete:
+    container_name: mls-diabete
+    environment:
+      GATEWAY_URL: "http://mls-gateway:8081"
+      GATEWAY_USER: phildev
+      GATEWAY_PWD: mls2024@
+      EUREKA_SERVER: "http://eureka-server:8089/eureka"
+    build:
+      context: ./mls-diabete
+      dockerfile: Dockerfile
+    depends_on:
+      mls-coordonnees-patient:
+        condition: service_healthy
+      mls-notes-patient:
+        condition: service_healthy
       mls-gateway:
         condition: service_healthy
       eureka-server:

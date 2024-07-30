@@ -7,6 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="mls-diabete" />
         <module name="mls-gateway" />
         <module name="front-mls" />
         <module name="eureka-server" />
@@ -23,6 +24,7 @@
       <module name="eureka-server" options="-parameters" />
       <module name="front-mls" options="-parameters" />
       <module name="mls-coordonnees-patient" options="-parameters" />
+      <module name="mls-diabete" options="-parameters" />
       <module name="mls-gateway" options="-parameters" />
       <module name="mls-notes-patient" options="-parameters" />
       <module name="notes-patient" options="-parameters" />
