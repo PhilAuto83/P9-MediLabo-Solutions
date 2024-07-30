@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -27,6 +28,11 @@ public class NotePatientController {
     @GetMapping("/patient/notes")
     public Page<NotePatient> recupererLesNotesParPatientParPaqe(@RequestParam("patientId") @NotNull(message ="l'id du patient ne peut pas être null") Integer patientId, @RequestParam("pageNo") Integer pageNo){
         return notePatientService.recupererLesNotesParPatientParPage(patientId, pageNo);
+    }
+
+    @GetMapping("/patient/notes/all")
+    public List<NotePatient> recupererToutesLesNotesParPatient(@RequestParam("patientId") @NotNull(message ="l'id du patient ne peut pas être null") Integer patientId){
+        return notePatientService.recupererToutesLesNotesParPatient(patientId);
     }
 
     @PostMapping("/patient/note")

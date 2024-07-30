@@ -3,6 +3,7 @@ package com.phildev.mls.notes.patient.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.phildev.mls.notes.patient.exception.NoteNonTrouveeException;
 import com.phildev.mls.notes.patient.model.NotePatient;
 import com.phildev.mls.notes.patient.service.NotePatientService;
 import org.junit.jupiter.api.DisplayName;
@@ -38,10 +39,9 @@ public class NotePatientControllerTest {
 
     @MockBean
     private NotePatientService notePatientService;
-
     @Test
-    @DisplayName("test de récupération des notes d'un patient")
-    public void testRecuperationNotesPatient() throws Exception {
+    @DisplayName("test de récupération des notes d'un patient avec page")
+    void testRecuperationNotesPatientAvecPage() throws Exception {
         Page<NotePatient> notes = new PageImpl<>(List.of(new NotePatient("123456a", LocalDateTime.of(2024,7,16,14,52,10),5,"PHIL DEV", "First note")), PageRequest.of(0, 5), 2);
         when(notePatientService.recupererLesNotesParPatientParPage(5, 0)).thenReturn(notes);
         mockMvc.perform(get("/patient/notes")
@@ -55,8 +55,34 @@ public class NotePatientControllerTest {
     }
 
     @Test
+    @DisplayName("test de récupération des notes d'un patient")
+    void testRecuperationNotesPatient() throws Exception {
+        List<NotePatient> notes = List.of(new NotePatient("123456a", LocalDateTime.of(2024,7,16,14,52,10),5,"PHIL DEV", "First note"));
+        when(notePatientService.recupererToutesLesNotesParPatient(5)).thenReturn(notes);
+        mockMvc.perform(get("/patient/notes/all")
+                        .param("patientId", "5"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].patient", is("PHIL DEV")))
+                .andExpect(jsonPath("$[0].note", is("First note")));
+    }
+
+    @Test
+    @DisplayName("test retour 404 avec NoteNonTrouveeException")
+    void testNoteNonTrouveeException() throws Exception {
+        when(notePatientService.recupererToutesLesNotesParPatient(5)).thenThrow( new NoteNonTrouveeException("Aucune note pour le patient"));
+        mockMvc.perform(get("/patient/notes/all")
+                        .param("patientId", "5"))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.statusCode", is(404)))
+                .andExpect(jsonPath("$.message", is("Aucune note pour le patient")));
+    }
+
+    @Test
     @DisplayName("test de création d'une note patient")
-    public void testAjouterUneNote() throws Exception {
+    void testAjouterUneNote() throws Exception {
         NotePatient note = new NotePatient("123456a", LocalDateTime.of(2024,7,16,14,52,10),5,"PHIL DEV", "First note");
         when(notePatientService.ajouterUneNote(note)).thenReturn(note);
         ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
@@ -72,7 +98,7 @@ public class NotePatientControllerTest {
 
     @Test
     @DisplayName("Tester l'ajout d'une note vide qui renvoie un code 400")
-    public void testAjouterUneNoteVideRenvoieUneBadRequest() throws Exception {
+    void testAjouterUneNoteVideRenvoieUneBadRequest() throws Exception {
         NotePatient note = new NotePatient("123456a", LocalDateTime.of(2024,7,16,14,52,10),5,"PHIL DEV", "");
         ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
         mockMvc.perform(post("/patient/note")
@@ -85,7 +111,7 @@ public class NotePatientControllerTest {
 
     @Test
     @DisplayName("Tester l'ajout d'une note nulle qui renvoie un code 400")
-    public void testAjouterUneNoteNulleRenvoieUneBadRequest() throws Exception {
+    void testAjouterUneNoteNulleRenvoieUneBadRequest() throws Exception {
         NotePatient note = new NotePatient("123456a", LocalDateTime.of(2024,7,16,14,52,10),5,"PHIL DEV", null);
         ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
         mockMvc.perform(post("/patient/note")
@@ -98,7 +124,7 @@ public class NotePatientControllerTest {
 
     @Test
     @DisplayName("Tester l'ajout d'une note avec des espaces vides qui renvoie un code 400")
-    public void testAjouterUneNoteAvecEspacesVidesRenvoieUneBadRequest() throws Exception {
+    void testAjouterUneNoteAvecEspacesVidesRenvoieUneBadRequest() throws Exception {
         NotePatient note = new NotePatient("123456a", LocalDateTime.of(2024,7,16,14,52,10),5,"PHIL DEV", "  ");
         ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
         mockMvc.perform(post("/patient/note")
@@ -111,7 +137,7 @@ public class NotePatientControllerTest {
 
     @Test
     @DisplayName("Tester la suppression d'une note patient")
-    public void testSuppressionNotePatient() throws Exception {
+    void testSuppressionNotePatient() throws Exception {
         NotePatient note = new NotePatient("123456a", LocalDateTime.of(2024,7,16,14,52,10),10,"PHIL DEV", "Ok");
         when(notePatientService.trouverLaNote("123456a")).thenReturn(Optional.empty());
         mockMvc.perform(delete("/patient/note/123456a"))
@@ -122,7 +148,7 @@ public class NotePatientControllerTest {
 
     @Test
     @DisplayName("Tester la suppression d'une note patient qui échoue")
-    public void testSuppressionNotePatientEchoue() throws Exception {
+    void testSuppressionNotePatientEchoue() throws Exception {
         NotePatient note = new NotePatient("123456a", LocalDateTime.of(2024,7,16,14,52,10),10,"PHIL DEV", "Ok");
         when(notePatientService.trouverLaNote("123456a")).thenReturn(Optional.of(note));
         mockMvc.perform(delete("/patient/note/123456a"))

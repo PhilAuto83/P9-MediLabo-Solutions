@@ -21,10 +21,8 @@ public class NotePatientService {
 
     private static final Logger logger = LoggerFactory.getLogger(NotePatientService.class);
 
-
     @Autowired
     private NotePatientRepository notePatientRepository;
-
 
     public Page<NotePatient> recupererLesNotesParPatientParPage(Integer patientId, int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber, 5, Sort.by("dateCreation").descending());
@@ -32,6 +30,16 @@ public class NotePatientService {
         if(notes.isEmpty()){
             logger.error("Aucune note trouvée avec l'id patient {} pour la page {}", patientId, pageNumber);
             throw new NoteNonTrouveeException("Aucune note de trouver pour le patient avec l'id "+ patientId+ " pour la page "+pageNumber);
+        }else{
+            return notes;
+        }
+    }
+
+    public List<NotePatient> recupererToutesLesNotesParPatient(Integer patientId) {
+        List<NotePatient> notes = notePatientRepository.findAllByPatientId(patientId);
+        if(notes.isEmpty()){
+            logger.error("Aucune note trouvée avec l'id patient {}", patientId);
+            throw new NoteNonTrouveeException("Aucune note de trouver pour le patient avec l'id "+ patientId);
         }else{
             return notes;
         }
