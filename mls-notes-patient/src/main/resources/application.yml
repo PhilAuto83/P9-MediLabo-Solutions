@@ -1,0 +1,21 @@
+spring:
+  application:
+      name: mls-notes-patient
+  data:
+    mongodb:
+      uri: ${MONGO_DATABASE_URL}
+server:
+  port: 9010
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER} #http://localhost:8089/eureka
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+logging:
+  level:
+    root: error
+    com.phildev.mls.notes.patient: debug

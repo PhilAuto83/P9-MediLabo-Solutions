@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: front-mls
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DATABASE_URL} # jdbc:mysql://localhost:3306/mls?serverTimezone=UTC
+    username: mls
+    password: mls
+  sql:
+    init:
+      mode: never
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+  cloud:
+    openfeign:
+      client:
+        config:
+          mls-gateway-coordonnees:
+            url: ${GATEWAY_URL}
+          mls-gateway-notes:
+            url: ${GATEWAY_URL}
+          mls-gateway-diabete:
+            url: ${GATEWAY_URL}
+  thymeleaf:
+    encoding: UTF-8
+server:
+  port: 8080
+  servlet:
+    encoding:
+      charset: UTF-8
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+gateway-user: ${GATEWAY_USER}
+gateway-pwd:  ${GATEWAY_PWD}
+logging:
+  level:
+    com.phildev.front.mls: debug
+    root: error
+

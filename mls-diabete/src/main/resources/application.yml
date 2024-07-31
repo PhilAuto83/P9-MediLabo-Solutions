@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: mls-diabete
+  cloud:
+    openfeign:
+      client:
+        config:
+          mls-gateway-coordonnees:
+            url: ${GATEWAY_URL}
+          mls-gateway-notes:
+            url: ${GATEWAY_URL}
+server:
+  port: 9005
+  servlet:
+    encoding:
+      charset: UTF-8
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+gateway-user: ${GATEWAY_USER}
+gateway-pwd:  ${GATEWAY_PWD}
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER} #http://localhost:8089/eureka
+logging:
+  level:
+    com.phildev.front.mls: debug
+    root: error

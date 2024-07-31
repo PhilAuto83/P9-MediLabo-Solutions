@@ -1,0 +1,152 @@
+services:
+  front-mls:
+    container_name: front-mls
+    environment:
+      DATABASE_URL: "jdbc:mysql://mls-mysql:3306/mls?allowPublicKeyRetrieval=true&autoReconnect=true&useSSL=false"
+      GATEWAY_URL: "http://mls-gateway:8081"
+      GATEWAY_USER: phildev
+      GATEWAY_PWD: mls2024@
+    build:
+      context: ./front-mls
+      dockerfile: Dockerfile
+    depends_on:
+      mls-notes-patient:
+        condition: service_healthy
+      mls-coordonnees-patient:
+        condition: service_healthy
+      mls-diabete:
+        condition: service_healthy
+      mls-mysql:
+        condition: service_started
+      mls-mongo:
+        condition: service_started
+      mls-gateway:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+  mls-coordonnees-patient:
+    container_name: mls-coordonnees-patient
+    environment:
+      DATABASE_URL: "jdbc:mysql://mls-mysql:3306/mls_coordonnees?allowPublicKeyRetrieval=true&autoReconnect=true&useSSL=false"
+      EUREKA_SERVER: "http://eureka-server:8089/eureka"
+    build:
+      context: ./mls-coordonnees-patient
+      dockerfile: Dockerfile
+    depends_on:
+      mls-mysql:
+        condition: service_started
+      mls-gateway:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    healthcheck:
+      test: "wget -T5 -qO- http://localhost:9000/actuator/health | grep UP || exit 1"
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+  mls-diabete:
+    container_name: mls-diabete
+    environment:
+      GATEWAY_URL: "http://mls-gateway:8081"
+      GATEWAY_USER: phildev
+      GATEWAY_PWD: mls2024@
+      EUREKA_SERVER: "http://eureka-server:8089/eureka"
+    build:
+      context: ./mls-diabete
+      dockerfile: Dockerfile
+    depends_on:
+      mls-coordonnees-patient:
+        condition: service_healthy
+      mls-notes-patient:
+        condition: service_healthy
+      mls-gateway:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    healthcheck:
+      test: "wget -T5 -qO- http://localhost:9005/actuator/health | grep UP || exit 1"
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+  mls-notes-patient:
+    container_name: mls-notes-patient
+    environment:
+      MONGO_DATABASE_URL: "mongodb://mls:notes@mls-mongo:27017/mls?authMode=scram-sha1"
+      EUREKA_SERVER: "http://eureka-server:8089/eureka"
+    build:
+      context: ./mls-notes-patient
+      dockerfile: Dockerfile
+    depends_on:
+      mls-mongo:
+        condition: service_started
+      mls-gateway:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    healthcheck:
+      test: "wget -T5 -qO- http://localhost:9010/actuator/health | grep UP || exit 1"
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+  eureka-server:
+    container_name: eureka-server
+    environment:
+      EUREKA_SERVER: "http://eureka-server:8089/eureka"
+    build:
+      context: ./eureka-server
+      dockerfile: Dockerfile
+    ports:
+      - "8089:8089"
+    healthcheck:
+      test: "wget -T5 -qO- http://localhost:8089/actuator/health | grep UP || exit 1"
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+  mls-mysql:
+    container_name: mls-mysql
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: mls
+      MYSQL_PASSWORD: mls
+    restart: always
+    volumes:
+      - mysql-data:/var/lib/mysql
+  mls-gateway:
+    container_name: mls-gateway
+    environment:
+      EUREKA_SERVER: "http://eureka-server:8089/eureka"
+    build:
+      context: ./mls-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    healthcheck:
+      test: "wget -T5 -qO- http://localhost:8081/actuator/health | grep UP || exit 1"
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+  mls-mongo:
+    container_name: mls-mongo
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: mls
+    restart: always
+    volumes:
+      - mongo-data:/data/db
+volumes:
+  mysql-data:
+  mongo-data:
+
+
+
+

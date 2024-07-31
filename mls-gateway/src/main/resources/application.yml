@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: mls-gateway
+  cloud:
+      gateway:
+        mvc:
+          routes:
+          - id: coordonnees-patient
+            uri: lb://mls-coordonnees-patient
+            predicates:
+              - Path=/gateway/coordonneesPatient/**
+            filters:
+              - StripPrefix=1
+          - id: notes-patient
+            uri: lb://mls-notes-patient
+            predicates:
+              - Path=/gateway/patient/**
+            filters:
+              - StripPrefix=1
+          - id: diagnostic-diabete
+            uri: lb://mls-diabete
+            predicates:
+              - Path=/gateway/diabete/**
+            filters:
+              - StripPrefix=1
+  security:
+    user:
+      name: phildev
+      password: mls2024@
+server:
+  port: 8081
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER} # http://localhost:8089/eureka
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+

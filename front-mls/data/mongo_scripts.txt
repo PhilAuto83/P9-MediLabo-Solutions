@@ -1,0 +1,38 @@
+# commande pour accéder à une base de données ou la créer si elle n'existe pas
+use mls;
+
+# commande pour afficher les bases de données existantes
+show dbs
+
+# commande pour créer un utilisateur avec des droits admin en lecture/écriture
+db.createUser({
+user : "mls",
+pwd : "notes",
+roles : ["readWrite","dbAdmin"]
+});
+
+# commande pour mettre à jour un utilisateur 
+db.updateUser( "mls",
+   
+   {roles : [
+      { role : "readWrite", db : "mls" }
+   ],
+   pwd : "notes"
+} );
+
+# commande pour vérifier que le user existe sur une base de données
+db.getUser("mls");
+
+# commande pour se connecter en tant que user pour pouvoir faire des actions sur la base
+db.auth("username", "password");
+
+#commande pour créer une collection
+db.createCollection("notes-patient");
+
+# commande pour insérer des données sur une collection à titre d'exemple
+db["notes-patient"].insertOne({date: new Date(), contenu: "Première note pour le patient 2", patient_id: 2});
+
+# commande pour rechercher toutes les data sur une collection
+db["notes-patient"].find();
+
+
