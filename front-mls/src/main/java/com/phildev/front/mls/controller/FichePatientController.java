@@ -1,6 +1,7 @@
 package com.phildev.front.mls.controller;
 
 import com.phildev.front.mls.error.BadRequestException;
+import com.phildev.front.mls.error.DiagnosticNotFoundException;
 import com.phildev.front.mls.error.FichePatientNotFoundException;
 import com.phildev.front.mls.error.ResponseNotFoundException;
 import com.phildev.front.mls.model.FichePatient;
@@ -58,11 +59,12 @@ public class FichePatientController {
             String diabeteDiagnostic = diabeteService.calculDiagnosticDiabete(id.intValue());
             model.addAttribute("diabeteDiagnostic", diabeteDiagnostic);
         }catch(BadRequestException | ResponseNotFoundException responseNotFoundException){
-            model.addAttribute("diagnosticErreur", "Les informations pour calculer le rapport sont insuffisantes");
             model.addAttribute("noteErreur", "Le patient n'a pas encore de notes");
         }catch(FichePatientNotFoundException exception){
             log.error("Le patient n'a pas été trouvé avec son id {}", id);
             model.addAttribute("patientErreur", String.format("Le patient n'a pas été trouvé avec son id %s ",id));
+        }catch(DiagnosticNotFoundException exception){
+            model.addAttribute("diagnosticErreur", "Les informations pour calculer le rapport sont insuffisantes");
         }
         return "fiche_patient";
     }

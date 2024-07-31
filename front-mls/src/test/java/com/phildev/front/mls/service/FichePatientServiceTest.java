@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = FichePatientService.class)
-public class FichePatientServiceTest {
+class FichePatientServiceTest {
 
     @Autowired
     private FichePatientService fichePatientService;

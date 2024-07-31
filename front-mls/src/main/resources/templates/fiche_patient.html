@@ -109,11 +109,14 @@
         <span th:text="${noteErreur}" class="text-danger" style="font-size: 1rem"></span>
     </div>
     <div class="fs-4 text-center mt-4">Rapport Diabète</div>
-    <div class="col-6 mx-auto mt-4" th:if="${diagnosticErreur !=null && fiche != null}">
+    <div class="col-6 mx-auto mt-4" th:if="${diagnosticErreur !=null}">
         <p class="text-danger text-center" th:text="${diagnosticErreur}"></p>
     </div>
-    <div class="col-6 mx-auto mt-4" th:if="${diabeteDiagnostic !=null && fiche != null}">
+    <div class="col-6 mx-auto mt-4" th:if="${diabeteDiagnostic !=null && diagnosticErreur == null}">
         <p class="text-center">Le niveau de risque diabète pour le patient est : <span class="text-info fs-6" th:text="${diabeteDiagnostic}"></span></p>
+    </div>
+    <div class="col-6 mx-auto mt-4" th:if="${diabeteDiagnostic ==null && diagnosticErreur == null}">
+        <p class="text-center text-info">Les informations actuelles ne sont pas suffisantes pour calculer le niveau de risque</p>
     </div>
 </div>
 </body>
