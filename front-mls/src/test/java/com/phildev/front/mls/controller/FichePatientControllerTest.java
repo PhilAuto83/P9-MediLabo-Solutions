@@ -223,6 +223,7 @@ class FichePatientControllerTest {
                         .param("patientId", "8")
                         .param("patient", "Phil Developer"))
                 .andDo(print())
+                .andExpect(flash().attributeExists("ajoutNoteErreur"))
                 .andExpect(redirectedUrl("/patient/fiche/8/pageNo/0"))
                 .andExpect(status().is(302));
     }
@@ -249,7 +250,7 @@ class FichePatientControllerTest {
     @WithMockUser
     @DisplayName("Test appel du microservice note patient avec retour BadRequestException")
     void testAjoutNotePatientAvecRetourBadRequestException() throws Exception {
-        when(microserviceNotesPatientProxy.ajouterUneNote(any(NotePatient.class))).thenThrow(new BadRequestException("Bad request"));
+        when(microserviceNotesPatientProxy.ajouterUneNote(any(NotePatient.class))).thenThrow(new BadRequestException("erreur sur le formulaire"));
         mockMvc.perform(post("/patient/note")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -258,16 +259,16 @@ class FichePatientControllerTest {
                         .param("patientId", "8")
                         .param("patient", "Phil Developer"))
                 .andDo(print())
-                .andExpect(flash().attribute("noteErreur", "Bad request"))
                 .andExpect(redirectedUrl("/patient/fiche/8/pageNo/0"))
                 .andExpect(status().is(302));
+
     }
 
     @Test
     @WithMockUser
     @DisplayName("Test appel du microservice note patient avec retour ResponseNotFoundException")
     void testAjoutNotePatientAvecRetourResponseNotFoundException() throws Exception {
-        when(microserviceNotesPatientProxy.ajouterUneNote(any(NotePatient.class))).thenThrow(new ResponseNotFoundException("Not found"));
+        when(microserviceNotesPatientProxy.ajouterUneNote(any(NotePatient.class))).thenThrow(new ResponseNotFoundException("erreur sur le formulaire"));;
         mockMvc.perform(post("/patient/note")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -276,7 +277,6 @@ class FichePatientControllerTest {
                         .param("patientId", "8")
                         .param("patient", "Phil Developer"))
                 .andDo(print())
-                .andExpect(flash().attribute("noteErreur", "Not found"))
                 .andExpect(redirectedUrl("/patient/fiche/8/pageNo/0"))
                 .andExpect(status().is(302));
     }

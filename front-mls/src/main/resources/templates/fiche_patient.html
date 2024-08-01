@@ -105,6 +105,9 @@
             <button type="submit" class="btn btn-primary mt-2 col-4">Ajouter la note</button>
         </div>
     </form>
+    <div th:if="${ajoutNoteErreur != null}" class="text-center">
+        <span th:text="${ajoutNoteErreur}" class="text-danger" style="font-size: 1rem"></span>
+    </div>
     <div th:if="${noteErreur != null}" class="text-center">
         <span th:text="${noteErreur}" class="text-danger" style="font-size: 1rem"></span>
     </div>
