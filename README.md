@@ -31,6 +31,10 @@ Voici le schéma de fonctionnement de l'application :
 - Pour MongoDb, des exemples de commande pour se connecter ou insérer les données sont [ici](./front-mls/data/mongo_scripts.txt).
 - **N.B**: _ne pas oublier que les autres conteneurs doivent avoir accès aux datas donc pour MySql, il faudra un grant sur 'mls'@'%'_
 
+## <span style="color: grey;">Tests</span>
+
+Pour les tests, vous pouvez utiliser le user Sam Doc -> _sam.doc@test.fr_ ou Joe Louis -> _joe.louis@test.fr_ avec le pwd `Test2024@`
+
 ## <span style="color: limegreen;">Green code</span>
 
 - Utilisation de [squoosh](https://squoosh.app/) pour mettre les images au format webp et les compresser au maximum :
